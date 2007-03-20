@@ -1,0 +1,15 @@
+Motion Detector
+
+Copyright © Andrew Kirillov, 2005-2007
+andrew.kirillov@gmail.com
+
+
+The program is FREE for any non commercial usage. In the case of
+modifying and/or redistributing the code it's obligate to retain
+the original copyright notice.  It is not allowed to create your
+own commercial products on the basis of the program or any parts
+of it.
+
+
+Please, contact me for any offers, remarks, ideas, etc.
+
