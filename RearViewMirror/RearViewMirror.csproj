@@ -115,6 +115,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MJPEGServer\MJPEGServer.csproj">
+      <Project>{DF568140-D108-4294-8183-32DEE9136BD6}</Project>
+      <Name>MJPEGServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\motion\motion.csproj">
       <Project>{F4799C73-DEE9-48F2-B626-32149CC30976}</Project>
       <Name>motion</Name>
