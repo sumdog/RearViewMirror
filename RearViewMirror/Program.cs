@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MJPEGServer;
 
 namespace RearViewMirror
 {
@@ -25,7 +24,6 @@ namespace RearViewMirror
         [STAThread]
         static void Main()
         {
-            VideoServer v = new VideoServer(222);
             SystemTray s = new SystemTray();
             Application.Run(s);
         }

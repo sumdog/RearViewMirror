@@ -18,6 +18,7 @@ using System.Text;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
+using MJPEGServer;
 using motion;
 
 
@@ -39,10 +40,16 @@ namespace RearViewMirror
 
         private Opacity opacityConfig;
 
+        private VideoServer videoServer;
+
+
         public SystemTray()
         {
             InitializeComponent();
             this.Resize += SystemTray_Resize;
+
+            //set video server
+            videoServer = new VideoServer(80);
 
             //initalize values
             detector = null;
@@ -81,6 +88,12 @@ namespace RearViewMirror
             {
                 startDetectorToolStripMenuItem_Click(null, null);
             }
+
+        }
+
+        void camera_NewFrame(object sender, EventArgs e)
+        {
+            videoServer.sendFrame(camera.LastRawFrame);
         }
 
         /// <summary>
@@ -244,6 +257,7 @@ namespace RearViewMirror
             camera.Start();
 
             camera.Alarm += new EventHandler( cameraAlert );
+            camera.NewFrame += new EventHandler(camera_NewFrame);
 
             // attach camera to camera window
             view.Camera = camera;

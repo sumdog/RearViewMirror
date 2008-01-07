@@ -20,6 +20,8 @@ namespace motion
 		private IVideoSource	videoSource = null;
 		private IMotionDetector	motionDetecotor = null;
 		private Bitmap			lastFrame = null;
+        private Bitmap          lastRawFrame = null;
+
 
 		// image width and height
 		private int		width = -1, height = -1;
@@ -36,6 +38,12 @@ namespace motion
 		{
 			get { return lastFrame; }
 		}
+
+        public Bitmap LastRawFrame
+        {
+            get { return lastRawFrame; }
+        }
+
 		// Width property
 		public int Width
 		{
@@ -149,8 +157,17 @@ namespace motion
 				{
 					lastFrame.Dispose( );
 				}
+                if (lastRawFrame != null)
+                {
+                    lastRawFrame.Dispose();
+                }
 
 				lastFrame = (Bitmap) e.Frame.Clone( );
+
+                //Clone() doesn't actaully create a seperate copy
+                // We need this for a raw frame, before motion 
+                // detection to be transmitted via MJPEGStreams
+                lastRawFrame = new Bitmap(e.Frame);
 
 				// apply motion detector
 				if ( motionDetecotor != null )
