@@ -105,5 +105,17 @@ namespace RearViewMirror.Properties {
                 this["CaptureDevice"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int serverPort {
+            get {
+                return ((int)(this["serverPort"]));
+            }
+            set {
+                this["serverPort"] = value;
+            }
+        }
     }
 }

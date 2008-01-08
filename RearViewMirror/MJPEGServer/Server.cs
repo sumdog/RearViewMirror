@@ -15,7 +15,12 @@ namespace MJPEGServer
     {
         private TcpListener serverListener;
 
+        /// <summary>
+        /// List of connected sockets in queue 
+        /// </summary>
         private List<VideoSocketHandler> socketList;
+
+        private int port;
 
         private static readonly int BACKLOG = 30;
 
@@ -25,10 +30,15 @@ namespace MJPEGServer
 
         public ServerState State { get { return state; } }
 
+        public int Port { get { return port; }  }
+
+        public int ConnectedUsers { get { return socketList.Count; } }
+
         public VideoServer(int port)
         {
+            this.port = port;
             socketList = new List<VideoSocketHandler>();
-            serverListener = new TcpListener(IPAddress.Any, 80);
+            serverListener = new TcpListener(IPAddress.Any, port);
             state = ServerState.STOPPED;
         }
 
@@ -44,7 +54,7 @@ namespace MJPEGServer
                 }
                 catch (SocketException e)
                 {
-                    throw new InvalidServerStateException("Could not start server: " + e.Message);
+                    throw new InvalidServerStateException("Could not start server. " + e.Message);
                 }
             }
             else
@@ -55,7 +65,7 @@ namespace MJPEGServer
 
         public void stopServer()
         {
-            if (state == ServerState.STARTED)
+            if (state == ServerState.STOPPED)
             {
                 throw new InvalidServerStateException("Server has not been started");
             }
@@ -63,43 +73,64 @@ namespace MJPEGServer
             {
                 serverListener.Stop();
                 state = ServerState.STOPPED;
+
+                //kill all sockets by closing them first and then
+                //clearning the socket queue
+                lock (socketList)
+                {
+                    foreach (VideoSocketHandler v in socketList) { v.close(); }
+                    socketList.Clear();
+                }
             }
             catch (SocketException e)
             {
-                //Can we safely Ignore this?
+                Log.warn("SocketException occured in stopServer(). Can we safely ignore this?");
             }
             
         }
 
         private void socketAcceptCallback(IAsyncResult r)
         {
-            VideoSocketHandler handle = (VideoSocketHandler) r.AsyncState;
-            Socket clientSocket = serverListener.EndAcceptSocket(r);
-            serverListener.BeginAcceptSocket(new AsyncCallback(socketAcceptCallback), new VideoSocketHandler());
+            try
+            {
+                VideoSocketHandler handle = (VideoSocketHandler)r.AsyncState;
+                Socket clientSocket = serverListener.EndAcceptSocket(r);
+                serverListener.BeginAcceptSocket(new AsyncCallback(socketAcceptCallback), new VideoSocketHandler());
 
-            handle.setIOStreams(clientSocket);
-            if (handle.initalize())
-            {
-                socketList.Add(handle);
+                handle.setIOStreams(clientSocket);
+                if (handle.initalize())
+                {
+                    lock (socketList)
+                    {
+                        socketList.Add(handle);
+                    }
+                }
+                else
+                {
+                    handle.close();
+                }
             }
-            else
+            catch (ObjectDisposedException od)
             {
-                handle.close();
+                Log.info("Socket callback got a ObjectDisposed. This is normal if the server was stopped");
             }
         }
 
         public void sendFrame(Bitmap b)
         {
-            foreach (VideoSocketHandler v in socketList)
+            lock (socketList)
             {
-                try
+                foreach (VideoSocketHandler v in socketList)
                 {
-                    v.sendFrame(b);
-                }
-                catch (IOException o)
-                {
-                    v.close();
-                    socketList.Remove(v);
+                    try
+                    {
+                        v.sendFrame(b);
+                    }
+                    catch (IOException o)
+                    {
+                        v.close();
+                        socketList.Remove(v);
+                    }
                 }
             }
         }

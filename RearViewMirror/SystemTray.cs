@@ -30,7 +30,7 @@ namespace RearViewMirror
 
         private Viewer view;
 
-        private VideoCaptureDevice captureDevice;
+        private IVideoSource captureDevice;
 
         private IMotionDetector detector;
 
@@ -48,9 +48,6 @@ namespace RearViewMirror
             InitializeComponent();
             this.Resize += SystemTray_Resize;
 
-            //set video server
-            videoServer = new VideoServer(80);
-
             //initalize values
             detector = null;
             detectorType = 0;
@@ -62,7 +59,7 @@ namespace RearViewMirror
 
             //**load settings**
 
-            captureDevice = Properties.Settings.Default.CaptureDevice;
+            //captureDevice = Properties.Settings.Default.CaptureDevice;
             enableAlarmToolStripMenuItem.Checked = Properties.Settings.Default.enabled;
             view.Opacity = Properties.Settings.Default.opacity;
 
@@ -82,6 +79,9 @@ namespace RearViewMirror
             {
                 view.Location = new Point(x, y);
             }
+
+            //setup the server
+            videoServer = new VideoServer(Properties.Settings.Default.serverPort);
 
             //if we were running previously, see if we can start back up
             if (Properties.Settings.Default.running && captureDevice != null)
@@ -171,8 +171,9 @@ namespace RearViewMirror
             Properties.Settings.Default.viewer_y = view.Location.Y;
             Properties.Settings.Default.detector = detectorType;
             Properties.Settings.Default.enabled = enableAlarmToolStripMenuItem.Checked;
-            Properties.Settings.Default.CaptureDevice = captureDevice;
+            //Properties.Settings.Default.CaptureDevice = captureDevice;
             Properties.Settings.Default.opacity = view.Opacity;
+            Properties.Settings.Default.serverPort = videoServer.Port;
             Properties.Settings.Default.Save();
 
             Application.Exit();
@@ -197,8 +198,23 @@ namespace RearViewMirror
                 stopDetectorToolStripMenuItem.Enabled = true;
             }
 
-            //stickey vit
-            showViewerToolStripMenuItem.Checked = view.Stickey;           
+            //stickey bit
+            showViewerToolStripMenuItem.Checked = view.Stickey;
+           
+            //server setup
+            portToolStripMenuItem.Text = "Port: " + videoServer.Port;
+            if (videoServer.State == VideoServer.ServerState.STARTED)
+            {
+                startServerToolStripMenuItem.Enabled = false;
+                stopServerToolStripMenuItem.Enabled = true;
+                portToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                startServerToolStripMenuItem.Enabled = true;
+                stopServerToolStripMenuItem.Enabled = false;
+                portToolStripMenuItem.Enabled = true;
+            }
 
             //set the correct detector type checkbox
             detectorBasic.Checked = false;
@@ -242,6 +258,17 @@ namespace RearViewMirror
                 // create video source
                 captureDevice = new VideoCaptureDevice();
                 captureDevice.Source = form.Device;
+            }
+        }
+
+        private void mJPEGStreamToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            URLForm form = new URLForm();
+            form.StartPosition = FormStartPosition.CenterScreen;
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                captureDevice = new MJPEGStream();
+                captureDevice.Source = form.URL;
             }
         }
 
@@ -362,6 +389,50 @@ namespace RearViewMirror
             view.Stickey = !view.Stickey;
         }
 
+
+        private void portToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string boxPort = videoServer.Port.ToString();
+            bool invalid = true;
+
+            while (invalid)
+            {
+                string strResponse = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Enter Server Port", "RearViewMirror : Server Port", boxPort, 100, 100);
+
+                //empty string means cancel was clicked
+                if (strResponse.Equals("")) { invalid = false; continue;  }
+
+                try
+                {
+                    videoServer = new VideoServer(Convert.ToInt32(strResponse));
+                    Properties.Settings.Default.serverPort = videoServer.Port;
+                    invalid = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Invalid Port Number", "Error: Invalid Port", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private void startServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                videoServer.startServer();
+            }
+            catch (InvalidServerStateException se)
+            {
+                MessageBox.Show(se.Message, "Could not Start Server", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void stopServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            videoServer.stopServer();
+        }
 
     }
 }

@@ -23,5 +23,8 @@
     <Setting Name="CaptureDevice" Type="AForge.Video.DirectShow.VideoCaptureDevice" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="serverPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

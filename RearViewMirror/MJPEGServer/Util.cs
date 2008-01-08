@@ -22,6 +22,11 @@ namespace MJPEGServer
             consoleWrite(s);
         }
 
+        public static void warn(String s)
+        {
+            consoleWrite(s);
+        }
+
         public static void error(String s)
         {
             consoleWrite(s);
