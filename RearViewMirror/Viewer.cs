@@ -134,7 +134,7 @@ namespace RearViewMirror
         /// <summary>
         /// override the base Hide function to handle the sticky bit
         /// </summary>
-        public void Hide()
+        new public void Hide()
         {
             if (alarmInterval == 0 && !stickey)
             {

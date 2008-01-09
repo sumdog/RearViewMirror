@@ -32,7 +32,28 @@ namespace MJPEGServer
 
         public int Port { get { return port; }  }
 
-        public int ConnectedUsers { get { return socketList.Count; } }
+        /// <summary>
+        /// Property indicating number of clients connected to server
+        /// </summary>
+        public int NumberOfConnectedUsers { get { return socketList.Count; } }
+
+        /// <summary>
+        /// Property containing a list of IP addresses connected to server
+        /// </summary>
+        public List<String> ConnectedUsers {
+            get
+            {
+                List<String> retval = new List<String>();
+                lock (socketList)
+                {
+                    for (int i = 0; i < socketList.Count; i++)
+                    {
+                        retval.Add( socketList[i].Socket.RemoteEndPoint.ToString() );
+                    }
+                }
+                return retval;
+            }
+        }
 
         public VideoServer(int port)
         {
@@ -82,7 +103,7 @@ namespace MJPEGServer
                     socketList.Clear();
                 }
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 Log.warn("SocketException occured in stopServer(). Can we safely ignore this?");
             }
@@ -110,7 +131,7 @@ namespace MJPEGServer
                     handle.close();
                 }
             }
-            catch (ObjectDisposedException od)
+            catch (ObjectDisposedException)
             {
                 Log.info("Socket callback got a ObjectDisposed. This is normal if the server was stopped");
             }
@@ -126,7 +147,7 @@ namespace MJPEGServer
                     {
                         v.sendFrame(b);
                     }
-                    catch (IOException o)
+                    catch (IOException)
                     {
                         v.close();
                         socketList.Remove(v);

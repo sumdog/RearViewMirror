@@ -42,6 +42,8 @@ namespace RearViewMirror
 
         private VideoServer videoServer;
 
+        private ServerConnections connectionsWindow;
+
 
         public SystemTray()
         {
@@ -82,6 +84,7 @@ namespace RearViewMirror
 
             //setup the server
             videoServer = new VideoServer(Properties.Settings.Default.serverPort);
+            connectionsWindow = new ServerConnections(videoServer);
 
             //if we were running previously, see if we can start back up
             if (Properties.Settings.Default.running && captureDevice != null)
@@ -203,17 +206,20 @@ namespace RearViewMirror
            
             //server setup
             portToolStripMenuItem.Text = "Port: " + videoServer.Port;
+            connectionsToolStripMenuItem.Text = "Connections: " + videoServer.NumberOfConnectedUsers;
             if (videoServer.State == VideoServer.ServerState.STARTED)
             {
                 startServerToolStripMenuItem.Enabled = false;
                 stopServerToolStripMenuItem.Enabled = true;
                 portToolStripMenuItem.Enabled = false;
+                connectionsToolStripMenuItem.Enabled = true;
             }
             else
             {
                 startServerToolStripMenuItem.Enabled = true;
                 stopServerToolStripMenuItem.Enabled = false;
                 portToolStripMenuItem.Enabled = true;
+                connectionsToolStripMenuItem.Enabled = false;
             }
 
             //set the correct detector type checkbox
@@ -397,6 +403,7 @@ namespace RearViewMirror
 
             while (invalid)
             {
+                //TODO: Remove this and replace with a real C# Form / remove VB reference
                 string strResponse = Microsoft.VisualBasic.Interaction.InputBox(
                     "Enter Server Port", "RearViewMirror : Server Port", boxPort, 100, 100);
 
@@ -409,7 +416,7 @@ namespace RearViewMirror
                     Properties.Settings.Default.serverPort = videoServer.Port;
                     invalid = false;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Invalid Port Number", "Error: Invalid Port", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -432,6 +439,11 @@ namespace RearViewMirror
         private void stopServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             videoServer.stopServer();
+        }
+
+        private void connectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            connectionsWindow.Show();
         }
 
     }

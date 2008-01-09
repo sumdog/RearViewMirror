@@ -54,6 +54,12 @@
     </Compile>
     <Compile Include="Camera.cs" />
     <Compile Include="MJPEGServer\Server.cs" />
+    <Compile Include="MJPEGServer\ServerConnections.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MJPEGServer\ServerConnections.Designer.cs">
+      <DependentUpon>ServerConnections.cs</DependentUpon>
+    </Compile>
     <Compile Include="MJPEGServer\Socket.cs" />
     <Compile Include="MJPEGServer\Util.cs" />
     <Compile Include="Opacity.cs">
@@ -67,6 +73,10 @@
     <EmbeddedResource Include="About.resx">
       <SubType>Designer</SubType>
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MJPEGServer\ServerConnections.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ServerConnections.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Opacity.resx">
       <SubType>Designer</SubType>

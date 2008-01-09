@@ -15,10 +15,12 @@ namespace MJPEGServer
         private Socket socket;
         private Boolean initalized;
         private BinaryWriter bwrite;
+        private DateTime connectionTime;
 
         public StreamWriter Writer { get { return write; } set { write = value; } }
         public StreamReader Reader { get { return read; } set { read = value; } }
         public Socket Socket { get { return socket; } set { socket = value; } }
+        public TimeSpan TimeConnected { get { return new DateTime() - connectionTime; } }
 
         public VideoSocketHandler()
         {
@@ -27,6 +29,7 @@ namespace MJPEGServer
             socket = null;
             initalized = false;
             bwrite = null;
+            connectionTime = new DateTime();
         }
 
         public void setIOStreams(Socket s)
@@ -66,7 +69,7 @@ namespace MJPEGServer
                 Log.trace("Response Sent. Ready to Send JPEGs");
                 initalized = true;
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 Log.error("I/O Exception Occured in Socket Initilization");
                 initalized = false;
