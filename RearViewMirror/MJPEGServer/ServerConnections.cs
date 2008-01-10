@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace MJPEGServer
 {
+
     public partial class ServerConnections : Form
     {
 
@@ -21,18 +22,29 @@ namespace MJPEGServer
         {
             InitializeComponent();
             videoServer = v;
+
+            //setup refresh timer (1sec interval)
             refreshTimer = new Timer();
             refreshTimer.Interval = 1000; //one second
             refreshTimer.Tick += new EventHandler(refreshTimer_Tick);
 
+            //setup list view
+            lv_clients.Columns.Add("Client");
+            lv_clients.Columns.Add("Connection Time");
+            lv_clients.View = View.Details;
 
+
+            //keep form from disposing
             this.FormClosing += new FormClosingEventHandler(ServerConnections_FormClosing);
         }
 
         void ServerConnections_FormClosing(object sender, FormClosingEventArgs e)
         {
             refreshTimer.Stop();
-            e.Cancel = true; //prevents window from being Disposed of
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //prevents window from being Disposed of
+            }
             Hide();
         }
 
@@ -41,12 +53,43 @@ namespace MJPEGServer
         /// </summary>
         void refreshTimer_Tick(object sender, EventArgs e)
         {
-            System.Windows.Forms.ListBox.ObjectCollection c = lb_clients.Items;
-            //lb_clients.Items.Clear();
-            /*foreach (String u in videoServer.ConnectedUsers)
+            lv_clients.BeginUpdate();
+
+            ConnectionInformation[] conUsers = videoServer.ConnectedUsers;
+
+            //unmark everything first
+            foreach (SocketListItem s in lv_clients.Items)
             {
-                lb_clients.Items.Add(u);
-            }*/
+                s.Marked = false;
+            }
+
+            //if it exists, flag it, else add it
+            foreach (ConnectionInformation c in conUsers)
+            {
+                if (lv_clients.Items.ContainsKey(c.RemoteHost))
+                {
+
+                    SocketListItem s = (SocketListItem)lv_clients.Items.Find(c.RemoteHost, false)[0];
+                    /*s.ConnectionInfo.ConnectionTime = c.ConnectionTime;*/
+                    s.Marked = true;
+                    s.updateTime();
+                }
+                else
+                {
+                    lv_clients.Items.Add(new SocketListItem(c));
+                }
+            }
+            
+            //delete anything that's still unmarked
+            foreach (SocketListItem s in lv_clients.Items)
+            {
+                if (!s.Marked)
+                {
+                    s.Remove();
+                }
+            }
+
+            lv_clients.EndUpdate();
         }
 
         new public void Show()
@@ -65,5 +108,48 @@ namespace MJPEGServer
         {
             Hide();
         }
+    }
+
+    public class SocketListItem : ListViewItem
+    {
+        private bool marked;
+        private ConnectionInformation info;
+
+        /// <summary>
+        /// Can be used when syncronizing window with server connection list.
+        /// </summary>
+        public bool Marked
+        {
+            get { return marked; }
+            set { marked = value; }
+        }
+
+        public ConnectionInformation ConnectionInfo
+        {
+            get { return info; }
+            set { info = value; }
+        }
+
+        /// <summary>
+        /// pulls the latest connection time from the SocketHandler
+        /// </summary>
+        public void updateTime()
+        {
+            //String days = info.ConnectionTime.Days.ToString().PadLeft(2, '0');
+            String hours = info.ConnectionTime.Hours.ToString().PadLeft(2, '0');
+            String mins = info.ConnectionTime.Minutes.ToString().PadLeft(2, '0');
+            String secs = info.ConnectionTime.Seconds.ToString().PadLeft(2, '0');
+            SubItems[1].Text = hours + ":" + mins + ":" + secs;
+        }
+
+        public SocketListItem(ConnectionInformation c) : base(c.RemoteHost)
+        {
+            info = c;
+            marked = true;
+            SubItems.Add("00:00:00");
+            //The name is actually the "Key" usined in the lv_clients.Item collection
+            this.Name = c.RemoteHost;
+        }
+
     }
 }

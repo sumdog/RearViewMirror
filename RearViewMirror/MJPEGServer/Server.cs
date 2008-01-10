@@ -9,7 +9,29 @@ using System.IO;
 
 namespace MJPEGServer
 {
+    public class ConnectionInformation
+    {
 
+        private VideoSocketHandler sockHandle;
+
+        /// <summary>
+        /// Indicates how long the client has been connected to the server
+        /// </summary>
+        public TimeSpan ConnectionTime
+        {
+            get { return sockHandle.TimeConnected; }
+        }
+
+        /// <summary>
+        /// Client's Hostname and sending Port
+        /// </summary>
+        public String RemoteHost { get { return sockHandle.Socket.RemoteEndPoint.ToString(); } }
+
+        public ConnectionInformation(VideoSocketHandler h)
+        {
+            sockHandle = h;
+        }
+    }
 
     public class VideoServer
     {
@@ -40,15 +62,16 @@ namespace MJPEGServer
         /// <summary>
         /// Property containing a list of IP addresses connected to server
         /// </summary>
-        public List<String> ConnectedUsers {
+        public ConnectionInformation[] ConnectedUsers {
             get
             {
-                List<String> retval = new List<String>();
+                ConnectionInformation[] retval;
                 lock (socketList)
                 {
+                    retval = new ConnectionInformation[socketList.Count];
                     for (int i = 0; i < socketList.Count; i++)
                     {
-                        retval.Add( socketList[i].Socket.RemoteEndPoint.ToString() );
+                        retval[i] = new ConnectionInformation(socketList[i]);
                     }
                 }
                 return retval;

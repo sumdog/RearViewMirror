@@ -20,7 +20,7 @@ namespace MJPEGServer
         public StreamWriter Writer { get { return write; } set { write = value; } }
         public StreamReader Reader { get { return read; } set { read = value; } }
         public Socket Socket { get { return socket; } set { socket = value; } }
-        public TimeSpan TimeConnected { get { return new DateTime() - connectionTime; } }
+        public TimeSpan TimeConnected { get { return DateTime.Now - connectionTime; } }
 
         public VideoSocketHandler()
         {
@@ -29,7 +29,7 @@ namespace MJPEGServer
             socket = null;
             initalized = false;
             bwrite = null;
-            connectionTime = new DateTime();
+            connectionTime = DateTime.Now;
         }
 
         public void setIOStreams(Socket s)
@@ -102,6 +102,7 @@ namespace MJPEGServer
 
         public void close()
         {
+            socket.Shutdown(SocketShutdown.Both);
             socket.Close();
         }
     }
