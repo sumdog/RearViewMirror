@@ -53,6 +53,7 @@ namespace MJPEGServer
             this.b_disconnect.TabIndex = 2;
             this.b_disconnect.Text = "Disconnect";
             this.b_disconnect.UseVisualStyleBackColor = true;
+            this.b_disconnect.Click += new System.EventHandler(this.b_disconnect_Click);
             // 
             // lv_clients
             // 

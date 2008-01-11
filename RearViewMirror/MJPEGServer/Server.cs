@@ -1,3 +1,10 @@
+/*
+ * RearViewMirror - Sumit Khanna 
+ * http://penguindreams.org
+ * 
+ * License: GNU GPLv3 - Free to Distribute so long as any 
+ *   modifications are released for free as well
+ */
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +16,10 @@ using System.IO;
 
 namespace MJPEGServer
 {
+    /// <summary>
+    /// Used as a way to pass connection information to user interfaces
+    /// and abstract the VideoSocketHandler
+    /// </summary>
     public class ConnectionInformation
     {
 
@@ -27,12 +38,20 @@ namespace MJPEGServer
         /// </summary>
         public String RemoteHost { get { return sockHandle.Socket.RemoteEndPoint.ToString(); } }
 
+        /// <summary>
+        /// Disconnects the client
+        /// </summary>
+        public void disconnect() { sockHandle.close(); }
+
         public ConnectionInformation(VideoSocketHandler h)
         {
             sockHandle = h;
         }
     }
 
+    /// <summary>
+    /// MJPEG Server Object designed to send video over HTTP
+    /// </summary>
     public class VideoServer
     {
         private TcpListener serverListener;
@@ -65,19 +84,26 @@ namespace MJPEGServer
         public ConnectionInformation[] ConnectedUsers {
             get
             {
-                ConnectionInformation[] retval;
+                List<ConnectionInformation> retval;
                 lock (socketList)
                 {
-                    retval = new ConnectionInformation[socketList.Count];
+                    retval = new List<ConnectionInformation>(socketList.Count);
                     for (int i = 0; i < socketList.Count; i++)
                     {
-                        retval[i] = new ConnectionInformation(socketList[i]);
+                        if (socketList[i].Socket.Connected)
+                        {
+                            retval.Add(new ConnectionInformation(socketList[i]));
+                        }
                     }
                 }
-                return retval;
+                return retval.ToArray();
             }
         }
 
+        /// <summary>
+        /// Creates a bound instance of the MJPEG HTTP Server
+        /// </summary>
+        /// <param name="port">port for server to accept requests on</param>
         public VideoServer(int port)
         {
             this.port = port;
@@ -86,6 +112,10 @@ namespace MJPEGServer
             state = ServerState.STOPPED;
         }
 
+
+        /// <summary>
+        /// Begins listening and accepting server connections.
+        /// </summary>
         public void startServer()
         {
             if (state == ServerState.STOPPED)
@@ -107,6 +137,9 @@ namespace MJPEGServer
             }
         }
 
+        /// <summary>
+        /// Stops accepting connections and disconnects all connected clients.
+        /// </summary>
         public void stopServer()
         {
             if (state == ServerState.STOPPED)
@@ -160,6 +193,10 @@ namespace MJPEGServer
             }
         }
 
+        /// <summary>
+        /// Sends one frame of JPEG video to all connected clients
+        /// </summary>
+        /// <param name="b">Frame to Send</param>
         public void sendFrame(Bitmap b)
         {
             lock (socketList)
@@ -172,14 +209,21 @@ namespace MJPEGServer
                     }
                     catch (IOException)
                     {
-                        v.close();
+                        //the socket must be removed from the list first
+                        //or else we'll keep catching the same exceptions here
+                        //on manual disconnects from the ServerConnections.cs
                         socketList.Remove(v);
+                        v.close();
                     }
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Thrown when trying to stop a server that isn't running
+    /// or when trying to start a server that is all ready running
+    /// </summary>
     public class InvalidServerStateException : Exception
     {
         public InvalidServerStateException(String s) : base(s) { }
