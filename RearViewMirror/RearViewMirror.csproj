@@ -10,6 +10,7 @@
     <RootNamespace>RearViewMirror</RootNamespace>
     <AssemblyName>RearViewMirror</AssemblyName>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <StartupObject>RearViewMirror.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
