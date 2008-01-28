@@ -11,6 +11,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -44,6 +45,9 @@ namespace RearViewMirror
 
         private ServerConnections connectionsWindow;
 
+        private StringCollection recentURLs;
+
+        private const int RECENT_URL_LIMIT = 10;
 
         public SystemTray()
         {
@@ -61,13 +65,30 @@ namespace RearViewMirror
 
             //**load settings**
 
-            //captureDevice = Properties.Settings.Default.CaptureDevice;
+            //setup capture device from saved settings
+            VideoCaptureDevice vc = Properties.Settings.Default.CaptureDevice;
+            MJPEGStream mj = Properties.Settings.Default.CaptureStream;
+            if (vc != null && mj == null)
+            {
+                captureDevice = vc;
+            }
+            else if (vc == null && mj != null)
+            {
+                captureDevice = mj;
+            }
+            
+            //misc settings
             enableAlarmToolStripMenuItem.Checked = Properties.Settings.Default.enabled;
             view.Opacity = Properties.Settings.Default.opacity;
+            showViewerToolStripMenuItem.Checked = Properties.Settings.Default.showViewer;
 
             //load detector type
             detectorType = Properties.Settings.Default.detector;
             loadDetectorType();
+
+            //previous URLs for MJPEG streams
+            recentURLs = Properties.Settings.Default.recentURLs;
+            if (recentURLs == null) { recentURLs = new StringCollection(); }
 
             //set the location of the viewer
             int x = Properties.Settings.Default.viewer_x;
@@ -84,20 +105,36 @@ namespace RearViewMirror
 
             //setup the server
             videoServer = new VideoServer(Properties.Settings.Default.serverPort);
+            if (Properties.Settings.Default.serverRunning)
+            {  videoServer.startServer(); }
             connectionsWindow = new ServerConnections(videoServer);
 
             //if we were running previously, see if we can start back up
             if (Properties.Settings.Default.running && captureDevice != null)
             {
-                startDetectorToolStripMenuItem_Click(null, null);
+                startCapture();
             }
 
         }
+
+
+
+        #region Camera Event Handlers
 
         void camera_NewFrame(object sender, EventArgs e)
         {
             videoServer.sendFrame(camera.LastRawFrame);
         }
+
+        private void cameraAlert(object sender, EventArgs e)
+        {
+            // keep displaying window for three seconds after we stop
+            view.AlarmInterval = 3;
+        }
+
+        #endregion
+
+        #region General Functions 
 
         /// <summary>
         /// should be called by any function that changes the detectorType
@@ -142,68 +179,113 @@ namespace RearViewMirror
             }
         }
 
-        private void SystemTray_Resize(object sender, System.EventArgs e)
+        private void startCapture()
         {
-            if (FormWindowState.Minimized == WindowState)
-                Hide();
-        }
-
-        /// <summary>
-        /// Single Mouse click on the tray icon makes the viewer sticky
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void trayIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && e.Clicks == 0)
+            // enable/disable motion alarm
+            if (detector != null)
             {
-                view.Stickey = !view.Stickey;
+                detector.MotionLevelCalculation = enableAlarmToolStripMenuItem.Checked;
             }
+
+            camera = new Camera(captureDevice, detector);
+            camera.Start();
+
+            camera.Alarm += new EventHandler(cameraAlert);
+            camera.NewFrame += new EventHandler(camera_NewFrame);
+
+            // attach camera to camera window
+            view.Camera = camera;
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void stopCapture()
         {
-            //save this state before we kill the camera
-            Properties.Settings.Default.running = (camera != null);
+            if (camera != null)
+            {
+                camera.SignalToStop();
+                camera.WaitForStop();
+                camera = null;
+            }
 
-            //stop the camera
-            stopDetectorToolStripMenuItem_Click(null, null);
+            // detach camera from camera window
+            view.Camera = null;
 
-            //save our settings
-            Properties.Settings.Default.viewer_x = view.Location.X;
-            Properties.Settings.Default.viewer_y = view.Location.Y;
-            Properties.Settings.Default.detector = detectorType;
-            Properties.Settings.Default.enabled = enableAlarmToolStripMenuItem.Checked;
-            //Properties.Settings.Default.CaptureDevice = captureDevice;
-            Properties.Settings.Default.opacity = view.Opacity;
-            Properties.Settings.Default.serverPort = videoServer.Port;
-            Properties.Settings.Default.Save();
+            if (detector != null)
+            {
+                detector.Reset();
+            }
 
-            Application.Exit();
+
+            view.AlarmInterval = 0;
+            view.Hide();
         }
+
+        #endregion
+
+        #region Detector Type Subcontext Menu Events
+
+        private void detectorBasic_Click(object sender, EventArgs e)
+        {
+            detectorType = 1;
+            loadDetectorType();
+        }
+
+
+        private void detectorOutline_Click(object sender, EventArgs e)
+        {
+            detectorType = 2;
+            loadDetectorType();
+        }
+
+        private void detectorBlock_Click(object sender, EventArgs e)
+        {
+            detectorType = 3;
+            loadDetectorType();
+        }
+
+        private void detectorBetterBlock_Click(object sender, EventArgs e)
+        {
+            detectorType = 4;
+            loadDetectorType();
+        }
+
+        private void detectorBox_Click(object sender, EventArgs e)
+        {
+            detectorType = 5;
+            loadDetectorType();
+        }
+
+        private void detectorNone_Click(object sender, EventArgs e)
+        {
+            detectorType = 0;
+            loadDetectorType();
+        }
+
+        #endregion
+
+        #region General Tray Events
 
         private void trayContextMenu_Opening(object sender, CancelEventArgs e)
         {
             //disable start/stop links if cam is not setup yet
             if (captureDevice == null)
             {
-                startDetectorToolStripMenuItem.Enabled = false;
-                stopDetectorToolStripMenuItem.Enabled = false;
+                startStopDetectorToolStripMenuItem.Enabled = false;
+                startStopDetectorToolStripMenuItem.Text = "Start Detector";
             }
-            else if(camera == null)
+            else if (camera == null)
             {
-                startDetectorToolStripMenuItem.Enabled = true;
-                stopDetectorToolStripMenuItem.Enabled = false;
+                startStopDetectorToolStripMenuItem.Enabled = true;
+                startStopDetectorToolStripMenuItem.Text = "Start Detector";
             }
             else if (camera != null)
             {
-                startDetectorToolStripMenuItem.Enabled = false;
-                stopDetectorToolStripMenuItem.Enabled = true;
+                startStopDetectorToolStripMenuItem.Enabled = true;
+                startStopDetectorToolStripMenuItem.Text = "Stop Detector";
             }
 
             //stickey bit
             showViewerToolStripMenuItem.Checked = view.Stickey;
-           
+
             //server setup
             portToolStripMenuItem.Text = "Port: " + videoServer.Port;
             connectionsToolStripMenuItem.Text = "Connections: " + videoServer.NumberOfConnectedUsers;
@@ -251,8 +333,31 @@ namespace RearViewMirror
                     detectorBox.Checked = true;
                     break;
             }
-                   
+
         }
+
+        private void SystemTray_Resize(object sender, System.EventArgs e)
+        {
+            if (FormWindowState.Minimized == WindowState)
+                Hide();
+        }
+
+        /// <summary>
+        /// Single Mouse click on the tray icon makes the viewer sticky
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && e.Clicks == 0)
+            {
+                view.Stickey = !view.Stickey;
+            }
+        }
+
+        #endregion
+
+        #region Video Device Selection SubMenu Events
 
         private void selectDeviceToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -270,99 +375,44 @@ namespace RearViewMirror
         private void mJPEGStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
             URLForm form = new URLForm();
+            form.Description = "Enter URL of an updating JPEG from a web camera";
+
+            //Load recent URLs
+            String[] urls = new String[recentURLs.Count];
+            recentURLs.CopyTo(urls, 0);
+            form.URLs = urls;
+
             form.StartPosition = FormStartPosition.CenterScreen;
             if (form.ShowDialog(this) == DialogResult.OK)
             {
+                //update recent URLs
+                if (recentURLs.Count == RECENT_URL_LIMIT)
+                {
+                    recentURLs.RemoveAt(RECENT_URL_LIMIT - 1);
+                }
+                recentURLs.Add(form.URL);
+
+                //open the stream
                 captureDevice = new MJPEGStream();
                 captureDevice.Source = form.URL;
             }
         }
 
-        private void startDetectorToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Main TrayIcon Menu Events
+
+        private void startStopDetectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // enable/disable motion alarm
-            if (detector != null)
+            if (camera == null)
             {
-                detector.MotionLevelCalculation = enableAlarmToolStripMenuItem.Checked;
+                startCapture();
             }
-
-            camera = new Camera(captureDevice, detector);
-            camera.Start();
-
-            camera.Alarm += new EventHandler( cameraAlert );
-            camera.NewFrame += new EventHandler(camera_NewFrame);
-
-            // attach camera to camera window
-            view.Camera = camera;
-
-        }
-
-        private void cameraAlert(object sender, EventArgs e)
-        {
-            // keep displaying window for three seconds after we stop
-            view.AlarmInterval = 3;
-        }
-
-        private void stopDetectorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (camera != null)
+            else
             {
-                // detach camera from camera window
-                view.Camera = null;
-
-                camera.SignalToStop();
-                camera.WaitForStop();
-
-                camera = null;
-
-                if (detector != null)
-                    detector.Reset();
+                stopCapture();
             }
-
-            view.AlarmInterval = 0;
-            view.Hide();
         }
-
-        //-----Start Detector Type Subcontext Menu Events-----
-
-        private void detectorBasic_Click(object sender, EventArgs e)
-        {
-            detectorType = 1;
-            loadDetectorType();
-        }
-
-
-        private void detectorOutline_Click(object sender, EventArgs e)
-        {
-            detectorType = 2;
-            loadDetectorType();
-        }
-
-        private void detectorBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = 3;
-            loadDetectorType();
-        }
-
-        private void detectorBetterBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = 4;
-            loadDetectorType();
-        }
-
-        private void detectorBox_Click(object sender, EventArgs e)
-        {
-            detectorType = 5;
-            loadDetectorType();
-        }
-
-        private void detectorNone_Click(object sender, EventArgs e)
-        {
-            detectorType = 0;
-            loadDetectorType();
-        }
-
-        //-----End Detector Type Subcontext Menu-----
 
         private void enableAlarmToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -378,6 +428,11 @@ namespace RearViewMirror
             }
         }
 
+        private void showViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            view.Stickey = !view.Stickey;
+        }
+
         private void setOpacityToolStripMenuItem_Click(object sender, EventArgs e)
         {
             opacityConfig.Show();
@@ -390,11 +445,44 @@ namespace RearViewMirror
             a.ShowDialog();
         }
 
-        private void showViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            view.Stickey = !view.Stickey;
+            //save this state before we kill the camera
+            Properties.Settings.Default.running = (camera != null);
+
+            //stop the camera
+            stopCapture();
+
+            //save the video capture device
+            if (captureDevice is MJPEGStream)
+            {
+                Properties.Settings.Default.CaptureDevice = null;
+                Properties.Settings.Default.CaptureStream = (MJPEGStream)captureDevice;
+            }
+            else if (captureDevice is VideoCaptureDevice)
+            {
+                Properties.Settings.Default.CaptureDevice = (VideoCaptureDevice)captureDevice;
+                Properties.Settings.Default.CaptureStream = null;
+            }
+
+            //save our settings
+            Properties.Settings.Default.viewer_x = view.Location.X;
+            Properties.Settings.Default.viewer_y = view.Location.Y;
+            Properties.Settings.Default.detector = detectorType;
+            Properties.Settings.Default.enabled = enableAlarmToolStripMenuItem.Checked;
+            Properties.Settings.Default.showViewer = showViewerToolStripMenuItem.Checked;
+            Properties.Settings.Default.opacity = view.Opacity;
+            Properties.Settings.Default.serverPort = videoServer.Port;
+            Properties.Settings.Default.serverRunning = videoServer.State == VideoServer.ServerState.STARTED;
+            Properties.Settings.Default.recentURLs = recentURLs;
+            Properties.Settings.Default.Save();
+
+            Application.Exit();
         }
 
+        #endregion
+
+        #region Server SubMenu Events
 
         private void portToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -445,6 +533,9 @@ namespace RearViewMirror
         {
             connectionsWindow.Show();
         }
+
+        #endregion
+
 
     }
 }

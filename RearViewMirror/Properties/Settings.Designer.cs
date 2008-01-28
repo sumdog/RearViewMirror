@@ -117,5 +117,51 @@ namespace RearViewMirror.Properties {
                 this["serverPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection recentURLs {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["recentURLs"]));
+            }
+            set {
+                this["recentURLs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool serverRunning {
+            get {
+                return ((bool)(this["serverRunning"]));
+            }
+            set {
+                this["serverRunning"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::AForge.Video.MJPEGStream CaptureStream {
+            get {
+                return ((global::AForge.Video.MJPEGStream)(this["CaptureStream"]));
+            }
+            set {
+                this["CaptureStream"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool showViewer {
+            get {
+                return ((bool)(this["showViewer"]));
+            }
+            set {
+                this["showViewer"] = value;
+            }
+        }
     }
 }

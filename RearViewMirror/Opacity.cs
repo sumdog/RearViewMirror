@@ -5,9 +5,6 @@
  * License: GNU GPLv3 - Free to Distribute so long as any 
  *   modifications are released for free as well
  * 
- * Based on work by Andrew Kirillov found at the following address:
- * http://www.codeproject.com/KB/audio-video/Motion_Detection.aspx
- * 
  */
 using System;
 using System.Collections.Generic;

@@ -1,3 +1,10 @@
+/*
+ * RearViewMirror - Sumit Khanna 
+ * http://penguindreams.org
+ * 
+ * License: GNU GPLv3 - Free to Distribute so long as any 
+ *   modifications are released for free as well
+ */
 using System;
 using System.Collections.Generic;
 using System.Text;
