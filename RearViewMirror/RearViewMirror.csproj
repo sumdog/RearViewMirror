@@ -121,6 +121,7 @@
       <DependentUpon>SystemTray.cs</DependentUpon>
     </Compile>
     <Compile Include="Updater.cs" />
+    <Compile Include="VideoSource.cs" />
     <Compile Include="Viewer.cs">
       <SubType>Form</SubType>
     </Compile>

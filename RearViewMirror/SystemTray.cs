@@ -336,6 +336,8 @@ namespace RearViewMirror
 
         }
 
+        #endregion
+
         private void SystemTray_Resize(object sender, System.EventArgs e)
         {
             if (FormWindowState.Minimized == WindowState)
@@ -355,7 +357,7 @@ namespace RearViewMirror
             }
         }
 
-        #endregion
+
 
         #region Video Device Selection SubMenu Events
 

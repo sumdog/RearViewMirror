@@ -1,13 +1,16 @@
 # ChangeLog for Rear View Mirror
 # Copyright 2007 Sumit Khanna / penguindreams.org; Distributed under GPL v3
 
-*RearViewMirror-x.x
+*RearViewMirror-0.8.5 (28 Jan 2008)
 
    Faster Response time for Alarm Window
    Replaced dshow Project with AForge Libraries
    Permanent Fix for Ctrl+Alt+Del Issue
    Cleaned up and Removed unused Files
    Removed VFW. May replace it later with AForge.VFW
+   Added a simple MJPEG Server
+   Added support for connecting to MJPEG cameras
+   Menu/Submenu Cleanup
 
 *RearViewMirror-0.8.1 (31 Dec 2007)
    
