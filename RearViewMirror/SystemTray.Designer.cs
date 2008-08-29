@@ -32,28 +32,11 @@ namespace RearViewMirror
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SystemTray));
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectDeviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mJPEGStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.portToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.connectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.startStopDetectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mjpegToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.enableAlarmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setOpacityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorNone = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorBasic = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorOutline = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorBlock = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorBetterBlock = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorBox = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayContextMenu.SuspendLayout();
@@ -70,193 +53,58 @@ namespace RearViewMirror
             // trayContextMenu
             // 
             this.trayContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openVideoToolStripMenuItem,
-            this.videoServerToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.startStopDetectorToolStripMenuItem,
+            this.sourcesToolStripMenuItem,
+            this.newSourceToolStripMenuItem,
             this.toolStripSeparator2,
-            this.enableAlarmToolStripMenuItem,
-            this.showViewerToolStripMenuItem,
-            this.setOpacityToolStripMenuItem,
-            this.detectorTypeToolStripMenuItem,
-            this.toolStripSeparator3,
             this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.trayContextMenu.Name = "trayContextMenu";
-            this.trayContextMenu.Size = new System.Drawing.Size(186, 242);
-            this.trayContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayContextMenu_Opening);
+            this.trayContextMenu.Size = new System.Drawing.Size(153, 120);
             // 
-            // openVideoToolStripMenuItem
+            // sourcesToolStripMenuItem
             // 
-            this.openVideoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectDeviceToolStripMenuItem,
-            this.mJPEGStreamToolStripMenuItem});
-            this.openVideoToolStripMenuItem.Name = "openVideoToolStripMenuItem";
-            this.openVideoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.openVideoToolStripMenuItem.Text = "Open Video";
+            this.sourcesToolStripMenuItem.Name = "sourcesToolStripMenuItem";
+            this.sourcesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sourcesToolStripMenuItem.Text = "Video Sources";
             // 
-            // selectDeviceToolStripMenuItem
+            // newSourceToolStripMenuItem
             // 
-            this.selectDeviceToolStripMenuItem.Name = "selectDeviceToolStripMenuItem";
-            this.selectDeviceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.selectDeviceToolStripMenuItem.Text = "Camera Device";
-            this.selectDeviceToolStripMenuItem.Click += new System.EventHandler(this.selectDeviceToolStripMenuItem_Click);
+            this.newSourceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cameraToolStripMenuItem,
+            this.mjpegToolStripMenuItem});
+            this.newSourceToolStripMenuItem.Name = "newSourceToolStripMenuItem";
+            this.newSourceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newSourceToolStripMenuItem.Text = "New Source";
             // 
-            // mJPEGStreamToolStripMenuItem
+            // cameraToolStripMenuItem
             // 
-            this.mJPEGStreamToolStripMenuItem.Name = "mJPEGStreamToolStripMenuItem";
-            this.mJPEGStreamToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.mJPEGStreamToolStripMenuItem.Text = "MJPEG Stream";
-            this.mJPEGStreamToolStripMenuItem.Click += new System.EventHandler(this.mJPEGStreamToolStripMenuItem_Click);
+            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.cameraToolStripMenuItem.Text = "Camera";
+            this.cameraToolStripMenuItem.Click += new System.EventHandler(this.cameraToolStripMenuItem_Click);
             // 
-            // videoServerToolStripMenuItem
+            // mjpegToolStripMenuItem
             // 
-            this.videoServerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.startServerToolStripMenuItem,
-            this.stopServerToolStripMenuItem,
-            this.portToolStripMenuItem,
-            this.connectionsToolStripMenuItem});
-            this.videoServerToolStripMenuItem.Name = "videoServerToolStripMenuItem";
-            this.videoServerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.videoServerToolStripMenuItem.Text = "Video Server";
-            // 
-            // startServerToolStripMenuItem
-            // 
-            this.startServerToolStripMenuItem.Name = "startServerToolStripMenuItem";
-            this.startServerToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.startServerToolStripMenuItem.Text = "Start Server";
-            this.startServerToolStripMenuItem.Click += new System.EventHandler(this.startServerToolStripMenuItem_Click);
-            // 
-            // stopServerToolStripMenuItem
-            // 
-            this.stopServerToolStripMenuItem.Name = "stopServerToolStripMenuItem";
-            this.stopServerToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.stopServerToolStripMenuItem.Text = "Stop Server";
-            this.stopServerToolStripMenuItem.Click += new System.EventHandler(this.stopServerToolStripMenuItem_Click);
-            // 
-            // portToolStripMenuItem
-            // 
-            this.portToolStripMenuItem.Name = "portToolStripMenuItem";
-            this.portToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.portToolStripMenuItem.Text = "Port";
-            this.portToolStripMenuItem.Click += new System.EventHandler(this.portToolStripMenuItem_Click);
-            // 
-            // connectionsToolStripMenuItem
-            // 
-            this.connectionsToolStripMenuItem.Name = "connectionsToolStripMenuItem";
-            this.connectionsToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.connectionsToolStripMenuItem.Text = "Connections";
-            this.connectionsToolStripMenuItem.Click += new System.EventHandler(this.connectionsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(182, 6);
-            // 
-            // startStopDetectorToolStripMenuItem
-            // 
-            this.startStopDetectorToolStripMenuItem.Name = "startStopDetectorToolStripMenuItem";
-            this.startStopDetectorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.startStopDetectorToolStripMenuItem.Text = "Start_Stop_Detector";
-            this.startStopDetectorToolStripMenuItem.Click += new System.EventHandler(this.startStopDetectorToolStripMenuItem_Click);
+            this.mjpegToolStripMenuItem.Name = "mjpegToolStripMenuItem";
+            this.mjpegToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.mjpegToolStripMenuItem.Text = "MJPEG Stream";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(182, 6);
-            // 
-            // enableAlarmToolStripMenuItem
-            // 
-            this.enableAlarmToolStripMenuItem.Name = "enableAlarmToolStripMenuItem";
-            this.enableAlarmToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.enableAlarmToolStripMenuItem.Text = "Enable Alert";
-            this.enableAlarmToolStripMenuItem.Click += new System.EventHandler(this.enableAlarmToolStripMenuItem_Click);
-            // 
-            // showViewerToolStripMenuItem
-            // 
-            this.showViewerToolStripMenuItem.Name = "showViewerToolStripMenuItem";
-            this.showViewerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.showViewerToolStripMenuItem.Text = "Show Viewer";
-            this.showViewerToolStripMenuItem.Click += new System.EventHandler(this.showViewerToolStripMenuItem_Click);
-            // 
-            // setOpacityToolStripMenuItem
-            // 
-            this.setOpacityToolStripMenuItem.Name = "setOpacityToolStripMenuItem";
-            this.setOpacityToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.setOpacityToolStripMenuItem.Text = "Set Opacity";
-            this.setOpacityToolStripMenuItem.Click += new System.EventHandler(this.setOpacityToolStripMenuItem_Click);
-            // 
-            // detectorTypeToolStripMenuItem
-            // 
-            this.detectorTypeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.detectorNone,
-            this.detectorBasic,
-            this.detectorOutline,
-            this.detectorBlock,
-            this.detectorBetterBlock,
-            this.detectorBox});
-            this.detectorTypeToolStripMenuItem.Name = "detectorTypeToolStripMenuItem";
-            this.detectorTypeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.detectorTypeToolStripMenuItem.Text = "Detector Type";
-            // 
-            // detectorNone
-            // 
-            this.detectorNone.Name = "detectorNone";
-            this.detectorNone.Size = new System.Drawing.Size(167, 22);
-            this.detectorNone.Text = "None";
-            this.detectorNone.Click += new System.EventHandler(this.detectorNone_Click);
-            // 
-            // detectorBasic
-            // 
-            this.detectorBasic.Name = "detectorBasic";
-            this.detectorBasic.Size = new System.Drawing.Size(167, 22);
-            this.detectorBasic.Text = "Baisc";
-            this.detectorBasic.Click += new System.EventHandler(this.detectorBasic_Click);
-            // 
-            // detectorOutline
-            // 
-            this.detectorOutline.Name = "detectorOutline";
-            this.detectorOutline.Size = new System.Drawing.Size(167, 22);
-            this.detectorOutline.Text = "Outline";
-            this.detectorOutline.Click += new System.EventHandler(this.detectorOutline_Click);
-            // 
-            // detectorBlock
-            // 
-            this.detectorBlock.Name = "detectorBlock";
-            this.detectorBlock.Size = new System.Drawing.Size(167, 22);
-            this.detectorBlock.Text = "Block";
-            this.detectorBlock.Click += new System.EventHandler(this.detectorBlock_Click);
-            // 
-            // detectorBetterBlock
-            // 
-            this.detectorBetterBlock.Name = "detectorBetterBlock";
-            this.detectorBetterBlock.Size = new System.Drawing.Size(167, 22);
-            this.detectorBetterBlock.Text = "Block (Optimized)";
-            this.detectorBetterBlock.Click += new System.EventHandler(this.detectorBetterBlock_Click);
-            // 
-            // detectorBox
-            // 
-            this.detectorBox.Name = "detectorBox";
-            this.detectorBox.Size = new System.Drawing.Size(167, 22);
-            this.detectorBox.Text = "Box";
-            this.detectorBox.Click += new System.EventHandler(this.detectorBox_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(182, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -279,28 +127,11 @@ namespace RearViewMirror
         private System.Windows.Forms.NotifyIcon trayIcon;
         private System.Windows.Forms.ContextMenuStrip trayContextMenu;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem detectorTypeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem detectorBasic;
-        private System.Windows.Forms.ToolStripMenuItem detectorOutline;
-        private System.Windows.Forms.ToolStripMenuItem detectorBlock;
-        private System.Windows.Forms.ToolStripMenuItem detectorBetterBlock;
-        private System.Windows.Forms.ToolStripMenuItem detectorBox;
-        private System.Windows.Forms.ToolStripMenuItem detectorNone;
-        private System.Windows.Forms.ToolStripMenuItem enableAlarmToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem setOpacityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showViewerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem videoServerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem startServerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stopServerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem portToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openVideoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectDeviceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mJPEGStreamToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem newSourceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cameraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mjpegToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sourcesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem connectionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem startStopDetectorToolStripMenuItem;
     }
 }

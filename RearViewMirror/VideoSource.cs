@@ -11,81 +11,9 @@ using motion;
 
 namespace RearViewMirror
 {
-    [Serializable]
-    class CameraVideoSource : VideoSourceBase
-    {
-
-        #region Video Server Variables
-
-        //Local cameras support having a video server
-
-        private VideoServer videoServer;
-
-        private ServerConnections connectionsWindow;
-
-        private StringCollection recentURLs;
-
-        private const int RECENT_URL_LIMIT = 10;
-
-        #endregion
-
-        public CameraVideoSource(String name, VideoCaptureDevice d) : base(name, d)
-        {
-            
-        }
-
-        #region Camera Event Handlers
-
-        protected override void camera_NewFrame(object sender, EventArgs e) 
-        {            
-            if (videoServer != null)
-            {
-                videoServer.sendFrame(camera.LastRawFrame);
-            }
-            
-            
-            base.camera_NewFrame(sender, e);
-        }
-
-        #endregion
-
-
-        public override void updateContextMenu()
-        {
-            base.updateContextMenu();
-            //server setup
-            /*
-            portToolStripMenuItem.Text = "Port: " + videoServer.Port;
-            connectionsToolStripMenuItem.Text = "Connections: " + videoServer.NumberOfConnectedUsers;
-            if (videoServer.State == VideoServer.ServerState.STARTED)
-            {
-                startServerToolStripMenuItem.Enabled = false;
-                stopServerToolStripMenuItem.Enabled = true;
-                portToolStripMenuItem.Enabled = false;
-                connectionsToolStripMenuItem.Enabled = true;
-            }
-            else
-            {
-                startServerToolStripMenuItem.Enabled = true;
-                stopServerToolStripMenuItem.Enabled = false;
-                portToolStripMenuItem.Enabled = true;
-                connectionsToolStripMenuItem.Enabled = false;
-            }*/
-        }
-    }
 
     [Serializable]
-    class MJPEGStreamVideoSource : VideoSourceBase
-    {
-        public MJPEGStreamVideoSource(String name, MJPEGStream s) : base(name,s)
-        {
-        }
-    
-    }
-
-
-    [Serializable]
-    abstract class VideoSourceBase
+    class VideoSource
     {
 
         protected Viewer view;
@@ -102,36 +30,76 @@ namespace RearViewMirror
 
         protected String sourceName;
 
+        //Video Server variables
+
+        private VideoServer videoServer;
+
+        private ServerConnections connectionsWindow;
+
+        public VideoSource(String name, IVideoSource source)
+        {
+            //establish source
+            captureDevice = source;
+            sourceName = name;
+
+            //initalize values
+            detector = null;
+            detectorType = 0;
+
+            //setup viewing window 
+            view = new Viewer();
+            view.Hide();
+            opacityConfig = new Opacity(view);
+            view.moveToTopRight();
+
+            //video server
+            videoServer = new VideoServer(80);
+            connectionsWindow = new ServerConnections(videoServer);
+
+            //setup system tray menu
+            InitalizeToolstrip();            
+        }
+
+
+
+
+
+
         #region ContextMenu
 
-        protected ToolStripMenuItem miMain; //+
-        protected ToolStripMenuItem miDeviceStatus;
-        protected ToolStripMenuItem miEnableAlert; //+
-        protected ToolStripMenuItem miShowViewer;
-        protected ToolStripMenuItem miOpacity;
-        protected ToolStripMenuItem miDetectorType;
-        protected ToolStripMenuItem miDetectorTypeNone;
-        protected ToolStripMenuItem miDetectorTypeBasic;
-        protected ToolStripMenuItem miDetectorTypeOutline;
-        protected ToolStripMenuItem miDetectorTypeBlock;
-        protected ToolStripMenuItem miDetectorTypeFastBlock;
-        protected ToolStripMenuItem miDetectorTypeBox;
+        private ToolStripMenuItem miMain;
+        private ToolStripMenuItem miDeviceStatus;
+        private ToolStripMenuItem miEnableAlert;
+        private ToolStripMenuItem miShowViewer;
+        private ToolStripMenuItem miOpacity;
+        private ToolStripMenuItem miDetectorType;
+        private ToolStripMenuItem miDetectorTypeNone;
+        private ToolStripMenuItem miDetectorTypeBasic;
+        private ToolStripMenuItem miDetectorTypeOutline;
+        private ToolStripMenuItem miDetectorTypeBlock;
+        private ToolStripMenuItem miDetectorTypeFastBlock;
+        private ToolStripMenuItem miDetectorTypeBox;
+
+        private ToolStripMenuItem miVideoServer;
+        private ToolStripMenuItem miVideoServerStatus;
+        private ToolStripMenuItem miVideoServerPort;
+        private ToolStripMenuItem miVideoServerConnections;
 
         private void InitalizeToolstrip()
         {
             miMain = new ToolStripMenuItem(sourceName);
-            
-            miDeviceStatus = new ToolStripMenuItem("Start Camera", null);
-            miMain.DropDown.Items.Add(miDeviceStatus);
-            miMain.DropDown.Items.Add(new ToolStripSeparator());
 
-            miEnableAlert = new ToolStripMenuItem("Enable Alert", null);
+            miDeviceStatus = new ToolStripMenuItem("-", null, miStatusMenuItem_Click);
+            miMain.DropDown.Items.Add(miDeviceStatus);
+            miMain.DropDown.Items.Add(new ToolStripSeparator());            
+
+            miEnableAlert = new ToolStripMenuItem("Enable Alert", null,miEnableAlertMenuItem_Click);
             miMain.DropDown.Items.Add(miEnableAlert);
-            miShowViewer = new ToolStripMenuItem("Show Viewer", null);
+            miShowViewer = new ToolStripMenuItem("Show Viewer", null,miShowViewerMenuItem_Click);
             miMain.DropDown.Items.Add(miShowViewer);
-            miOpacity = new ToolStripMenuItem("Set Opacity", null);
+            miOpacity = new ToolStripMenuItem("Set Opacity", null,miOpacityMenuItem_Click);
             miMain.DropDown.Items.Add(miOpacity);
-            miDetectorType = new ToolStripMenuItem("Detector Type", null);
+            miDetectorType = new ToolStripMenuItem("Detector Type");
             miMain.DropDown.Items.Add(miDetectorType);
 
             miDetectorTypeNone = new ToolStripMenuItem("None", null, detectorNone_Click);
@@ -147,6 +115,16 @@ namespace RearViewMirror
             miDetectorTypeBox = new ToolStripMenuItem("Box",null,detectorBox_Click);
             miDetectorType.DropDown.Items.Add(miDetectorTypeBox);
 
+            miVideoServer = new ToolStripMenuItem("Video Server");
+            miMain.DropDown.Items.Add(miVideoServer);
+
+            miVideoServerStatus = new ToolStripMenuItem("-");
+            miVideoServer.DropDown.Items.Add(miVideoServerStatus);
+            miVideoServerPort = new ToolStripMenuItem("Port: 0");
+            miVideoServer.DropDown.Items.Add(miVideoServerPort);
+            miVideoServerConnections = new ToolStripMenuItem("Connections: 0");
+            miVideoServer.DropDown.Items.Add(miVideoServerConnections);
+
             
         }
 
@@ -161,78 +139,6 @@ namespace RearViewMirror
         #endregion
 
         #region Detector Type Subcontext Menu Events
-
-        private void detectorBasic_Click(object sender, EventArgs e)
-        {
-            detectorType = 1;
-            loadDetectorType();
-        }
-
-
-        private void detectorOutline_Click(object sender, EventArgs e)
-        {
-            detectorType = 2;
-            loadDetectorType();
-        }
-
-        private void detectorBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = 3;
-            loadDetectorType();
-        }
-
-        private void detectorBetterBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = 4;
-            loadDetectorType();
-        }
-
-        private void detectorBox_Click(object sender, EventArgs e)
-        {
-            detectorType = 5;
-            loadDetectorType();
-        }
-
-        private void detectorNone_Click(object sender, EventArgs e)
-        {
-            detectorType = 0;
-            loadDetectorType();
-        }
-
-        #endregion
-
-        public VideoSourceBase(String name,IVideoSource source)
-        {
-            //establish source
-            captureDevice = source;
-            sourceName = name;
-
-            //initalize values
-            detector = null;
-            detectorType = 0;
-
-            //setup viewing window 
-            view = new Viewer();
-            view.Hide();
-            opacityConfig = new Opacity(view);
-        }
-
-        #region Camera Event Handlers
-
-        virtual protected void camera_NewFrame(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cameraAlert(object sender, EventArgs e)
-        {
-            // keep displaying window for three seconds after we stop
-            view.AlarmInterval = 3;
-        }
-
-        #endregion
-
-        #region General Functions
 
         /// <summary>
         /// should be called by any function that changes the detectorType
@@ -278,7 +184,68 @@ namespace RearViewMirror
             }
         }
 
-        private void startCapture()
+        private void detectorBasic_Click(object sender, EventArgs e)
+        {
+            detectorType = 1;
+            loadDetectorType();
+        }
+
+
+        private void detectorOutline_Click(object sender, EventArgs e)
+        {
+            detectorType = 2;
+            loadDetectorType();
+        }
+
+        private void detectorBlock_Click(object sender, EventArgs e)
+        {
+            detectorType = 3;
+            loadDetectorType();
+        }
+
+        private void detectorBetterBlock_Click(object sender, EventArgs e)
+        {
+            detectorType = 4;
+            loadDetectorType();
+        }
+
+        private void detectorBox_Click(object sender, EventArgs e)
+        {
+            detectorType = 5;
+            loadDetectorType();
+        }
+
+        private void detectorNone_Click(object sender, EventArgs e)
+        {
+            detectorType = 0;
+            loadDetectorType();
+        }
+
+
+
+        #endregion
+
+        #region Camera Event Handlers
+
+        private void camera_NewFrame(object sender, EventArgs e)
+        {
+            if (videoServer != null)
+            {
+                videoServer.sendFrame(camera.LastRawFrame);
+            }
+        }
+
+        private void cameraAlert(object sender, EventArgs e)
+        {
+            // keep displaying window for three seconds after we stop
+            view.AlarmInterval = 3;
+        }
+
+        #endregion
+
+        #region Camera Start/Stop Functions
+
+        public void startCamera()
         {
             // enable/disable motion alarm
             if (detector != null)
@@ -296,7 +263,7 @@ namespace RearViewMirror
             view.Camera = camera;
         }
 
-        private void stopCapture()
+        public void stopCamera()
         {
             if (camera != null)
             {
@@ -320,9 +287,13 @@ namespace RearViewMirror
 
         #endregion
 
-        #region General Tray Events
+        #region Tray Menu Events
 
-        public virtual void updateContextMenu()
+        /// <summary>
+        /// This must be called by system try to update the context menu for this 
+        /// video source before it is displayed. 
+        /// </summary>
+        public void updateContextMenu()
         {
             //disable start/stop links if cam is not setup yet
             if (captureDevice == null)
@@ -340,6 +311,25 @@ namespace RearViewMirror
                 miDeviceStatus.Enabled = true;
                 miDeviceStatus.Text = "Stop Camera";
             }
+            
+            //server setup
+            /*
+            portToolStripMenuItem.Text = "Port: " + videoServer.Port;
+            connectionsToolStripMenuItem.Text = "Connections: " + videoServer.NumberOfConnectedUsers;
+            if (videoServer.State == VideoServer.ServerState.STARTED)
+            {
+                startServerToolStripMenuItem.Enabled = false;
+                stopServerToolStripMenuItem.Enabled = true;
+                portToolStripMenuItem.Enabled = false;
+                connectionsToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                startServerToolStripMenuItem.Enabled = true;
+                stopServerToolStripMenuItem.Enabled = false;
+                portToolStripMenuItem.Enabled = true;
+                connectionsToolStripMenuItem.Enabled = false;
+            }*/
 
             //stickey bit
             miShowViewer.Checked = view.Stickey;
@@ -376,6 +366,46 @@ namespace RearViewMirror
 
         }
 
+        private void miStatusMenuItem_Click(object sender, EventArgs e)
+        {
+            if (camera == null)
+            {
+                startCamera();
+            }
+            else
+            {
+                stopCamera();
+            }
+        }
+
+        private void miEnableAlertMenuItem_Click(object sender, EventArgs e)
+        {
+            miEnableAlert.Checked = !miEnableAlert.Checked;
+            if (detector != null)
+            {
+                detector.MotionLevelCalculation = miEnableAlert.Checked;
+            }
+            //if it's open, cut it off
+            if (!miEnableAlert.Checked)
+            {
+                view.AlarmInterval = 0;
+            }
+        }
+
+        private void miShowViewerMenuItem_Click(object sender, EventArgs e)
+        {
+            view.Stickey = !view.Stickey;
+        }
+
+        private void miOpacityMenuItem_Click(object sender, EventArgs e)
+        {
+            opacityConfig.Show();
+        }
+
+
         #endregion
+
+
+
     }
 }
