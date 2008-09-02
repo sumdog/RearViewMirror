@@ -10,6 +10,7 @@
  * 
  */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -33,14 +34,22 @@ namespace RearViewMirror
 
         private const int RECENT_URL_LIMIT = 10;
 
-        private List<VideoSource> sources;
+        private ArrayList sources;
 
         public SystemTray()
         {
             InitializeComponent();
             this.Resize += SystemTray_Resize;
 
-            sources = new List<VideoSource>();
+            ArrayList loadSources = Properties.Settings.Default.videoSources;
+            if (loadSources != null)
+            {
+                sources = loadSources;
+            }
+            else
+            {
+                sources = new ArrayList();
+            }
 
             //previous URLs for MJPEG streams
             recentURLs = Properties.Settings.Default.recentURLs;
@@ -145,6 +154,10 @@ namespace RearViewMirror
                 v.stopCamera();
             }
 
+
+            Properties.Settings.Default.videoSources = sources;
+            Properties.Settings.Default.Save();
+
             //save the video capture device
             /*if (captureDevice is MJPEGStream)
             {
@@ -174,6 +187,24 @@ namespace RearViewMirror
         }
 
         #endregion
+
+        private void trayContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //refresh video sources
+            sourcesToolStripMenuItem.DropDown.Items.Clear();
+            if (sources.Count == 0)
+            {
+                ToolStripMenuItem blank = new ToolStripMenuItem("(none)");
+                blank.Enabled = false;
+                sourcesToolStripMenuItem.DropDown.Items.Add(blank);
+            }
+
+            foreach (VideoSource v in sources)
+            {
+                sourcesToolStripMenuItem.DropDown.Items.Add(v.ContextMenu);
+                v.updateContextMenu();
+            }
+        }
 
 
         /*

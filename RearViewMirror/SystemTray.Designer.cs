@@ -60,6 +60,7 @@ namespace RearViewMirror
             this.exitToolStripMenuItem});
             this.trayContextMenu.Name = "trayContextMenu";
             this.trayContextMenu.Size = new System.Drawing.Size(153, 120);
+            this.trayContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayContextMenu_Opening);
             // 
             // sourcesToolStripMenuItem
             // 
