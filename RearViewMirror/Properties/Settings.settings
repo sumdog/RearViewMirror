@@ -2,43 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RearViewMirror.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="viewer_x" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
-    </Setting>
-    <Setting Name="viewer_y" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
-    </Setting>
-    <Setting Name="enabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="opacity" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="running" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="detector" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">4</Value>
-    </Setting>
-    <Setting Name="CaptureDevice" Type="AForge.Video.DirectShow.VideoCaptureDevice" Scope="User">
+    <Setting Name="Test" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="serverPort" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">80</Value>
-    </Setting>
-    <Setting Name="recentURLs" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="Video1" Type="RearViewMirror.VideoSource" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="serverRunning" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="CaptureStream" Type="AForge.Video.MJPEGStream" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="showViewer" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="videoSources" Type="System.Collections.ArrayList" Scope="User">
+    <Setting Name="videoSources" Type="RearViewMirror.VideoSource[]" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

@@ -25,150 +25,32 @@ namespace RearViewMirror.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int viewer_x {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Test {
             get {
-                return ((int)(this["viewer_x"]));
+                return ((string)(this["Test"]));
             }
             set {
-                this["viewer_x"] = value;
+                this["Test"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int viewer_y {
+        public global::RearViewMirror.VideoSource Video1 {
             get {
-                return ((int)(this["viewer_y"]));
+                return ((global::RearViewMirror.VideoSource)(this["Video1"]));
             }
             set {
-                this["viewer_y"] = value;
+                this["Video1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool enabled {
+        public RearViewMirror.VideoSource[] videoSources {
             get {
-                return ((bool)(this["enabled"]));
-            }
-            set {
-                this["enabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double opacity {
-            get {
-                return ((double)(this["opacity"]));
-            }
-            set {
-                this["opacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool running {
-            get {
-                return ((bool)(this["running"]));
-            }
-            set {
-                this["running"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
-        public uint detector {
-            get {
-                return ((uint)(this["detector"]));
-            }
-            set {
-                this["detector"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::AForge.Video.DirectShow.VideoCaptureDevice CaptureDevice {
-            get {
-                return ((global::AForge.Video.DirectShow.VideoCaptureDevice)(this["CaptureDevice"]));
-            }
-            set {
-                this["CaptureDevice"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
-        public int serverPort {
-            get {
-                return ((int)(this["serverPort"]));
-            }
-            set {
-                this["serverPort"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection recentURLs {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["recentURLs"]));
-            }
-            set {
-                this["recentURLs"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool serverRunning {
-            get {
-                return ((bool)(this["serverRunning"]));
-            }
-            set {
-                this["serverRunning"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::AForge.Video.MJPEGStream CaptureStream {
-            get {
-                return ((global::AForge.Video.MJPEGStream)(this["CaptureStream"]));
-            }
-            set {
-                this["CaptureStream"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool showViewer {
-            get {
-                return ((bool)(this["showViewer"]));
-            }
-            set {
-                this["showViewer"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.ArrayList videoSources {
-            get {
-                return ((global::System.Collections.ArrayList)(this["videoSources"]));
+                return ((RearViewMirror.VideoSource[])(this["videoSources"]));
             }
             set {
                 this["videoSources"] = value;

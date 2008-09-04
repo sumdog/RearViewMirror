@@ -13,22 +13,26 @@ namespace RearViewMirror
 {
 
     [Serializable]
-    class VideoSource
+    public class VideoSource
     {
 
-        protected Viewer view;
+        public enum DetectorType { None,Basic,Outline,Block,FastBlock,Box };
 
-        protected IVideoSource captureDevice;
+        public enum CameraState { Stopped, Started };
 
-        protected IMotionDetector detector;
+        private Viewer view;
 
-        protected Camera camera;
+        private IVideoSource captureDevice;
 
-        protected uint detectorType;
+        private IMotionDetector detector;
 
-        protected Opacity opacityConfig;
+        private Camera camera;
 
-        protected String sourceName;
+        private DetectorType detectorType;
+
+        private Opacity opacityConfig;
+
+        private String sourceName;
 
         //Video Server variables
 
@@ -36,15 +40,28 @@ namespace RearViewMirror
 
         private ServerConnections connectionsWindow;
 
+        /// <summary>
+        /// Default constructor for serialization. Not useful to call directly. 
+        /// </summary>
+        public VideoSource() : this("default",null)
+        {
+            //default constructor for serialization
+
+        }
+
         public VideoSource(String name, IVideoSource source)
         {
+
             //establish source
             captureDevice = source;
             sourceName = name;
 
-            //initalize values
-            detector = null;
-            detectorType = 0;
+            //setup system tray menu
+            InitalizeToolstrip();  
+
+            //initalize default detector
+            detectorType = DetectorType.FastBlock;
+            loadDetectorType();
 
             //setup viewing window 
             view = new Viewer();
@@ -56,14 +73,81 @@ namespace RearViewMirror
             videoServer = new VideoServer(80);
             connectionsWindow = new ServerConnections(videoServer);
 
-            //setup system tray menu
-            InitalizeToolstrip();            
+            //defaults
+            miEnableAlert.Checked = true;
+
+            //start camera
+            //startCamera();
+          
         }
 
+        #region Properties (Used for Serialization)
 
+        /// <summary>
+        /// Property representing a CameraDevice. If set, this will overwrite the StreamSource. 
+        /// If the StreamSource is set, this will return null.
+        /// </summary>
+        public VideoCaptureDevice CameraDevice
+        {
+            get
+            {
+                return (captureDevice is VideoCaptureDevice) ? (VideoCaptureDevice)captureDevice : null;
+            }
+            set { captureDevice = value; }
 
+        }
 
+        /// <summary>
+        /// Property representing a StreamSource. If set, this will overwrite the CameraDevice
+        /// If the CameraDevice is set, this will return null.
+        /// </summary>
+        public MJPEGStream StreamSource
+        {
+            get { return (captureDevice is MJPEGStream) ? (MJPEGStream)captureDevice : null; }
+            set { captureDevice = value; }
+        }
 
+        /// <summary>
+        /// If set, window to automatically pops-up if motion detector is specified
+        /// </summary>
+        public bool EnableAlert
+        {
+            get { return miEnableAlert.Checked; }
+            set { miEnableAlert.Checked = value; }
+        }
+
+        /// <summary>
+        /// Viewer window's transparency
+        /// </summary>
+        public int ViewerOpacity
+        {
+            get { return view.Opacity; }
+            set { view.Opacity = value; }
+        }
+
+        /// <summary>
+        /// Motion detector type
+        /// </summary>
+        public DetectorType Detector
+        {
+            get { return detectorType; }
+            set
+            {
+                detectorType = value;
+                loadDetectorType();
+            }
+        }
+
+        /// <summary>
+        /// Name given to video source to display in menu
+        /// </summary>
+        public String Name
+        {
+            get { return sourceName; }
+            set { sourceName = value; }
+        }
+
+        #endregion
 
         #region ContextMenu
 
@@ -148,22 +232,22 @@ namespace RearViewMirror
         {
             switch (detectorType)
             {
-                case 0:
+                case DetectorType.None:
                     detector = null;
                     break;
-                case 1:
+                case DetectorType.Basic:
                     detector = new MotionDetector1();
                     break;
-                case 2:
+                case DetectorType.Outline:
                     detector = new MotionDetector2();
                     break;
-                case 3:
+                case DetectorType.Block:
                     detector = new MotionDetector3();
                     break;
-                case 4:
+                case DetectorType.FastBlock:
                     detector = new MotionDetector3Optimized();
                     break;
-                case 5:
+                case DetectorType.Box:
                     detector = new MotionDetector4();
                     break;
             }
@@ -186,38 +270,38 @@ namespace RearViewMirror
 
         private void detectorBasic_Click(object sender, EventArgs e)
         {
-            detectorType = 1;
+            detectorType = DetectorType.Basic;
             loadDetectorType();
         }
 
 
         private void detectorOutline_Click(object sender, EventArgs e)
         {
-            detectorType = 2;
+            detectorType = DetectorType.Outline;
             loadDetectorType();
         }
 
         private void detectorBlock_Click(object sender, EventArgs e)
         {
-            detectorType = 3;
+            detectorType = DetectorType.Block;
             loadDetectorType();
         }
 
         private void detectorBetterBlock_Click(object sender, EventArgs e)
         {
-            detectorType = 4;
+            detectorType = DetectorType.FastBlock;
             loadDetectorType();
         }
 
         private void detectorBox_Click(object sender, EventArgs e)
         {
-            detectorType = 5;
+            detectorType = DetectorType.Box;
             loadDetectorType();
         }
 
         private void detectorNone_Click(object sender, EventArgs e)
         {
-            detectorType = 0;
+            detectorType = DetectorType.None;
             loadDetectorType();
         }
 
@@ -344,22 +428,22 @@ namespace RearViewMirror
 
             switch (detectorType)
             {
-                case 0:
+                case DetectorType.None:
                     miDetectorTypeNone.Checked = true;
                     break;
-                case 1:
+                case DetectorType.Basic:
                     miDetectorTypeBasic.Checked = true;
                     break;
-                case 2:
+                case DetectorType.Outline:
                     miDetectorTypeOutline.Checked = true;
                     break;
-                case 3:
+                case DetectorType.Block:
                     miDetectorTypeBlock.Checked = true;
                     break;
-                case 4:
+                case DetectorType.FastBlock:
                     miDetectorTypeFastBlock.Checked = true;
                     break;
-                case 5:
+                case DetectorType.Box:
                     miDetectorTypeBox.Checked = true;
                     break;
             }
@@ -404,7 +488,6 @@ namespace RearViewMirror
 
 
         #endregion
-
 
 
     }

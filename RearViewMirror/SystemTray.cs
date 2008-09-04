@@ -41,18 +41,12 @@ namespace RearViewMirror
             InitializeComponent();
             this.Resize += SystemTray_Resize;
 
-            ArrayList loadSources = Properties.Settings.Default.videoSources;
-            if (loadSources != null)
-            {
-                sources = loadSources;
-            }
-            else
-            {
-                sources = new ArrayList();
-            }
+            VideoSource[] loadSources = Properties.Settings.Default.videoSources;
+
+            sources = (loadSources != null) ? new ArrayList(loadSources) : new ArrayList();
 
             //previous URLs for MJPEG streams
-            recentURLs = Properties.Settings.Default.recentURLs;
+            //recentURLs = Properties.Settings.Default.recentURLs;
             if (recentURLs == null) { recentURLs = new StringCollection(); }
 
         }
@@ -148,15 +142,15 @@ namespace RearViewMirror
             //save this state before we kill the camera
             //Properties.Settings.Default.running = (camera != null);
 
+
+            Properties.Settings.Default.videoSources = (VideoSource[]) sources.ToArray(typeof(VideoSource));
+            Properties.Settings.Default.Save();
+
             //stop the camera(s)
             foreach (VideoSource v in sources)
             {
                 v.stopCamera();
             }
-
-
-            Properties.Settings.Default.videoSources = sources;
-            Properties.Settings.Default.Save();
 
             //save the video capture device
             /*if (captureDevice is MJPEGStream)
