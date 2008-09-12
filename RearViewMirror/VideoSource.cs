@@ -34,12 +34,6 @@ namespace RearViewMirror
 
         private String sourceName;
 
-        //Video Server variables
-
-        private VideoServer videoServer;
-
-        private ServerConnections connectionsWindow;
-
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
         /// </summary>
@@ -68,10 +62,6 @@ namespace RearViewMirror
             view.Hide();
             opacityConfig = new Opacity(view);
             view.moveToTopRight();
-
-            //video server
-            videoServer = new VideoServer(80);
-            connectionsWindow = new ServerConnections(videoServer);
 
             //defaults
             miEnableAlert.Checked = true;
@@ -119,7 +109,7 @@ namespace RearViewMirror
         /// <summary>
         /// Viewer window's transparency
         /// </summary>
-        public int ViewerOpacity
+        public double ViewerOpacity
         {
             get { return view.Opacity; }
             set { view.Opacity = value; }
@@ -315,7 +305,7 @@ namespace RearViewMirror
         {
             if (videoServer != null)
             {
-                videoServer.sendFrame(camera.LastRawFrame);
+                videoServer.sendFrame(camera.LastRawFrame,sourceName);
             }
         }
 

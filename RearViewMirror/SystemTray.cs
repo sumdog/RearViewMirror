@@ -36,6 +36,12 @@ namespace RearViewMirror
 
         private ArrayList sources;
 
+        //Video Server variables
+
+        private VideoServer videoServer;
+
+        private ServerConnections connectionsWindow;
+
         public SystemTray()
         {
             InitializeComponent();
@@ -48,6 +54,10 @@ namespace RearViewMirror
             //previous URLs for MJPEG streams
             //recentURLs = Properties.Settings.Default.recentURLs;
             if (recentURLs == null) { recentURLs = new StringCollection(); }
+
+            //video server
+            videoServer = new VideoServer(80);
+            connectionsWindow = new ServerConnections(videoServer);
 
         }
             

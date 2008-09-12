@@ -197,7 +197,7 @@ namespace MJPEGServer
         /// Sends one frame of JPEG video to all connected clients
         /// </summary>
         /// <param name="b">Frame to Send</param>
-        public void sendFrame(Bitmap b)
+        public void sendFrame(Bitmap b, String name)
         {
             lock (socketList)
             {
@@ -205,7 +205,11 @@ namespace MJPEGServer
                 {
                     try
                     {
-                        v.sendFrame(b);
+                        //send to clients connecting to a specific camera path/name
+                        if (v.CameraPath == name)
+                        {
+                            v.sendFrame(b);
+                        }
                     }
                     catch (IOException)
                     {

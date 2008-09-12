@@ -7,6 +7,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using System.IO;
 using System.Net.Sockets;
@@ -23,11 +24,16 @@ namespace MJPEGServer
         private Boolean initalized;
         private BinaryWriter bwrite;
         private DateTime connectionTime;
+        private StringCollection headers;
+        private String name;
+        private String protocol;
 
         public StreamWriter Writer { get { return write; } set { write = value; } }
         public StreamReader Reader { get { return read; } set { read = value; } }
         public Socket Socket { get { return socket; } set { socket = value; } }
         public TimeSpan TimeConnected { get { return DateTime.Now - connectionTime; } }
+        public String ClientProtocol { get { return protocol; } }
+        public String CameraPath { get { return name; } set { name = value; } }
 
         public VideoSocketHandler()
         {
@@ -36,6 +42,7 @@ namespace MJPEGServer
             socket = null;
             initalized = false;
             bwrite = null;
+            headers = new StringCollection();
             connectionTime = DateTime.Now;
         }
 
@@ -49,6 +56,35 @@ namespace MJPEGServer
             initalized = false;
         }
 
+        /// <summary>
+        /// Used within initalize() to check if the HTTP GET request is valid
+        /// and pull back the correct camera name.
+        /// </summary>
+        /// <returns>True if client request header is valid.</returns>
+        private bool checkHeader()
+        {
+            if (headers.Count <= 0)
+            {
+                return false;
+            }
+            //split apart the HTTP Get Request. Example:
+            //  GET /path HTTP/1.1
+            String[] get = headers[0].Split(' ');
+            if (get.Length < 3 || get[0] != "GET")
+            {
+                return false;
+            }
+            //This is the URL the client is trying to hit
+            // which should match the name of the camera
+            // (trim off leading/trailing slashes)
+            name = get[1].Trim( new char[] { '/','\\' } ); 
+
+            //this is the client's protocol (e.g. HTTP/1.1)
+            protocol = get[2];
+
+            return true;
+        }
+
         public bool initalize()
         {
             try
@@ -60,10 +96,21 @@ namespace MJPEGServer
                 while (!endhead)
                 {
                     String line = read.ReadLine();
+                    headers.Add(line);
                     Log.trace(line);
                     if (line == null || line.Trim() == "")
                     {
                         endhead = true;
+
+                        if (!checkHeader())
+                        {
+                            Log.info("Invalid request from " + socket.RemoteEndPoint.ToString());
+                            write.WriteLine("HTTP/1.1 400 Bad Response");
+                            write.WriteLine("\n<html><body><p>" + 
+                                            "This M" + 
+                                            "</p></body></html>");
+                        }
+
                         Log.trace("Finished Headers. Sending Response");
                         write.WriteLine("HTTP/1.1 200 OK");
                         write.WriteLine("Content-Type: multipart/x-mixed-replace;boundary=--VID_Boundary");
