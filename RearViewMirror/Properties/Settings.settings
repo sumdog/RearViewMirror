@@ -2,14 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RearViewMirror.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Test" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Video1" Type="RearViewMirror.VideoSource" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="videoSources" Type="RearViewMirror.VideoSource[]" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="serverPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="recentURLs" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="serverRunning" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

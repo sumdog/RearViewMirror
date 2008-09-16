@@ -25,35 +25,47 @@ namespace RearViewMirror.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Test {
-            get {
-                return ((string)(this["Test"]));
-            }
-            set {
-                this["Test"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::RearViewMirror.VideoSource Video1 {
-            get {
-                return ((global::RearViewMirror.VideoSource)(this["Video1"]));
-            }
-            set {
-                this["Video1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public RearViewMirror.VideoSource[] videoSources {
             get {
                 return ((RearViewMirror.VideoSource[])(this["videoSources"]));
             }
             set {
                 this["videoSources"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int serverPort {
+            get {
+                return ((int)(this["serverPort"]));
+            }
+            set {
+                this["serverPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection recentURLs {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["recentURLs"]));
+            }
+            set {
+                this["recentURLs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool serverRunning {
+            get {
+                return ((bool)(this["serverRunning"]));
+            }
+            set {
+                this["serverRunning"] = value;
             }
         }
     }

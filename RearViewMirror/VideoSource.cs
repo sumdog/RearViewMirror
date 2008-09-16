@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Drawing;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using MJPEGServer;
@@ -32,26 +33,26 @@ namespace RearViewMirror
 
         private Opacity opacityConfig;
 
-        private String sourceName;
+        private VideoServer server;
 
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
         /// </summary>
-        public VideoSource() : this("default",null)
+        public VideoSource() : this("default",null,null)
         {
             //default constructor for serialization
 
         }
 
-        public VideoSource(String name, IVideoSource source)
+        public VideoSource(String name, IVideoSource source,VideoServer video)
         {
 
             //establish source
             captureDevice = source;
-            sourceName = name;
 
             //setup system tray menu
-            InitalizeToolstrip();  
+            InitalizeToolstrip();
+            miMain.Text = name;
 
             //initalize default detector
             detectorType = DetectorType.FastBlock;
@@ -59,12 +60,17 @@ namespace RearViewMirror
 
             //setup viewing window 
             view = new Viewer();
+            //you have to set this to be able to move the viewer programatically
+            view.StartPosition = FormStartPosition.Manual;
+            view.moveToTopRight();
             view.Hide();
             opacityConfig = new Opacity(view);
             view.moveToTopRight();
 
             //defaults
             miEnableAlert.Checked = true;
+
+            server = video;
 
             //start camera
             //startCamera();
@@ -133,9 +139,22 @@ namespace RearViewMirror
         /// </summary>
         public String Name
         {
-            get { return sourceName; }
-            set { sourceName = value; }
+            get { return miMain.Text; }
+            set { miMain.Text = value; }
         }
+
+
+        /// <summary>
+        /// Viewer's Window Position
+        /// </summary>
+        public Point Location
+        {
+            get { return view.Location; }
+            set { view.Location = value; }
+        }
+
+
+
 
         #endregion
 
@@ -154,14 +173,9 @@ namespace RearViewMirror
         private ToolStripMenuItem miDetectorTypeFastBlock;
         private ToolStripMenuItem miDetectorTypeBox;
 
-        private ToolStripMenuItem miVideoServer;
-        private ToolStripMenuItem miVideoServerStatus;
-        private ToolStripMenuItem miVideoServerPort;
-        private ToolStripMenuItem miVideoServerConnections;
-
         private void InitalizeToolstrip()
         {
-            miMain = new ToolStripMenuItem(sourceName);
+            miMain = new ToolStripMenuItem();
 
             miDeviceStatus = new ToolStripMenuItem("-", null, miStatusMenuItem_Click);
             miMain.DropDown.Items.Add(miDeviceStatus);
@@ -188,17 +202,6 @@ namespace RearViewMirror
             miDetectorType.DropDown.Items.Add(miDetectorTypeFastBlock);
             miDetectorTypeBox = new ToolStripMenuItem("Box",null,detectorBox_Click);
             miDetectorType.DropDown.Items.Add(miDetectorTypeBox);
-
-            miVideoServer = new ToolStripMenuItem("Video Server");
-            miMain.DropDown.Items.Add(miVideoServer);
-
-            miVideoServerStatus = new ToolStripMenuItem("-");
-            miVideoServer.DropDown.Items.Add(miVideoServerStatus);
-            miVideoServerPort = new ToolStripMenuItem("Port: 0");
-            miVideoServer.DropDown.Items.Add(miVideoServerPort);
-            miVideoServerConnections = new ToolStripMenuItem("Connections: 0");
-            miVideoServer.DropDown.Items.Add(miVideoServerConnections);
-
             
         }
 
@@ -303,9 +306,9 @@ namespace RearViewMirror
 
         private void camera_NewFrame(object sender, EventArgs e)
         {
-            if (videoServer != null)
+            if (server != null)
             {
-                videoServer.sendFrame(camera.LastRawFrame,sourceName);
+                server.sendFrame(camera.LastRawFrame,Name);
             }
         }
 
