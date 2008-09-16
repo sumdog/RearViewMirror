@@ -57,11 +57,10 @@ namespace RearViewMirror
             if (recentURLs == null) { recentURLs = new StringCollection(); }
 
             //video server
-            videoServer = new VideoServer(Properties.Settings.Default.serverPort);
+            videoServer = VideoServer.Instance;
+            videoServer.Port = Properties.Settings.Default.serverPort;
             connectionsWindow = new ServerConnections(videoServer);
-            foreach(VideoSource s in sources) {
-               // s.VideoServer = videoServer;
-            }
+
             //load previous server running state
             if (Properties.Settings.Default.serverRunning)
             {
@@ -136,7 +135,7 @@ namespace RearViewMirror
                 c.Source = form.Device;
 
                 String sourceName = showGetSourceNameBox();
-                VideoSource r = new VideoSource(sourceName, c, videoServer);
+                VideoSource r = new VideoSource(sourceName, c);
                 sources.Add(r);
                 sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
                 r.startCamera(); //start camera by default
@@ -167,7 +166,7 @@ namespace RearViewMirror
                 String sourceName = showGetSourceNameBox();
                 MJPEGStream s = new MJPEGStream();
                 s.Source = form.URL;
-                VideoSource v = new VideoSource(sourceName, s,videoServer);
+                VideoSource v = new VideoSource(sourceName, s);
                 sources.Add(v);
                 v.startCamera(); //start camera by default
                 
@@ -201,8 +200,6 @@ namespace RearViewMirror
                 v.stopCamera();
             }
 
-/*          Properties.Settings.Default.serverRunning = videoServer.State == VideoServer.ServerState.STARTED;
-            */
             Application.Exit();
         }
 
@@ -280,8 +277,7 @@ namespace RearViewMirror
 
                 try
                 {                    
-                    videoServer = new VideoServer(Convert.ToInt32(strResponse));
-                    Properties.Settings.Default.serverPort = videoServer.Port;
+                    videoServer.Port = (Convert.ToInt32(strResponse));
                     invalid = false;
                 }
                 catch (Exception)

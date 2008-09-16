@@ -63,6 +63,9 @@ namespace MJPEGServer
 
         private int port;
 
+        /// <summary>
+        /// Standard TCP Backlog Queue
+        /// </summary>
         private static readonly int BACKLOG = 30;
 
         public enum ServerState { STOPPED, STARTED };
@@ -71,7 +74,10 @@ namespace MJPEGServer
 
         public ServerState State { get { return state; } }
 
-        public int Port { get { return port; }  }
+        /// <summary>
+        /// Port for Server to Listen To
+        /// </summary>
+        public int Port { get { return port; } set { port = value; } }
 
         /// <summary>
         /// Property indicating number of clients connected to server
@@ -100,15 +106,19 @@ namespace MJPEGServer
             }
         }
 
+
         /// <summary>
-        /// Creates a bound instance of the MJPEG HTTP Server
+        /// Gets an instance to the Server Singleton
         /// </summary>
-        /// <param name="port">port for server to accept requests on</param>
-        public VideoServer(int port)
+        public static readonly VideoServer Instance = new VideoServer();
+
+
+        /// <summary>
+        /// Protected Singleton constructor for an instance of the MJPEG HTTP Server
+        /// </summary>
+        public VideoServer()
         {
-            this.port = port;
-            socketList = new List<VideoSocketHandler>();
-            serverListener = new TcpListener(IPAddress.Any, port);
+            socketList = new List<VideoSocketHandler>();            
             state = ServerState.STOPPED;
         }
 
@@ -123,6 +133,7 @@ namespace MJPEGServer
             {
                 try
                 {
+                    serverListener = new TcpListener(IPAddress.Any, port);
                     serverListener.Start(BACKLOG);
                     serverListener.BeginAcceptSocket(new AsyncCallback(socketAcceptCallback), new VideoSocketHandler());
                     state = ServerState.STARTED;
@@ -150,6 +161,7 @@ namespace MJPEGServer
             try
             {
                 serverListener.Stop();
+                serverListener = null;
                 state = ServerState.STOPPED;
 
                 //kill all sockets by closing them first and then

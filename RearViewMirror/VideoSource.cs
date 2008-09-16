@@ -33,18 +33,16 @@ namespace RearViewMirror
 
         private Opacity opacityConfig;
 
-        private VideoServer server;
-
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
         /// </summary>
-        public VideoSource() : this("default",null,null)
+        public VideoSource() : this("default",null)
         {
             //default constructor for serialization
 
         }
 
-        public VideoSource(String name, IVideoSource source,VideoServer video)
+        public VideoSource(String name, IVideoSource source)
         {
 
             //establish source
@@ -68,13 +66,7 @@ namespace RearViewMirror
             view.moveToTopRight();
 
             //defaults
-            miEnableAlert.Checked = true;
-
-            server = video;
-
-            //start camera
-            //startCamera();
-          
+            miEnableAlert.Checked = true;          
         }
 
         #region Properties (Used for Serialization)
@@ -306,9 +298,9 @@ namespace RearViewMirror
 
         private void camera_NewFrame(object sender, EventArgs e)
         {
-            if (server != null)
+            if (VideoServer.Instance != null)
             {
-                server.sendFrame(camera.LastRawFrame,Name);
+                VideoServer.Instance.sendFrame(camera.LastRawFrame, Name);
             }
         }
 
@@ -388,25 +380,6 @@ namespace RearViewMirror
                 miDeviceStatus.Enabled = true;
                 miDeviceStatus.Text = "Stop Camera";
             }
-            
-            //server setup
-            /*
-            portToolStripMenuItem.Text = "Port: " + videoServer.Port;
-            connectionsToolStripMenuItem.Text = "Connections: " + videoServer.NumberOfConnectedUsers;
-            if (videoServer.State == VideoServer.ServerState.STARTED)
-            {
-                startServerToolStripMenuItem.Enabled = false;
-                stopServerToolStripMenuItem.Enabled = true;
-                portToolStripMenuItem.Enabled = false;
-                connectionsToolStripMenuItem.Enabled = true;
-            }
-            else
-            {
-                startServerToolStripMenuItem.Enabled = true;
-                stopServerToolStripMenuItem.Enabled = false;
-                portToolStripMenuItem.Enabled = true;
-                connectionsToolStripMenuItem.Enabled = false;
-            }*/
 
             //stickey bit
             miShowViewer.Checked = view.Stickey;
