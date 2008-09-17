@@ -26,6 +26,8 @@ namespace RearViewMirror
 
         private Boolean stickey;
 
+        private Boolean globalStickey;
+
         private Timer timer;
 
         private uint alarmInterval;
@@ -41,6 +43,15 @@ namespace RearViewMirror
             }
         }
 
+        public Boolean ShowAll
+        {
+            get { return globalStickey; }
+            set
+            {
+                changeViewState(ref globalStickey,value);
+            }
+        }
+
         /// <summary>
         /// property for window sticky bit. When set, causes window to display or stay open.
         /// </summary>
@@ -50,15 +61,16 @@ namespace RearViewMirror
             { return stickey; }
             set
             {
-                stickey = value;
-                if (stickey && !Visible)
-                {
-                    Show();
-                }
-                else if (!stickey && Visible) //alarm interval is taken care of in Hide();
-                {
-                    this.Hide();
-                }
+                changeViewState(ref stickey, value);
+            }
+        }
+
+        private void changeViewState(ref bool s, bool newVal) {
+            s = newVal;
+            if (s && !Visible) { Show(); }
+            else if(!s && Visible) 
+            {
+                this.Hide();//alarm interval and both stickys are taken care of in Hide();
             }
         }
 
@@ -136,7 +148,7 @@ namespace RearViewMirror
         /// </summary>
         new public void Hide()
         {
-            if (alarmInterval == 0 && !stickey)
+            if (alarmInterval == 0 && !stickey && !globalStickey)
             {
                 base.Hide();
             }

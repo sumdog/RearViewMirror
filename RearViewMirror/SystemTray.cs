@@ -37,6 +37,8 @@ namespace RearViewMirror
 
         private ArrayList sources;
 
+        private OptionsForm options;
+
         //Video Server variables
 
         private VideoServer videoServer;
@@ -47,6 +49,8 @@ namespace RearViewMirror
         {
             InitializeComponent();
             this.Resize += SystemTray_Resize;
+
+            options = new OptionsForm(null);
 
             VideoSource[] loadSources = Properties.Settings.Default.videoSources;
 
@@ -76,16 +80,14 @@ namespace RearViewMirror
         }
 
         /// <summary>
-        /// Single Mouse click on the tray icon makes the viewer sticky
+        /// Single Mouse click on the tray icon shows all viewers
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void trayIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            /*if (e.Button == MouseButtons.Left && e.Clicks == 0)
+            if (e.Button == MouseButtons.Left && e.Clicks == 0)
             {
-                view.Stickey = !view.Stickey;
-            }*/
+               showAllToolStripMenuItem_Click(sender, e);
+            }
         }
 
 
@@ -203,7 +205,6 @@ namespace RearViewMirror
             Application.Exit();
         }
 
-        #endregion
 
         private void trayContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -239,6 +240,22 @@ namespace RearViewMirror
             }
 
         }
+
+        private void showAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showAllToolStripMenuItem.Checked = !showAllToolStripMenuItem.Checked;
+            foreach (VideoSource s in sources)
+            {
+                s.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
+            }
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            options.Show();
+        }
+
+        #endregion
 
         #region Server SubMenu Events
 
@@ -293,6 +310,10 @@ namespace RearViewMirror
         }
 
         #endregion
+
+
+
+
 
     }
 }

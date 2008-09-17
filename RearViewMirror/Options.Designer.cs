@@ -38,11 +38,13 @@ namespace RearViewMirror
             this.label1 = new System.Windows.Forms.Label();
             this.bOK = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
+            this.lCameraName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.SuspendLayout();
             // 
             // tbOpacity
             // 
+            this.tbOpacity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbOpacity.Location = new System.Drawing.Point(61, 47);
             this.tbOpacity.Name = "tbOpacity";
             this.tbOpacity.Size = new System.Drawing.Size(219, 45);
@@ -60,6 +62,7 @@ namespace RearViewMirror
             // 
             // lOpacity
             // 
+            this.lOpacity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lOpacity.AutoSize = true;
             this.lOpacity.Location = new System.Drawing.Point(12, 57);
             this.lOpacity.Name = "lOpacity";
@@ -69,6 +72,8 @@ namespace RearViewMirror
             // 
             // cbAlertSound
             // 
+            this.cbAlertSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.cbAlertSound.AutoSize = true;
             this.cbAlertSound.Location = new System.Drawing.Point(15, 118);
             this.cbAlertSound.Name = "cbAlertSound";
@@ -79,6 +84,8 @@ namespace RearViewMirror
             // 
             // cbEnableOnStartup
             // 
+            this.cbEnableOnStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.cbEnableOnStartup.AutoSize = true;
             this.cbEnableOnStartup.Location = new System.Drawing.Point(15, 95);
             this.cbEnableOnStartup.Name = "cbEnableOnStartup";
@@ -89,6 +96,8 @@ namespace RearViewMirror
             // 
             // tbAudioFile
             // 
+            this.tbAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tbAudioFile.Location = new System.Drawing.Point(76, 141);
             this.tbAudioFile.Name = "tbAudioFile";
             this.tbAudioFile.Size = new System.Drawing.Size(160, 20);
@@ -96,6 +105,7 @@ namespace RearViewMirror
             // 
             // bBrowseAudioFile
             // 
+            this.bBrowseAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bBrowseAudioFile.Location = new System.Drawing.Point(242, 138);
             this.bBrowseAudioFile.Name = "bBrowseAudioFile";
             this.bBrowseAudioFile.Size = new System.Drawing.Size(75, 23);
@@ -105,6 +115,7 @@ namespace RearViewMirror
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(10, 144);
             this.label1.Name = "label1";
@@ -114,7 +125,8 @@ namespace RearViewMirror
             // 
             // bOK
             // 
-            this.bOK.Location = new System.Drawing.Point(61, 175);
+            this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bOK.Location = new System.Drawing.Point(61, 174);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(91, 27);
             this.bOK.TabIndex = 8;
@@ -123,18 +135,32 @@ namespace RearViewMirror
             // 
             // bCancel
             // 
+            this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.Location = new System.Drawing.Point(189, 174);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(91, 28);
+            this.bCancel.Size = new System.Drawing.Size(91, 27);
             this.bCancel.TabIndex = 9;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
+            // 
+            // lCameraName
+            // 
+            this.lCameraName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lCameraName.AutoSize = true;
+            this.lCameraName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lCameraName.Location = new System.Drawing.Point(195, 13);
+            this.lCameraName.Name = "lCameraName";
+            this.lCameraName.Size = new System.Drawing.Size(122, 20);
+            this.lCameraName.TabIndex = 10;
+            this.lCameraName.Text = "Camera Name";
+            this.lCameraName.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 214);
+            this.ClientSize = new System.Drawing.Size(329, 207);
+            this.Controls.Add(this.lCameraName);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.label1);
@@ -165,5 +191,6 @@ namespace RearViewMirror
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.Button bCancel;
+        private System.Windows.Forms.Label lCameraName;
     }
 }

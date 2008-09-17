@@ -69,6 +69,17 @@ namespace RearViewMirror
             miEnableAlert.Checked = true;          
         }
 
+        /// <summary>
+        /// Indicates the application wants all view windows visible.
+        /// Sets an indicator that all views should be visible. If set to
+        /// false and an individual viewer is still set to be "stickey" it
+        /// will still be visible. This is not a property to avoid 
+        /// serialization issues
+        /// </summary>
+        /// <param name="b">set to current global "Show All" status</param>
+        public void setViewerGlobalStickey(bool b)
+        { view.ShowAll = b; }
+
         #region Properties (Used for Serialization)
 
         /// <summary>
