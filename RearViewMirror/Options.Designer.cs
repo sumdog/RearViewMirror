@@ -28,6 +28,7 @@ namespace RearViewMirror
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
             this.tbOpacity = new System.Windows.Forms.TrackBar();
             this.cbGlobalOptions = new System.Windows.Forms.CheckBox();
             this.lOpacity = new System.Windows.Forms.Label();
@@ -171,6 +172,7 @@ namespace RearViewMirror
             this.Controls.Add(this.lOpacity);
             this.Controls.Add(this.cbGlobalOptions);
             this.Controls.Add(this.tbOpacity);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OptionsForm";
             this.Text = "Options";
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();

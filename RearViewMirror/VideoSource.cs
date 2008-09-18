@@ -33,6 +33,8 @@ namespace RearViewMirror
 
         private Opacity opacityConfig;
 
+        private CameraState savedState;
+
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
         /// </summary>
@@ -156,7 +158,23 @@ namespace RearViewMirror
             set { view.Location = value; }
         }
 
+        /// <summary>
+        /// Indicates if the Camera is currently running
+        /// </summary>
+        public CameraState CurrentState
+        {
+            get { return (camera == null) ? CameraState.Stopped : CameraState.Started; }
+        }
 
+        /// <summary>
+        /// Should be set before applicate closes to save
+        /// the running state of the Camera on Serizilation
+        /// </summary>
+        public CameraState SaveState 
+        {
+            get { return savedState; }
+            set { savedState = value; }
+        }
 
 
         #endregion
@@ -341,6 +359,12 @@ namespace RearViewMirror
 
             // attach camera to camera window
             view.Camera = camera;
+
+            //show if we're suposte to
+            if (view.ShowAll || view.Stickey)
+            {
+                view.Show();
+            }
         }
 
         public void stopCamera()

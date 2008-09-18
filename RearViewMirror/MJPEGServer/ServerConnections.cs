@@ -28,6 +28,7 @@ namespace MJPEGServer
         public ServerConnections(VideoServer v)
         {
             InitializeComponent();
+
             videoServer = v;
 
             //setup refresh timer (1sec interval)

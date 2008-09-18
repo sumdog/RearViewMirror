@@ -31,6 +31,18 @@ namespace RearViewMirror
             }
 
             Text = lCameraName.Text;
+
+            //prevents window disposal
+            this.FormClosing += new FormClosingEventHandler(OptionsForm_FormClosing);
+        }
+
+        void OptionsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //prevents window from being Disposed of
+            }
+            Hide();
         }
     }
 }

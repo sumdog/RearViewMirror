@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Rear View Mirror")]
-[assembly: AssemblyDescription("Rear View Mirror is a motion detection and alert program for use with web cameras and other video capture devices. The front end was written by Sumit Khanna <sumdog@gmail.com> and is released under the GNU GPL v3.\r\n\r\n It is based off the motion detection framework developed by Andrew Kirillov <andrew.kirillov@gmail.com> which was released as free for non-commercial use. \r\n\r\nKirillov's code uses the open source AForge.NET image filter libraries.")]
+[assembly: AssemblyDescription("Rear View Mirror is a motion detection and alert program for use with web cameras and other video capture devices. The front end was written by Sumit Khanna <sumit@penguindreams.org> and is released under the GNU GPL v3.\r\n\r\n It is based off the AForge.NET motion detection framework developed by Andrew Kirillov <andrew.kirillov@gmail.com> which was released as free for non-commercial use. \r\n")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PenguinDreams.org")]
 [assembly: AssemblyProduct("Rear View Mirror")]
-[assembly: AssemblyCopyright("Copyright Sumit Khanna  (2007 - GNU GPLv3)")]
+[assembly: AssemblyCopyright("Copyright Sumit Khanna  (2007,2008 - GNU GPLv3)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

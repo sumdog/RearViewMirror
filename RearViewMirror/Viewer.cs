@@ -67,7 +67,7 @@ namespace RearViewMirror
 
         private void changeViewState(ref bool s, bool newVal) {
             s = newVal;
-            if (s && !Visible) { Show(); }
+            if (s && !Visible && Camera != null) { Show(); }
             else if(!s && Visible) 
             {
                 this.Hide();//alarm interval and both stickys are taken care of in Hide();
@@ -148,7 +148,8 @@ namespace RearViewMirror
         /// </summary>
         new public void Hide()
         {
-            if (alarmInterval == 0 && !stickey && !globalStickey)
+            if (Camera == null || 
+                (alarmInterval == 0 && !stickey && !globalStickey) )
             {
                 base.Hide();
             }

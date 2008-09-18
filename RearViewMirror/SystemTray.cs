@@ -48,13 +48,23 @@ namespace RearViewMirror
         public SystemTray()
         {
             InitializeComponent();
+            System.Windows.Forms.Application.EnableVisualStyles(); //XP style
             this.Resize += SystemTray_Resize;
 
-            options = new OptionsForm(null);
+            Updater.checkForUpdates();
 
+            //Next Release
+            //options = new OptionsForm(null);
+
+            //load and start all video sources which were started previously
             VideoSource[] loadSources = Properties.Settings.Default.videoSources;
-
             sources = (loadSources != null) ? new ArrayList(loadSources) : new ArrayList();
+            foreach(VideoSource i in sources) {
+                if (i.SaveState == VideoSource.CameraState.Started)
+                {
+                    i.startCamera();
+                }
+            }
 
             //previous URLs for MJPEG streams
             recentURLs = Properties.Settings.Default.recentURLs;
@@ -69,6 +79,13 @@ namespace RearViewMirror
             if (Properties.Settings.Default.serverRunning)
             {
                 videoServer.startServer();
+            }
+
+            //load global stickey
+            showAllToolStripMenuItem.Checked = Properties.Settings.Default.showAll;
+            foreach (VideoSource s in sources)
+            {
+                s.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
             }
         }
             
@@ -189,18 +206,20 @@ namespace RearViewMirror
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //stop the camera(s)
+            foreach (VideoSource v in sources)
+            {
+                v.SaveState = v.CurrentState; //save the running state
+                v.stopCamera();
+            }
+
             //save our settings
             Properties.Settings.Default.videoSources = (VideoSource[]) sources.ToArray(typeof(VideoSource));
             Properties.Settings.Default.serverPort = videoServer.Port;
             Properties.Settings.Default.recentURLs = recentURLs;
             Properties.Settings.Default.serverRunning = (videoServer.State == VideoServer.ServerState.STARTED);
+            Properties.Settings.Default.showAll = showAllToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
-
-            //stop the camera(s)
-            foreach (VideoSource v in sources)
-            {
-                v.stopCamera();
-            }
 
             Application.Exit();
         }
@@ -252,7 +271,8 @@ namespace RearViewMirror
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            options.Show();
+            //next release
+            //options.Show();
         }
 
         #endregion

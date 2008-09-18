@@ -40,11 +40,10 @@ namespace RearViewMirror
             this.toggleServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.portToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,13 +61,12 @@ namespace RearViewMirror
             this.sourcesToolStripMenuItem,
             this.newSourceToolStripMenuItem,
             this.videoServerToolStripMenuItem,
-            this.optionsToolStripMenuItem,
             this.showAllToolStripMenuItem,
             this.toolStripSeparator2,
             this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.trayContextMenu.Name = "trayContextMenu";
-            this.trayContextMenu.Size = new System.Drawing.Size(153, 186);
+            this.trayContextMenu.Size = new System.Drawing.Size(153, 164);
             this.trayContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayContextMenu_Opening);
             // 
             // sourcesToolStripMenuItem
@@ -131,6 +129,13 @@ namespace RearViewMirror
             this.connectionsToolStripMenuItem.Text = "Connections:";
             this.connectionsToolStripMenuItem.Click += new System.EventHandler(this.connectionsToolStripMenuItem_Click);
             // 
+            // showAllToolStripMenuItem
+            // 
+            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
+            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAllToolStripMenuItem.Text = "Show All";
+            this.showAllToolStripMenuItem.Click += new System.EventHandler(this.showAllToolStripMenuItem_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -149,20 +154,6 @@ namespace RearViewMirror
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // showAllToolStripMenuItem
-            // 
-            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
-            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.showAllToolStripMenuItem.Text = "Show All";
-            this.showAllToolStripMenuItem.Click += new System.EventHandler(this.showAllToolStripMenuItem_Click);
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // SystemTray
             // 
@@ -194,6 +185,5 @@ namespace RearViewMirror
         private System.Windows.Forms.ToolStripMenuItem portToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }

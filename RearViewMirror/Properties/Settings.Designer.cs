@@ -68,5 +68,17 @@ namespace RearViewMirror.Properties {
                 this["serverRunning"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool showAll {
+            get {
+                return ((bool)(this["showAll"]));
+            }
+            set {
+                this["showAll"] = value;
+            }
+        }
     }
 }
