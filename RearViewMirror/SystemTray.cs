@@ -45,6 +45,8 @@ namespace RearViewMirror
 
         private ServerConnections connectionsWindow;
 
+        private const string DONATE_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1282813";
+
         public SystemTray()
         {
             InitializeComponent();
@@ -87,6 +89,7 @@ namespace RearViewMirror
             {
                 s.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
             }
+
         }
             
 
@@ -105,6 +108,17 @@ namespace RearViewMirror
             {
                showAllToolStripMenuItem_Click(sender, e);
             }
+        }
+
+        /// <summary>
+        /// Camera wants to be removed
+        /// </summary>
+        /// <param name="source">Video Source to remove</param>
+        void r_RemoveSelected(object source)
+        {
+            VideoSource s = (VideoSource)source;            
+            s.stopCamera();
+            sources.Remove(source);
         }
 
 
@@ -156,6 +170,7 @@ namespace RearViewMirror
                 String sourceName = showGetSourceNameBox();
                 VideoSource r = new VideoSource(sourceName, c);
                 sources.Add(r);
+                r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
                 sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
                 r.startCamera(); //start camera by default
             }
@@ -187,6 +202,7 @@ namespace RearViewMirror
                 s.Source = form.URL;
                 VideoSource v = new VideoSource(sourceName, s);
                 sources.Add(v);
+                v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
                 v.startCamera(); //start camera by default
                 
             }
@@ -197,11 +213,19 @@ namespace RearViewMirror
         #region Main TrayIcon Menu Events
 
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             About a = new About();
             a.StartPosition = FormStartPosition.CenterScreen;
             a.ShowDialog();
+        }
+
+
+
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //System.Diagnostics.Process.Start(DONATE_URL);
+            Help.ShowHelp(this,DONATE_URL);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,12 +274,14 @@ namespace RearViewMirror
                 toggleServerToolStripMenuItem.Text = "Start Server";
                 portToolStripMenuItem.Enabled = true;
                 connectionsToolStripMenuItem.Enabled = false;
+                cameraURLsToolStripMenuItem.Enabled = false;
             }
             else if (videoServer.State == VideoServer.ServerState.STARTED)
             {
                 toggleServerToolStripMenuItem.Text = "Stop Server";
                 portToolStripMenuItem.Enabled = false;
                 connectionsToolStripMenuItem.Enabled = true;
+                cameraURLsToolStripMenuItem.Enabled = true;
             }
 
         }
@@ -327,6 +353,17 @@ namespace RearViewMirror
         private void connectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             connectionsWindow.Show();
+        }
+
+        private void cameraURLsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string text = "Video Server URLs:\n\n";
+            string myHostName = System.Net.Dns.GetHostName();
+            foreach(VideoSource s in sources) {
+                String url = "http://" + myHostName + ":" + videoServer.Port + "/" + s.Name;
+                text += url + "\n";
+            }
+            MessageBox.Show(text, "Video Server URLs", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion

@@ -1,5 +1,11 @@
 # ChangeLog for Rear View Mirror
-# Copyright 2007 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+# Copyright 2007,2008 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+
+*RearViewMirror-0.8.6 (19 Nov 2008)
+
+   Support for Multiple Video Sources
+   Dialog box to display server URLs
+   Donate button added to help menu
 
 *RearViewMirror-0.8.5 (28 Jan 2008)
 

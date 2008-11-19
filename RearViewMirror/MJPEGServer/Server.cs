@@ -204,6 +204,10 @@ namespace MJPEGServer
             {
                 Log.info("Socket callback got a ObjectDisposed. This is normal if the server was stopped");
             }
+            catch (NullReferenceException)
+            {
+                Log.warn("Socket callback threw NullPointer. This *might* be normal if the server was stopped");
+            }
         }
 
         /// <summary>

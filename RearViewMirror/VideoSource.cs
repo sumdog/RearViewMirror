@@ -193,6 +193,7 @@ namespace RearViewMirror
         private ToolStripMenuItem miDetectorTypeBlock;
         private ToolStripMenuItem miDetectorTypeFastBlock;
         private ToolStripMenuItem miDetectorTypeBox;
+        private ToolStripMenuItem miRemoveDevice;
 
         private void InitalizeToolstrip()
         {
@@ -200,6 +201,8 @@ namespace RearViewMirror
 
             miDeviceStatus = new ToolStripMenuItem("-", null, miStatusMenuItem_Click);
             miMain.DropDown.Items.Add(miDeviceStatus);
+            miRemoveDevice = new ToolStripMenuItem("Remove Device", null, miRemoveDeviceMenuItem_Click);
+            miMain.DropDown.Items.Add(miRemoveDevice);
             miMain.DropDown.Items.Add(new ToolStripSeparator());            
 
             miEnableAlert = new ToolStripMenuItem("Enable Alert", null,miEnableAlertMenuItem_Click);
@@ -223,6 +226,7 @@ namespace RearViewMirror
             miDetectorType.DropDown.Items.Add(miDetectorTypeFastBlock);
             miDetectorTypeBox = new ToolStripMenuItem("Box",null,detectorBox_Click);
             miDetectorType.DropDown.Items.Add(miDetectorTypeBox);
+
             
         }
 
@@ -487,9 +491,25 @@ namespace RearViewMirror
             opacityConfig.Show();
         }
 
+        private void miRemoveDeviceMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult r = MessageBox.Show("Are you sure you want to remove the Camera " + this.Name + "?", "Remove Camera", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (r == DialogResult.Yes)
+            {
+                RemoveSelected(this);
+            }
+        }
+
 
         #endregion
 
+        #region Event Callback for Remove Device
+
+        public delegate void RemoveEventHandler(object source);
+
+        public event RemoveEventHandler RemoveSelected;
+
+        #endregion
 
     }
 }
