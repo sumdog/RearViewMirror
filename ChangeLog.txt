@@ -1,6 +1,13 @@
 # ChangeLog for Rear View Mirror
 # Copyright 2007,2008 Sumit Khanna / penguindreams.org; Distributed under GPL v3
 
+*RearViewMirror-0.8.7 (xx)
+
+   Fixed unable to cancel camera name issue
+   Save settings before stopping camera in case of crash
+   Window names are now camera names
+   Improved saving of URL list
+
 *RearViewMirror-0.8.6 (19 Nov 2008)
 
    Support for Multiple Video Sources

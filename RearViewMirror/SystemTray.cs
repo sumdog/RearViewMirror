@@ -145,6 +145,13 @@ namespace RearViewMirror
             {
                 String strResponse = Microsoft.VisualBasic.Interaction.InputBox(
                         "What would you like to name this video source?", "RearViewMirror : Source Name", "", 100, 100);
+                if (strResponse.Equals(""))
+                {
+                    //this is the worst way to determine if they clicked canceled
+                    //I need to replace that crappy VisualBasic.Interaction box with
+                    //a more useful widget
+                    return null;
+                }
                 if (strResponse != null && !strResponse.Trim().Equals("") && isValidSourceName(strResponse))
                 {
                     return strResponse;
@@ -168,11 +175,14 @@ namespace RearViewMirror
                 c.Source = form.Device;
 
                 String sourceName = showGetSourceNameBox();
-                VideoSource r = new VideoSource(sourceName, c);
-                sources.Add(r);
-                r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
-                sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
-                r.startCamera(); //start camera by default
+                if (sourceName != null) //user didn't cancel
+                {
+                    VideoSource r = new VideoSource(sourceName, c);
+                    sources.Add(r);
+                    r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
+                    sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
+                    r.startCamera(); //start camera by default
+                }
             }
         }
 
@@ -189,6 +199,11 @@ namespace RearViewMirror
             form.StartPosition = FormStartPosition.CenterScreen;
             if (form.ShowDialog(this) == DialogResult.OK)
             {
+                //remove existing item (so it will be placed at top of list)
+                if (recentURLs.Contains(form.URL))
+                {
+                    recentURLs.Remove(form.URL);
+                }
                 //update recent URLs
                 if (recentURLs.Count == RECENT_URL_LIMIT)
                 {
@@ -198,13 +213,15 @@ namespace RearViewMirror
 
                 //open the stream
                 String sourceName = showGetSourceNameBox();
-                MJPEGStream s = new MJPEGStream();
-                s.Source = form.URL;
-                VideoSource v = new VideoSource(sourceName, s);
-                sources.Add(v);
-                v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
-                v.startCamera(); //start camera by default
-                
+                if (sourceName != null) //user didn't select cancel
+                {
+                    MJPEGStream s = new MJPEGStream();
+                    s.Source = form.URL;
+                    VideoSource v = new VideoSource(sourceName, s);
+                    sources.Add(v);
+                    v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
+                    v.startCamera(); //start camera by default
+                }                
             }
         }
 
@@ -230,12 +247,6 @@ namespace RearViewMirror
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //stop the camera(s)
-            foreach (VideoSource v in sources)
-            {
-                v.SaveState = v.CurrentState; //save the running state
-                v.stopCamera();
-            }
 
             //save our settings
             Properties.Settings.Default.videoSources = (VideoSource[]) sources.ToArray(typeof(VideoSource));
@@ -245,7 +256,19 @@ namespace RearViewMirror
             Properties.Settings.Default.showAll = showAllToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
 
+            //stop the server
+            videoServer.stopServer();
+
+            //stop the camera(s)
+            foreach (VideoSource v in sources)
+            {
+                v.SaveState = v.CurrentState; //save the running state
+                //this may cause lockups and may be unnescessary. 
+                v.stopCamera();
+            }
+
             Application.Exit();
+
         }
 
 

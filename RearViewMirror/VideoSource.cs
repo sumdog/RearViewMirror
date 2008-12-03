@@ -60,6 +60,8 @@ namespace RearViewMirror
 
             //setup viewing window 
             view = new Viewer();
+            view.Text = name;
+
             //you have to set this to be able to move the viewer programatically
             view.StartPosition = FormStartPosition.Manual;
             view.moveToTopRight();
@@ -145,7 +147,8 @@ namespace RearViewMirror
         public String Name
         {
             get { return miMain.Text; }
-            set { miMain.Text = value; }
+            //TODO: There has got to be a better way to do this; this won't always work
+            set { miMain.Text = value; if (view != null) { view.Text = value; } }
         }
 
 
