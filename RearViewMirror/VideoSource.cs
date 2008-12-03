@@ -334,7 +334,7 @@ namespace RearViewMirror
 
         private void camera_NewFrame(object sender, EventArgs e)
         {
-            if (VideoServer.Instance != null)
+            if (VideoServer.Instance != null && camera != null)
             {
                 VideoServer.Instance.sendFrame(camera.LastRawFrame, Name);
             }
@@ -379,7 +379,9 @@ namespace RearViewMirror
             if (camera != null)
             {
                 camera.SignalToStop();
-                camera.WaitForStop();
+                //This is where we freze at on exit
+                //  --gotta be a fix for this
+                //camera.WaitForStop();
                 camera = null;
             }
 

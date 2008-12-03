@@ -53,7 +53,16 @@ namespace RearViewMirror
             System.Windows.Forms.Application.EnableVisualStyles(); //XP style
             this.Resize += SystemTray_Resize;
 
+            //does nothing / will be implemented in a future release
             Updater.checkForUpdates();
+
+            //upgrade our settings from previous versions
+            if (Properties.Settings.Default.updateSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.updateSettings = false;
+                Properties.Settings.Default.Save();
+            }
 
             //Next Release
             //options = new OptionsForm(null);
@@ -181,6 +190,7 @@ namespace RearViewMirror
                     sources.Add(r);
                     r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
                     sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
+                    r.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
                     r.startCamera(); //start camera by default
                 }
             }
@@ -220,6 +230,7 @@ namespace RearViewMirror
                     VideoSource v = new VideoSource(sourceName, s);
                     sources.Add(v);
                     v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
+                    v.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
                     v.startCamera(); //start camera by default
                 }                
             }
@@ -248,6 +259,12 @@ namespace RearViewMirror
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+            //save the running state
+            foreach (VideoSource v in sources)
+            {
+                v.SaveState = v.CurrentState; 
+            }
+
             //save our settings
             Properties.Settings.Default.videoSources = (VideoSource[]) sources.ToArray(typeof(VideoSource));
             Properties.Settings.Default.serverPort = videoServer.Port;
@@ -257,13 +274,15 @@ namespace RearViewMirror
             Properties.Settings.Default.Save();
 
             //stop the server
-            videoServer.stopServer();
+            if (videoServer != null && videoServer.State == VideoServer.ServerState.STARTED)
+            {
+                videoServer.stopServer();
+            }
 
-            //stop the camera(s)
+            //stop the cameras
+            // gotta do this last to prevent losing settings on crash
             foreach (VideoSource v in sources)
             {
-                v.SaveState = v.CurrentState; //save the running state
-                //this may cause lockups and may be unnescessary. 
                 v.stopCamera();
             }
 
