@@ -75,6 +75,7 @@ namespace RearViewMirror
                 {
                     i.startCamera();
                 }
+                i.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
             }
 
             //previous URLs for MJPEG streams

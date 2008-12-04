@@ -1,6 +1,10 @@
 # ChangeLog for Rear View Mirror
 # Copyright 2007,2008 Sumit Khanna / penguindreams.org; Distributed under GPL v3
 
+*RearViewMirror-xx
+
+   Fixed bug where remove camera event handler wasn't set after deserialization
+
 *RearViewMirror-0.8.8.1 (03 Dec 2008)
 
    Fixed unable to cancel camera name issue
