@@ -12,6 +12,7 @@ using System.Text;
 using System.Reflection;
 using System.Net;
 using System.IO;
+using MJPEGServer;
 
 namespace RearViewMirror
 {
@@ -21,15 +22,25 @@ namespace RearViewMirror
     public class Updater
     {
 
-        public readonly static String VERSION_URL = "http://penguindreams.org/files/RVM.version";
+        public const String VERSION_URL = "http://penguindreams.org/files/progs/RVM.version";
 
-        public readonly static String PAGE_URL = "http://penguindreams.org/files/RVM.version";
+        private static bool newerVersion(String client, String server)
+        {
+            return new Version(server) > new Version(client);
+        }
 
-        public static Boolean checkForUpdates()
+        /// <summary>
+        /// Checks for software updates
+        /// </summary>
+        /// <returns>string containing URL for updates or null if verison is current or error occurs</returns>
+        public static string checkForUpdates()
         {
             try
             {
+                Log.info("Checking for Updates");
+                
                 String version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                Log.debug("Current Version " + version);
 
                 //Make webserver request
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(VERSION_URL);
@@ -54,14 +65,21 @@ namespace RearViewMirror
                 }
                 while (count > 0);
 
-                Console.WriteLine(sb.ToString());
+                string serverResponse = sb.ToString();
+                Log.debug("Server Response " + sb.ToString());
 
-                return false;
+                string[] parts = serverResponse.Split(';');
+
+                bool newVersion = Updater.newerVersion(version,parts[0]);
+
+                Log.info("Newer Version " + newVersion);
+
+                return (newVersion) ? parts[1] : null;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                return false;
+                Log.error("Error checking for updates " + e.Message);
+                return null;
             }
         }
 

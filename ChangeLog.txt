@@ -1,5 +1,13 @@
 # ChangeLog for Rear View Mirror
-# Copyright 2007,2008 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+# Copyright 2007,2011 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+
+*RearViewMirror-0.8.8.2 (07 Jul 2011)
+
+   Updated project to Visual Studio 2010
+   Added queuing system for MJPEG server to reduce latency
+   Updated to .NET 4.0 
+   Removed several locks and replaced with thread safe collections
+   Added checks for update notifications
 
 *RearViewMirror-0.8.8.2 (11 Dec 2008)
 

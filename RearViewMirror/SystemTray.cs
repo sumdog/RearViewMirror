@@ -53,9 +53,6 @@ namespace RearViewMirror
             System.Windows.Forms.Application.EnableVisualStyles(); //XP style
             this.Resize += SystemTray_Resize;
 
-            //does nothing / will be implemented in a future release
-            Updater.checkForUpdates();
-
             //upgrade our settings from previous versions
             if (Properties.Settings.Default.updateSettings)
             {
@@ -98,6 +95,17 @@ namespace RearViewMirror
             foreach (VideoSource s in sources)
             {
                 s.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
+            }
+
+            //check for updates
+            string updateUrl = Updater.checkForUpdates();
+            Log.debug("Update URL is " + updateUrl);
+            if (updateUrl != null)
+            {
+                if (MessageBox.Show("An update is avaiable for Rear View Mirror. Would you like to download it?", "Update Avaiable", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(updateUrl);
+                }
             }
 
         }

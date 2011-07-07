@@ -132,22 +132,22 @@ namespace MJPEGServer
             return initalized;
         }
 
-        public void sendFrame(Bitmap b)
+        public void sendFrame(byte[] b)
         {
             if(!initalized) {
                 throw new UninitalizedVideoSocketException("call initalize() on handler first");
             }
-            MemoryStream mem = new MemoryStream();
+            /*MemoryStream mem = new MemoryStream();
             b.Save(mem, ImageFormat.Jpeg);
-            mem.Position = 0;
+            mem.Position = 0;*/
             write.WriteLine("--VID_Boundary");
             write.WriteLine("Content-Type: image/jpeg");
-            write.WriteLine("Content-Length: " + mem.Length);
+            write.WriteLine("Content-Length: " + b.Length);
             write.WriteLine("");
             write.Flush();
 
             //write the image binary 
-            bwrite.Write(mem.GetBuffer());
+            bwrite.Write(b);
             bwrite.Flush();
 
             write.WriteLine("");
@@ -156,8 +156,15 @@ namespace MJPEGServer
 
         public void close()
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            try
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (Exception e)
+            {
+                Log.warn("Could not close socket. " + e.Message);
+            }
         }
     }
 

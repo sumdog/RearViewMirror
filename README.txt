@@ -1,5 +1,5 @@
 Rear View Mirror
-0.8.8.1-beta
+0.8.8.6-beta
 
 Copyright 2007 Sumit Khanna
 -GNU GPL v3
@@ -30,7 +30,7 @@ Todo
 
 Show which camera a user is connected to in server window
 
-Automatic Update Checks
-
 More options per Camera (alert sound, enable camera on startup, etc.)
+
+Recording to file when motion occurs 
 

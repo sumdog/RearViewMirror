@@ -13,6 +13,8 @@ using System.Net;
 using System.Collections;
 using System.Drawing;
 using System.IO;
+using RearViewMirror.MJPEGServer;
+using System.Collections.Concurrent;
 
 namespace MJPEGServer
 {
@@ -59,7 +61,7 @@ namespace MJPEGServer
         /// <summary>
         /// List of connected sockets in queue 
         /// </summary>
-        private List<VideoSocketHandler> socketList;
+        private ConcurrentDictionary<int,VideoSocketHandler> socketList;
 
         private int port;
 
@@ -74,6 +76,8 @@ namespace MJPEGServer
 
         public ServerState State { get { return state; } }
 
+        private FrameQueue frameQueue;
+
         /// <summary>
         /// Port for Server to Listen To
         /// </summary>
@@ -82,7 +86,7 @@ namespace MJPEGServer
         /// <summary>
         /// Property indicating number of clients connected to server
         /// </summary>
-        public int NumberOfConnectedUsers { get { return socketList.Count; } }
+        public int NumberOfConnectedUsers { get {  return socketList.Count; }   }
 
         /// <summary>
         /// Property containing a list of IP addresses connected to server
@@ -91,15 +95,13 @@ namespace MJPEGServer
             get
             {
                 List<ConnectionInformation> retval;
-                lock (socketList)
+
+                retval = new List<ConnectionInformation>(socketList.Count);
+                foreach (KeyValuePair<int,VideoSocketHandler> pair in socketList)
                 {
-                    retval = new List<ConnectionInformation>(socketList.Count);
-                    for (int i = 0; i < socketList.Count; i++)
+                    if (pair.Value.Socket.Connected)
                     {
-                        if (socketList[i].Socket.Connected)
-                        {
-                            retval.Add(new ConnectionInformation(socketList[i]));
-                        }
+                        retval.Add(new ConnectionInformation(pair.Value));
                     }
                 }
                 return retval.ToArray();
@@ -118,8 +120,9 @@ namespace MJPEGServer
         /// </summary>
         public VideoServer()
         {
-            socketList = new List<VideoSocketHandler>();            
+            socketList = new ConcurrentDictionary<int,VideoSocketHandler>();                    
             state = ServerState.STOPPED;
+            frameQueue = new FrameQueue(socketList);
         }
 
 
@@ -136,6 +139,7 @@ namespace MJPEGServer
                     serverListener = new TcpListener(IPAddress.Any, port);
                     serverListener.Start(BACKLOG);
                     serverListener.BeginAcceptSocket(new AsyncCallback(socketAcceptCallback), new VideoSocketHandler());
+                    frameQueue.startQueue();
                     state = ServerState.STARTED;
                 }
                 catch (SocketException e)
@@ -161,16 +165,21 @@ namespace MJPEGServer
             try
             {
                 serverListener.Stop();
+                frameQueue.stopQueue();
                 serverListener = null;
                 state = ServerState.STOPPED;
 
                 //kill all sockets by closing them first and then
                 //clearning the socket queue
-                lock (socketList)
+                foreach (KeyValuePair<int, VideoSocketHandler> set in socketList)
                 {
-                    foreach (VideoSocketHandler v in socketList) { v.close(); }
-                    socketList.Clear();
+                    VideoSocketHandler closeme;
+                    if (socketList.TryRemove(set.Key, out closeme))
+                    {
+                        closeme.close();
+                    }
                 }
+                socketList.Clear();
             }
             catch (SocketException)
             {
@@ -190,10 +199,8 @@ namespace MJPEGServer
                 handle.setIOStreams(clientSocket);
                 if (handle.initalize())
                 {
-                    lock (socketList)
-                    {
-                        socketList.Add(handle);
-                    }
+                    socketList.TryAdd( ((IPEndPoint)(clientSocket.RemoteEndPoint)).Port,handle);
+                    //socketList.Add(1,handle);
                 }
                 else
                 {
@@ -216,28 +223,7 @@ namespace MJPEGServer
         /// <param name="b">Frame to Send</param>
         public void sendFrame(Bitmap b, String name)
         {
-            lock (socketList)
-            {
-                foreach (VideoSocketHandler v in socketList)
-                {
-                    try
-                    {
-                        //send to clients connecting to a specific camera path/name
-                        if (v.CameraPath == name)
-                        {
-                            v.sendFrame(b);
-                        }
-                    }
-                    catch (IOException)
-                    {
-                        //the socket must be removed from the list first
-                        //or else we'll keep catching the same exceptions here
-                        //on manual disconnects from the ServerConnections.cs
-                        socketList.Remove(v);
-                        v.close();
-                    }
-                }
-            }
+            frameQueue.addFrameToQueue(b, name);
         }
     }
 
