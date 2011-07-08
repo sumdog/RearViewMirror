@@ -81,7 +81,6 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Camera.cs" />
     <Compile Include="MJPEGServer\FrameQueue.cs" />
     <Compile Include="Options.cs">
       <SubType>Form</SubType>
@@ -151,8 +150,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="StateDetector.cs">
-    </Compile>
     <Compile Include="SystemTray.cs">
       <SubType>Form</SubType>
     </Compile>

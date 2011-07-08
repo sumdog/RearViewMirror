@@ -1,7 +1,7 @@
 Rear View Mirror
 0.8.8.6-beta
 
-Copyright 2007 Sumit Khanna
+Copyright 2007-2011 Sumit Khanna
 -GNU GPL v3
 http://penguindreams.org
 ------------------------------
