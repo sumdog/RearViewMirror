@@ -60,12 +60,15 @@ namespace RearViewMirror
 
         private ServerConnections connectionsWindow;
 
+        private LogViewer logviewer;
+
         private const string DONATE_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1282813";
 
         public SystemTray()
         {
             InitializeComponent();
             System.Windows.Forms.Application.EnableVisualStyles(); //XP style
+            logviewer = new LogViewer();
             this.Resize += SystemTray_Resize;
 
             //upgrade our settings from previous versions
@@ -367,6 +370,12 @@ namespace RearViewMirror
             //options.Show();
         }
 
+        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            logviewer.Show();
+        }
+
+
         #endregion
 
         #region Server SubMenu Events
@@ -433,6 +442,7 @@ namespace RearViewMirror
         }
 
         #endregion
+
 
 
 

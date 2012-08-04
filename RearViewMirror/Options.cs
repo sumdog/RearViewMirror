@@ -1,6 +1,6 @@
 /*
  * RearViewMirror - Sumit Khanna <sumit@penguindreams.org>
- * Copyleft 2007-2011, Some rights reserved
+ * Copyleft 2007-2012, Some rights reserved
  * http://penguindreams.org/projects/rearviewmirror
  * 
  * Based on work by Andrew Kirillov:
@@ -10,12 +10,12 @@
  * 
     This file is part of RearViewMirror.
 
-    Foobar is free software: you can redistribute it and/or modify
+    RearViewMirror is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    RearViewMirror is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -70,5 +70,34 @@ namespace RearViewMirror
             }
             Hide();
         }
+
+        #region Events
+
+        private void tbOpacity_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bBrowseRecordFolder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bBrowseAudioFile_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bOK_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }

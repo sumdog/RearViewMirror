@@ -1,6 +1,6 @@
 /*
  * RearViewMirror - Sumit Khanna <sumit@penguindreams.org>
- * Copyleft 2007-2011, Some rights reserved
+ * Copyleft 2007-2012, Some rights reserved
  * http://penguindreams.org/projects/rearviewmirror
  * 
  * Based on work by Andrew Kirillov:
@@ -10,7 +10,7 @@
  * 
     This file is part of RearViewMirror.
 
-    Foobar is free software: you can redistribute it and/or modify
+    RearViewMirror is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -21,7 +21,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with RearViewMirror.  If not, see <http://www.gnu.org/licenses/>.
  *  
  */
 using System;
