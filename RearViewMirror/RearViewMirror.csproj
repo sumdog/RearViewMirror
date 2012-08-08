@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\references\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\references\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -81,6 +84,8 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlertEvents.cs" />
+    <Compile Include="LoggingInterceptor.cs" />
     <Compile Include="LogViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,11 +93,12 @@
       <DependentUpon>LogViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="MJPEGServer\FrameQueue.cs" />
-    <Compile Include="Options.cs">
+    <Compile Include="Options.cs" />
+    <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Options.Designer.cs">
-      <DependentUpon>Options.cs</DependentUpon>
+    <Compile Include="OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MJPEGServer\Server.cs" />
     <Compile Include="MJPEGServer\ServerConnections.cs">
@@ -103,12 +109,6 @@
     </Compile>
     <Compile Include="MJPEGServer\Socket.cs" />
     <Compile Include="MJPEGServer\Util.cs" />
-    <Compile Include="Opacity.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Opacity.Designer.cs">
-      <DependentUpon>Opacity.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="About.resx">
@@ -122,13 +122,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>ServerConnections.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Opacity.resx">
+    <EmbeddedResource Include="OptionsForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Opacity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Options.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Options.cs</DependentUpon>
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,6 +145,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -158,6 +155,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Proxy.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SystemTray.cs">
       <SubType>Form</SubType>

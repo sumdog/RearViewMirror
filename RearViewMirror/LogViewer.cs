@@ -37,7 +37,7 @@ namespace RearViewMirror
             switch (level)
             {
                 case Log.LogLevel.TRACE:
-                    rbLogTxt.SelectionColor = Color.Blue;
+                    rbLogTxt.SelectionColor = Color.LightCyan;
                     break;
                 case Log.LogLevel.DEBUG:
                     rbLogTxt.SelectionColor = Color.Yellow;
@@ -59,11 +59,18 @@ namespace RearViewMirror
 
             rbLogTxt.SelectedText += logMessage + '\n';
 
-            int oversize = rbLogTxt.TextLength;
-            if (oversize > MaxBufferSize)
+
+            //Taken from http://stackoverflow.com/questions/2196097/elegant-log-window-in-winforms-c-sharp (m_eiman)
+            if (rbLogTxt.Lines.Length > MaxBufferSize)
             {
-                rbLogTxt.Text = rbLogTxt.Text.Substring(MaxBufferSize - oversize, MaxBufferSize);
+                rbLogTxt.Select(0, rbLogTxt.Text.IndexOf('\n') + 1);
+                rbLogTxt.SelectedRtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1053\\uc1 }";
+                rbLogTxt.SelectionStart = rbLogTxt.Text.Length;
             }
+
+            rbLogTxt.ScrollToCaret();
+
+
         }
     }
 }

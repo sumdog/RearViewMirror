@@ -1,4 +1,4 @@
-/*
+﻿/*
  * RearViewMirror - Sumit Khanna <sumit@penguindreams.org>
  * Copyleft 2007-2012, Some rights reserved
  * http://penguindreams.org/projects/rearviewmirror
@@ -25,79 +25,160 @@
  *  
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
+using System.Collections;
 namespace RearViewMirror
 {
-    public partial class OptionsForm : Form
-    {
 
+    [Serializable]
+    public abstract class AbstractFeedOptions
+    {
+        public abstract bool UseGlobal { get; set; }
+
+        public abstract double Opacity { get; set; }
+
+        public abstract string Name { get; }
+
+        public abstract bool EnableRecording { get; set; }
+
+        public abstract string RecordFolder { get; set; }
+
+        public abstract bool EnableAlertSound { get; set; }
+
+        public abstract string AlertSoundFile { get; set; }
+
+        protected AbstractFeedOptions() {
+        }
+    }
+
+    [Serializable]
+    public class VideoFeedOptions : AbstractFeedOptions
+    {
         private VideoSource vsource;
 
-        public OptionsForm(VideoSource vsource)
-        {
-            InitializeComponent();
+        public override bool UseGlobal {get; set;}
 
-            //If not video source, we're dealing with Global Options
+        public override bool EnableRecording { get; set; }
+
+        public override string RecordFolder { get; set; }
+
+        public override bool EnableAlertSound { get; set; }
+
+        public override string AlertSoundFile { get; set; }
+
+        public override double Opacity
+        {
+            get { return vsource.ViewerOpacity; }
+            set { vsource.ViewerOpacity = value; }
+        }
+
+        public override string Name { get { return vsource.Name; } }
+
+        public VideoFeedOptions(VideoSource vsource)
+        {
             this.vsource = vsource;
-            if (vsource == null)
+
+            //defaults
+            EnableAlertSound = false;
+            EnableRecording = false;
+            AlertSoundFile = null;
+            RecordFolder = null;
+        }
+    }
+
+    [Serializable]
+    public class GlobalVideoFeedOptions : AbstractFeedOptions
+    {
+        /// <summary>
+        /// List of all video sources passed in from the SystemTray
+        /// Note this array is not typed because of the way the SystemTray loads
+        /// it from the preferences. Assume each element is of type VideoSource
+        /// </summary>
+        private ArrayList vsources;
+
+        public GlobalVideoFeedOptions(ArrayList vsources)
+        {
+            this.vsources = vsources;
+
+            //defaults
+            globalOpacity = 1;
+            globalEnableAlertSound = false;
+            globalEnableRecording = false;
+            globalAlertSoundFile = null;
+            globalRecordFolder = null;
+        }
+
+        public void updateViewers()
+        {
+            foreach (VideoSource v in vsources)
+            { updateViewer(v); }
+        }
+
+        public void updateViewer(VideoSource v)
+        {
+            if (v.Options.UseGlobal)
             {
-                lCameraName.Text = "Global Options";
-                cbGlobalOptions.Visible = false;
-
+                v.ViewerOpacity = globalOpacity;
+                v.Options.EnableRecording = globalEnableRecording;
+                v.Options.RecordFolder = globalRecordFolder;
+                v.Options.EnableAlertSound = globalEnableAlertSound;
+                v.Options.AlertSoundFile = globalAlertSoundFile;
             }
-            else
+        }
+
+        #region PrivateGlobals
+
+        private double globalOpacity;
+
+        private bool globalEnableRecording, globalEnableAlertSound;
+
+        private string globalRecordFolder, globalAlertSoundFile;
+
+        #endregion
+
+        #region Global Properties
+
+        public override bool EnableRecording {
+            get { return globalEnableRecording; }
+            set { globalEnableRecording = value;  } 
+        }
+
+        public override string RecordFolder
+        {
+            get { return globalRecordFolder; }
+            set { globalRecordFolder = value; }
+        }
+
+        public override bool EnableAlertSound
+        {
+            get { return globalEnableAlertSound; }
+            set { globalEnableAlertSound = value; }
+        }
+
+        public override string AlertSoundFile
+        {
+            get { return globalAlertSoundFile; }
+            set { globalAlertSoundFile = value; }
+        }
+
+        public override bool UseGlobal
+        {
+            get { throw new NotImplementedException("Cannot set UseGlobal on Global Options"); }
+            set { throw new NotImplementedException("Cannot set UseGlobal on Global Options"); }
+        }
+
+        public override string Name { get { return "Global Options"; } }
+
+        public override double Opacity
+        {
+            get { return globalOpacity; }
+            set
             {
-                lCameraName.Text = vsource.Name;
+                globalOpacity = value;
+                updateViewers();
             }
-
-            Text = lCameraName.Text;
-
-            //prevents window disposal
-            this.FormClosing += new FormClosingEventHandler(OptionsForm_FormClosing);
-        }
-
-        void OptionsForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true; //prevents window from being Disposed of
-            }
-            Hide();
-        }
-
-        #region Events
-
-        private void tbOpacity_Scroll(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bBrowseRecordFolder_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bBrowseAudioFile_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bOK_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bCancel_Click(object sender, EventArgs e)
-        {
-
         }
 
         #endregion
+
     }
 }

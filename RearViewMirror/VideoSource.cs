@@ -57,9 +57,10 @@ namespace RearViewMirror
 
         private DetectorType detectorType;
 
-        private Opacity opacityConfig;
-
         private CameraState savedState;
+
+        private AlertEvents alertEvents;
+
 
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
@@ -88,15 +89,20 @@ namespace RearViewMirror
             view = new Viewer();
             view.Text = name;
 
+            //setup other alert events (recording/audio alert)
+            alertEvents = new AlertEvents(this);
+
             //you have to set this to be able to move the viewer programatically
             view.StartPosition = FormStartPosition.Manual;
             view.moveToTopRight();
             view.Hide();
-            opacityConfig = new Opacity(view);
+
             view.moveToTopRight();
 
             //defaults
-            miEnableAlert.Checked = true;          
+            miEnableAlert.Checked = true;
+            Options = Proxy.wrapOptions(new VideoFeedOptions(this));
+            Options.UseGlobal = true;
         }
 
         /// <summary>
@@ -125,6 +131,11 @@ namespace RearViewMirror
             set { captureDevice = value; }
 
         }
+
+        /// <summary>
+        /// Options for video feed and viewer
+        /// </summary>
+        public AbstractFeedOptions Options { get; set; }
 
         /// <summary>
         /// Property representing a StreamSource. If set, this will overwrite the CameraDevice
@@ -214,7 +225,7 @@ namespace RearViewMirror
         private ToolStripMenuItem miDeviceStatus;
         private ToolStripMenuItem miEnableAlert;
         private ToolStripMenuItem miShowViewer;
-        private ToolStripMenuItem miOpacity;
+        private ToolStripMenuItem miOptions;
         private ToolStripMenuItem miDetectorType;
         private ToolStripMenuItem miDetectorTypeNone;
         private ToolStripMenuItem miDetectorTypeBasic;
@@ -238,8 +249,8 @@ namespace RearViewMirror
             miMain.DropDown.Items.Add(miEnableAlert);
             miShowViewer = new ToolStripMenuItem("Show Viewer", null,miShowViewerMenuItem_Click);
             miMain.DropDown.Items.Add(miShowViewer);
-            miOpacity = new ToolStripMenuItem("Set Opacity", null,miOpacityMenuItem_Click);
-            miMain.DropDown.Items.Add(miOpacity);
+            miOptions = new ToolStripMenuItem("Options", null, miOptionsMenuItem_Click);
+            miMain.DropDown.Items.Add(miOptions);
             miDetectorType = new ToolStripMenuItem("Detector Type");
             miMain.DropDown.Items.Add(miDetectorType);
 
@@ -363,13 +374,16 @@ namespace RearViewMirror
             if (VideoServer.Instance != null && camera != null)
             {
                 VideoServer.Instance.sendFrame(camera.LastRawFrame, Name);
+                alertEvents.sendFrame(camera.LastFrame, Name);
             }
         }
 
         private void cameraAlert(object sender, EventArgs e)
         {
             // keep displaying window for three seconds after we stop
+            //TODO: make into an option with a default of 3
             view.AlarmInterval = 3;
+            alertEvents.AlarmInterval = 3;
         }
 
         #endregion
@@ -498,6 +512,11 @@ namespace RearViewMirror
             }
         }
 
+        public void miOptionsMenuItem_Click(object sender, EventArgs e)
+        {
+            new OptionsForm(Options).ShowDialog();
+        }
+
         private void miEnableAlertMenuItem_Click(object sender, EventArgs e)
         {
             miEnableAlert.Checked = !miEnableAlert.Checked;
@@ -517,10 +536,6 @@ namespace RearViewMirror
             view.Stickey = !view.Stickey;
         }
 
-        private void miOpacityMenuItem_Click(object sender, EventArgs e)
-        {
-            opacityConfig.Show();
-        }
 
         private void miRemoveDeviceMenuItem_Click(object sender, EventArgs e)
         {

@@ -65,6 +65,7 @@ namespace RearViewMirror
             this.cbGlobalOptions.TabIndex = 1;
             this.cbGlobalOptions.Text = "Use Global Options";
             this.cbGlobalOptions.UseVisualStyleBackColor = true;
+            this.cbGlobalOptions.CheckedChanged += new System.EventHandler(this.cbGlobalOptions_CheckedChanged);
             // 
             // lOpacity
             // 
@@ -87,6 +88,7 @@ namespace RearViewMirror
             this.cbAlertSound.TabIndex = 3;
             this.cbAlertSound.Text = "Enable Alert Sound";
             this.cbAlertSound.UseVisualStyleBackColor = true;
+            this.cbAlertSound.CheckedChanged += new System.EventHandler(this.cbAlertSound_CheckedChanged);
             // 
             // cbEnableOnStartup
             // 
@@ -173,6 +175,7 @@ namespace RearViewMirror
             this.cbRecord.TabIndex = 11;
             this.cbRecord.Text = "Record Video on Motion Detection";
             this.cbRecord.UseVisualStyleBackColor = true;
+            this.cbRecord.CheckedChanged += new System.EventHandler(this.cbRecord_CheckedChanged);
             // 
             // label2
             // 

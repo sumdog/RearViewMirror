@@ -46,8 +46,9 @@ namespace RearViewMirror
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,12 +66,13 @@ namespace RearViewMirror
             this.sourcesToolStripMenuItem,
             this.newSourceToolStripMenuItem,
             this.videoServerToolStripMenuItem,
+            this.optionsToolStripMenuItem,
             this.showAllToolStripMenuItem,
             this.toolStripSeparator2,
             this.helpToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.trayContextMenu.Name = "trayContextMenu";
-            this.trayContextMenu.Size = new System.Drawing.Size(153, 164);
+            this.trayContextMenu.Size = new System.Drawing.Size(153, 186);
             this.trayContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayContextMenu_Opening);
             // 
             // sourcesToolStripMenuItem
@@ -91,14 +93,14 @@ namespace RearViewMirror
             // cameraToolStripMenuItem
             // 
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.cameraToolStripMenuItem.Text = "Camera";
             this.cameraToolStripMenuItem.Click += new System.EventHandler(this.cameraToolStripMenuItem_Click);
             // 
             // mjpegToolStripMenuItem
             // 
             this.mjpegToolStripMenuItem.Name = "mjpegToolStripMenuItem";
-            this.mjpegToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mjpegToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.mjpegToolStripMenuItem.Text = "MJPEG Stream";
             this.mjpegToolStripMenuItem.Click += new System.EventHandler(this.mjpegToolStripMenuItem_Click);
             // 
@@ -166,16 +168,23 @@ namespace RearViewMirror
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
             // donateToolStripMenuItem
             // 
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.donateToolStripMenuItem.Text = "Donate";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
+            // 
+            // logViewerToolStripMenuItem
+            // 
+            this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
+            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.logViewerToolStripMenuItem.Text = "Log Viewer";
+            this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -184,12 +193,12 @@ namespace RearViewMirror
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // logViewerToolStripMenuItem
+            // optionsToolStripMenuItem
             // 
-            this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
-            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.logViewerToolStripMenuItem.Text = "Log Viewer";
-            this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // SystemTray
             // 
@@ -225,5 +234,6 @@ namespace RearViewMirror
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem logViewerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }

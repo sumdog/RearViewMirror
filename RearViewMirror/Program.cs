@@ -42,5 +42,7 @@ namespace RearViewMirror
             SystemTray s = new SystemTray();
             Application.Run(s);
         }
+
+        public static GlobalVideoFeedOptions globalSettings { get; set; }
     }
 }

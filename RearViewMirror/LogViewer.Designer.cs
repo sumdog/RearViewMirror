@@ -38,7 +38,6 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.rbLogTxt.Location = new System.Drawing.Point(12, 12);
             this.rbLogTxt.Name = "rbLogTxt";
-            this.rbLogTxt.ReadOnly = true;
             this.rbLogTxt.Size = new System.Drawing.Size(625, 317);
             this.rbLogTxt.TabIndex = 0;
             this.rbLogTxt.Text = "";

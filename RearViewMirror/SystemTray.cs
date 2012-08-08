@@ -52,8 +52,11 @@ namespace RearViewMirror
 
         private ArrayList sources;
 
-        private OptionsForm options;
-
+        private GlobalVideoFeedOptions globalOptions {
+            get { return Program.globalSettings; }
+            set { Program.globalSettings = value; }
+        }
+        
         //Video Server variables
 
         private VideoServer videoServer;
@@ -79,9 +82,6 @@ namespace RearViewMirror
                 Properties.Settings.Default.Save();
             }
 
-            //Next Release
-            //options = new OptionsForm(null);
-
             //load and start all video sources which were started previously
             VideoSource[] loadSources = Properties.Settings.Default.videoSources;
             sources = (loadSources != null) ? new ArrayList(loadSources) : new ArrayList();
@@ -91,6 +91,16 @@ namespace RearViewMirror
                     i.startCamera();
                 }
                 i.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
+            }
+
+            //Global Settings
+            if (Properties.Settings.Default.globalVideoOptions != null)
+            {
+                globalOptions = Properties.Settings.Default.globalVideoOptions;
+            }
+            else
+            {
+                globalOptions = new GlobalVideoFeedOptions(sources);
             }
 
             //previous URLs for MJPEG streams
@@ -218,6 +228,7 @@ namespace RearViewMirror
                     r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
                     sourcesToolStripMenuItem.DropDown.Items.Add(r.ContextMenu);
                     r.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
+                    globalOptions.updateViewer(r);
                     r.startCamera(); //start camera by default
                 }
             }
@@ -258,6 +269,7 @@ namespace RearViewMirror
                     sources.Add(v);
                     v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
                     v.setViewerGlobalStickey(showAllToolStripMenuItem.Checked);
+                    globalOptions.updateViewer(v);
                     v.startCamera(); //start camera by default
                 }                
             }
@@ -298,6 +310,7 @@ namespace RearViewMirror
             Properties.Settings.Default.recentURLs = recentURLs;
             Properties.Settings.Default.serverRunning = (videoServer.State == VideoServer.ServerState.STARTED);
             Properties.Settings.Default.showAll = showAllToolStripMenuItem.Checked;
+            Properties.Settings.Default.globalVideoOptions = globalOptions;
             Properties.Settings.Default.Save();
 
             //stop the server
@@ -366,9 +379,9 @@ namespace RearViewMirror
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //next release
-            //options.Show();
+            new OptionsForm(globalOptions).ShowDialog();
         }
+
 
         private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -442,6 +455,8 @@ namespace RearViewMirror
         }
 
         #endregion
+
+
 
 
 
