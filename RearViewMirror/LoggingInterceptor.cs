@@ -26,10 +26,11 @@ namespace RearViewMirror
             }
             catch (Exception e)
             {
-                Log.error(String.Format("exception {0}.{1} :: {2}",
+                Log.error(String.Format("exception {0}.{1} :: {2}\n{3}",
                     invocation.TargetType.Name,
                     invocation.Method.Name,
-                    e.Message
+                    e.Message,
+                    e.StackTrace.ToString()
                     )
                 );
                 throw e;

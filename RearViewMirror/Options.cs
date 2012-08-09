@@ -26,10 +26,11 @@
  */
 using System;
 using System.Collections;
+using System.Xml.Serialization;
+using MJPEGServer;
 namespace RearViewMirror
 {
 
-    [Serializable]
     public abstract class AbstractFeedOptions
     {
         public abstract bool UseGlobal { get; set; }
@@ -48,12 +49,17 @@ namespace RearViewMirror
 
         protected AbstractFeedOptions() {
         }
+
+        public override string ToString()
+        {
+            return String.Format("Settings for {0}: [UseGlobal={1}, Opacity={2}, EnableRecording={3}, RecordFolder={4}, EnableAlertSound={5}, AlertSoundFile={6}]",
+                Name,UseGlobal,Opacity,EnableRecording,RecordFolder,EnableAlertSound,AlertSoundFile);
+        }
     }
 
     [Serializable]
     public class VideoFeedOptions : AbstractFeedOptions
     {
-        private VideoSource vsource;
 
         public override bool UseGlobal {get; set;}
 
@@ -67,21 +73,32 @@ namespace RearViewMirror
 
         public override double Opacity
         {
-            get { return vsource.ViewerOpacity; }
-            set { vsource.ViewerOpacity = value; }
+            get { 
+                return VideoSource.ViewerOpacity; 
+            }
+            set {
+                if (VideoSource != null)
+                {
+                    VideoSource.ViewerOpacity = value;
+                }
+            }
         }
 
-        public override string Name { get { return vsource.Name; } }
+        [XmlIgnore]
+        public override string Name { get { return VideoSource.Name; } }
 
-        public VideoFeedOptions(VideoSource vsource)
+        [XmlIgnore]
+        public VideoSource VideoSource { set; private get; }
+
+        public VideoFeedOptions()
         {
-            this.vsource = vsource;
 
             //defaults
             EnableAlertSound = false;
             EnableRecording = false;
             AlertSoundFile = null;
             RecordFolder = null;
+            UseGlobal = true;
         }
     }
 
@@ -93,11 +110,10 @@ namespace RearViewMirror
         /// Note this array is not typed because of the way the SystemTray loads
         /// it from the preferences. Assume each element is of type VideoSource
         /// </summary>
-        private ArrayList vsources;
+        [XmlIgnore] public ArrayList VideoSources { set; private get; }
 
-        public GlobalVideoFeedOptions(ArrayList vsources)
+        public GlobalVideoFeedOptions()
         {
-            this.vsources = vsources;
 
             //defaults
             globalOpacity = 1;
@@ -109,8 +125,15 @@ namespace RearViewMirror
 
         public void updateViewers()
         {
-            foreach (VideoSource v in vsources)
-            { updateViewer(v); }
+            if (VideoSources == null)
+            {
+                Log.warn("Video Source List for Global Options is null");
+            }
+            else
+            {
+                foreach (VideoSource v in VideoSources)
+                { updateViewer(v); }
+            }
         }
 
         public void updateViewer(VideoSource v)
@@ -162,10 +185,11 @@ namespace RearViewMirror
 
         public override bool UseGlobal
         {
-            get { throw new NotImplementedException("Cannot set UseGlobal on Global Options"); }
-            set { throw new NotImplementedException("Cannot set UseGlobal on Global Options"); }
+            get { return false; }
+            set {  }
         }
 
+        [XmlIgnore]
         public override string Name { get { return "Global Options"; } }
 
         public override double Opacity

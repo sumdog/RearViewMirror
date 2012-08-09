@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PenguinDreams.org")]
 [assembly: AssemblyProduct("Rear View Mirror")]
-[assembly: AssemblyCopyright("Copyright Sumit Khanna  (2007,2011 - GNU GPLv3)")]
+[assembly: AssemblyCopyright("Copyright Sumit Khanna  (2007,2012 - GNU GPLv3)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.8.8.6")]
-[assembly: AssemblyFileVersion("0.8.8.6")]
+[assembly: AssemblyVersion("0.8.9.0")]
+[assembly: AssemblyFileVersion("0.8.9.0")]

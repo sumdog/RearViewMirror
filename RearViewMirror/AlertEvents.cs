@@ -11,7 +11,7 @@ namespace RearViewMirror
     {
         private uint alarmInterval;
 
-        private VideoSource videoSource;
+        private AbstractFeedOptions options;
 
         private Timer timer;
 
@@ -26,10 +26,10 @@ namespace RearViewMirror
             }
         }
 
-        public AlertEvents(VideoSource v)
+        public AlertEvents(AbstractFeedOptions o)
         {
             //initalize values
-            videoSource = v;
+            options = o;
             alarmInterval = 0;
             timer = new Timer();
             timer.Tick += new EventHandler(timer_Tick);
@@ -46,7 +46,7 @@ namespace RearViewMirror
         //call back for timer which is used to display
         //alarm window on motion detection. The timer 
         //interval is 1 sec, and alarmInterval is increased 
-        //by 5 sec by alarm callback
+        //by n sec by alarm callback
         void timer_Tick(object sender, EventArgs e)
         {
             if (alarmInterval > 0)

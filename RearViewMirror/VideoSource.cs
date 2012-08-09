@@ -35,6 +35,7 @@ using AForge.Video;
 using AForge.Video.DirectShow;
 using MJPEGServer;
 using motion;
+using System.Xml.Serialization;
 
 namespace RearViewMirror
 {
@@ -61,6 +62,7 @@ namespace RearViewMirror
 
         private AlertEvents alertEvents;
 
+        private VideoFeedOptions options;
 
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
@@ -89,9 +91,6 @@ namespace RearViewMirror
             view = new Viewer();
             view.Text = name;
 
-            //setup other alert events (recording/audio alert)
-            alertEvents = new AlertEvents(this);
-
             //you have to set this to be able to move the viewer programatically
             view.StartPosition = FormStartPosition.Manual;
             view.moveToTopRight();
@@ -101,8 +100,9 @@ namespace RearViewMirror
 
             //defaults
             miEnableAlert.Checked = true;
-            Options = Proxy.wrapOptions(new VideoFeedOptions(this));
-            Options.UseGlobal = true;
+
+            //setup other alert events (recording/audio alert)
+            alertEvents = new AlertEvents(Options);
         }
 
         /// <summary>
@@ -135,7 +135,24 @@ namespace RearViewMirror
         /// <summary>
         /// Options for video feed and viewer
         /// </summary>
-        public AbstractFeedOptions Options { get; set; }
+        public VideoFeedOptions Options { 
+            get {
+                if (options != null)
+                {
+                    return options;
+                }
+                else
+                {
+                    VideoFeedOptions o = new VideoFeedOptions();
+                    o.VideoSource = this;
+                    return o;
+                }
+            }
+            set { 
+                options = value;
+                options.VideoSource = this;
+            } 
+        }
 
         /// <summary>
         /// Property representing a StreamSource. If set, this will overwrite the CameraDevice
@@ -243,14 +260,14 @@ namespace RearViewMirror
             miMain.DropDown.Items.Add(miDeviceStatus);
             miRemoveDevice = new ToolStripMenuItem("Remove Device", null, miRemoveDeviceMenuItem_Click);
             miMain.DropDown.Items.Add(miRemoveDevice);
+            miOptions = new ToolStripMenuItem("Options", null, miOptionsMenuItem_Click);
+            miMain.DropDown.Items.Add(miOptions);
             miMain.DropDown.Items.Add(new ToolStripSeparator());            
 
             miEnableAlert = new ToolStripMenuItem("Enable Alert", null,miEnableAlertMenuItem_Click);
             miMain.DropDown.Items.Add(miEnableAlert);
             miShowViewer = new ToolStripMenuItem("Show Viewer", null,miShowViewerMenuItem_Click);
             miMain.DropDown.Items.Add(miShowViewer);
-            miOptions = new ToolStripMenuItem("Options", null, miOptionsMenuItem_Click);
-            miMain.DropDown.Items.Add(miOptions);
             miDetectorType = new ToolStripMenuItem("Detector Type");
             miMain.DropDown.Items.Add(miDetectorType);
 

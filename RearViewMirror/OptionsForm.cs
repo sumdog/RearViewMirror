@@ -61,6 +61,8 @@ namespace RearViewMirror
             tbAudioFile.Text = options.AlertSoundFile;
             flopFileSelectionBoxes();
 
+            tbOpacity.Value = (int)(options.Opacity * 100);
+
             //Global Check
             if (options is GlobalVideoFeedOptions)
             {
@@ -71,8 +73,6 @@ namespace RearViewMirror
                 cbGlobalOptions.Checked = options.UseGlobal;
                 initialUseGlobal = options.UseGlobal; //for cancel
             }
-
-            tbOpacity.Value = (int)(options.Opacity * 100);
 
             //for cancel
             initialOpacity = options.Opacity;
@@ -103,7 +103,7 @@ namespace RearViewMirror
 
         private void tbOpacity_Scroll(object sender, EventArgs e)
         {
-            options.Opacity = ((double)tbOpacity.Value) / 100;
+            options.Opacity = ((double)tbOpacity.Value) / 100.0;
         }
 
         private void bBrowseRecordFolder_Click(object sender, EventArgs e)
@@ -184,7 +184,7 @@ namespace RearViewMirror
 
         private void flopGlobals()
         {
-            Control[] controls = { tbOpacity, cbEnableOnStartup, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, tbAudioFile, tbRecordFolder };
+            Control[] controls = { tbOpacity, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, tbAudioFile, tbRecordFolder };
 
             if (cbGlobalOptions.Checked)
             {
@@ -203,7 +203,7 @@ namespace RearViewMirror
                 tbAudioFile.Text = globals.AlertSoundFile;
 
                 tbOpacity.Value = (int)(globals.Opacity * 100);
-                options.Opacity = ((double)tbOpacity.Value) / 100;
+                options.Opacity = ((double)tbOpacity.Value) / 100.0;
 
                 foreach (Control c in controls) { c.Enabled = false; }
                 
@@ -217,6 +217,7 @@ namespace RearViewMirror
                 tbRecordFolder.Text = undoRecordFolder;
                 tbAudioFile.Text = undoAudioFile;
                 tbOpacity.Value = undoOpacity;
+                options.Opacity = ((double)tbOpacity.Value) / 100.0;
 
                 foreach (Control c in controls) { c.Enabled = true; }
             }

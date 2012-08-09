@@ -77,6 +77,7 @@ namespace RearViewMirror
             //upgrade our settings from previous versions
             if (Properties.Settings.Default.updateSettings)
             {
+                Log.info("Upgrading settings from previous Rear View Mirror version");
                 Properties.Settings.Default.Upgrade();
                 Properties.Settings.Default.updateSettings = false;
                 Properties.Settings.Default.Save();
@@ -96,12 +97,18 @@ namespace RearViewMirror
             //Global Settings
             if (Properties.Settings.Default.globalVideoOptions != null)
             {
+                Log.info("Loading Saved Global Properties");
                 globalOptions = Properties.Settings.Default.globalVideoOptions;
+                Log.debug(globalOptions.ToString());
             }
             else
             {
-                globalOptions = new GlobalVideoFeedOptions(sources);
+                Log.info("No Saved Global Properties. Creating New Properties");
+                globalOptions = new GlobalVideoFeedOptions();
+                Log.debug(globalOptions.ToString());
             }
+            globalOptions.VideoSources =  sources ;
+
 
             //previous URLs for MJPEG streams
             recentURLs = Properties.Settings.Default.recentURLs;
@@ -126,6 +133,7 @@ namespace RearViewMirror
             }
 
             //check for updates
+            //TODO: It's own thread
             string updateUrl = Updater.checkForUpdates();
             Log.debug("Update URL is " + updateUrl);
             if (updateUrl != null)

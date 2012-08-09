@@ -33,7 +33,6 @@ namespace RearViewMirror
             this.cbGlobalOptions = new System.Windows.Forms.CheckBox();
             this.lOpacity = new System.Windows.Forms.Label();
             this.cbAlertSound = new System.Windows.Forms.CheckBox();
-            this.cbEnableOnStartup = new System.Windows.Forms.CheckBox();
             this.tbAudioFile = new System.Windows.Forms.TextBox();
             this.bBrowseAudioFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -82,7 +81,7 @@ namespace RearViewMirror
             this.cbAlertSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.cbAlertSound.AutoSize = true;
-            this.cbAlertSound.Location = new System.Drawing.Point(15, 118);
+            this.cbAlertSound.Location = new System.Drawing.Point(12, 103);
             this.cbAlertSound.Name = "cbAlertSound";
             this.cbAlertSound.Size = new System.Drawing.Size(117, 17);
             this.cbAlertSound.TabIndex = 3;
@@ -90,23 +89,11 @@ namespace RearViewMirror
             this.cbAlertSound.UseVisualStyleBackColor = true;
             this.cbAlertSound.CheckedChanged += new System.EventHandler(this.cbAlertSound_CheckedChanged);
             // 
-            // cbEnableOnStartup
-            // 
-            this.cbEnableOnStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.cbEnableOnStartup.AutoSize = true;
-            this.cbEnableOnStartup.Location = new System.Drawing.Point(15, 95);
-            this.cbEnableOnStartup.Name = "cbEnableOnStartup";
-            this.cbEnableOnStartup.Size = new System.Drawing.Size(150, 17);
-            this.cbEnableOnStartup.TabIndex = 4;
-            this.cbEnableOnStartup.Text = "Enable Camera on Startup";
-            this.cbEnableOnStartup.UseVisualStyleBackColor = true;
-            // 
             // tbAudioFile
             // 
             this.tbAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbAudioFile.Location = new System.Drawing.Point(86, 144);
+            this.tbAudioFile.Location = new System.Drawing.Point(83, 129);
             this.tbAudioFile.Name = "tbAudioFile";
             this.tbAudioFile.Size = new System.Drawing.Size(152, 20);
             this.tbAudioFile.TabIndex = 5;
@@ -114,7 +101,7 @@ namespace RearViewMirror
             // bBrowseAudioFile
             // 
             this.bBrowseAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bBrowseAudioFile.Location = new System.Drawing.Point(244, 141);
+            this.bBrowseAudioFile.Location = new System.Drawing.Point(241, 126);
             this.bBrowseAudioFile.Name = "bBrowseAudioFile";
             this.bBrowseAudioFile.Size = new System.Drawing.Size(75, 23);
             this.bBrowseAudioFile.TabIndex = 6;
@@ -126,7 +113,7 @@ namespace RearViewMirror
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 147);
+            this.label1.Location = new System.Drawing.Point(9, 132);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 7;
@@ -135,7 +122,7 @@ namespace RearViewMirror
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(61, 228);
+            this.bOK.Location = new System.Drawing.Point(58, 213);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(91, 27);
             this.bOK.TabIndex = 8;
@@ -146,7 +133,7 @@ namespace RearViewMirror
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(189, 228);
+            this.bCancel.Location = new System.Drawing.Point(186, 213);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(91, 27);
             this.bCancel.TabIndex = 9;
@@ -169,7 +156,7 @@ namespace RearViewMirror
             // cbRecord
             // 
             this.cbRecord.AutoSize = true;
-            this.cbRecord.Location = new System.Drawing.Point(15, 174);
+            this.cbRecord.Location = new System.Drawing.Point(12, 159);
             this.cbRecord.Name = "cbRecord";
             this.cbRecord.Size = new System.Drawing.Size(190, 17);
             this.cbRecord.TabIndex = 11;
@@ -180,7 +167,7 @@ namespace RearViewMirror
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 198);
+            this.label2.Location = new System.Drawing.Point(12, 183);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 12;
@@ -188,7 +175,7 @@ namespace RearViewMirror
             // 
             // bBrowseRecordFolder
             // 
-            this.bBrowseRecordFolder.Location = new System.Drawing.Point(244, 193);
+            this.bBrowseRecordFolder.Location = new System.Drawing.Point(241, 178);
             this.bBrowseRecordFolder.Name = "bBrowseRecordFolder";
             this.bBrowseRecordFolder.Size = new System.Drawing.Size(75, 23);
             this.bBrowseRecordFolder.TabIndex = 13;
@@ -198,7 +185,7 @@ namespace RearViewMirror
             // 
             // tbRecordFolder
             // 
-            this.tbRecordFolder.Location = new System.Drawing.Point(86, 195);
+            this.tbRecordFolder.Location = new System.Drawing.Point(83, 180);
             this.tbRecordFolder.Name = "tbRecordFolder";
             this.tbRecordFolder.Size = new System.Drawing.Size(152, 20);
             this.tbRecordFolder.TabIndex = 14;
@@ -218,7 +205,6 @@ namespace RearViewMirror
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bBrowseAudioFile);
             this.Controls.Add(this.tbAudioFile);
-            this.Controls.Add(this.cbEnableOnStartup);
             this.Controls.Add(this.cbAlertSound);
             this.Controls.Add(this.lOpacity);
             this.Controls.Add(this.cbGlobalOptions);
@@ -238,7 +224,6 @@ namespace RearViewMirror
         private System.Windows.Forms.CheckBox cbGlobalOptions;
         private System.Windows.Forms.Label lOpacity;
         private System.Windows.Forms.CheckBox cbAlertSound;
-        private System.Windows.Forms.CheckBox cbEnableOnStartup;
         private System.Windows.Forms.TextBox tbAudioFile;
         private System.Windows.Forms.Button bBrowseAudioFile;
         private System.Windows.Forms.Label label1;
