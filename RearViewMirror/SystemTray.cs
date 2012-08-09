@@ -100,6 +100,7 @@ namespace RearViewMirror
                 Log.info("Loading Saved Global Properties");
                 globalOptions = Properties.Settings.Default.globalVideoOptions;
                 Log.debug(globalOptions.ToString());
+                globalOptions.updateViewers();
             }
             else
             {

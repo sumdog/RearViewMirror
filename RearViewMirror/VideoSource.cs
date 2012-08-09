@@ -101,8 +101,6 @@ namespace RearViewMirror
             //defaults
             miEnableAlert.Checked = true;
 
-            //setup other alert events (recording/audio alert)
-            alertEvents = new AlertEvents(Options);
         }
 
         /// <summary>
@@ -145,12 +143,14 @@ namespace RearViewMirror
                 {
                     VideoFeedOptions o = new VideoFeedOptions();
                     o.VideoSource = this;
+                    alertEvents = new AlertEvents(o);
                     return o;
                 }
             }
             set { 
                 options = value;
                 options.VideoSource = this;
+                alertEvents = new AlertEvents(options);
             } 
         }
 
@@ -391,6 +391,9 @@ namespace RearViewMirror
             if (VideoServer.Instance != null && camera != null)
             {
                 VideoServer.Instance.sendFrame(camera.LastRawFrame, Name);
+            }
+            if (alertEvents != null && camera != null)
+            {
                 alertEvents.sendFrame(camera.LastFrame, Name);
             }
         }
@@ -400,7 +403,11 @@ namespace RearViewMirror
             // keep displaying window for three seconds after we stop
             //TODO: make into an option with a default of 3
             view.AlarmInterval = 3;
-            alertEvents.AlarmInterval = 3;
+
+            if (alertEvents != null)
+            {
+                alertEvents.AlarmInterval = 3;
+            }
         }
 
         #endregion

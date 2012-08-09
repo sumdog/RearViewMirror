@@ -69,12 +69,16 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge.Imaging">
-      <Name>AForge.Imaging</Name>
+    <Reference Include="AForge, Version=1.5.0.0, Culture=neutral, PublicKeyToken=75f8e82c5042a70f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\references\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Imaging, Version=1.7.0.0, Culture=neutral, PublicKeyToken=38eb47741dd0492e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\references\AForge.Imaging.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Math">
-      <Name>AForge.Math</Name>
+    <Reference Include="AForge.Math, Version=1.6.0.0, Culture=neutral, PublicKeyToken=e12ceb15b47eb5cc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\references\AForge.Math.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Video, Version=1.5.0.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
@@ -84,6 +88,10 @@
     <Reference Include="AForge.Video.DirectShow, Version=1.6.3.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\references\AForge.Video.DirectShow.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video.VFW, Version=2.2.4.0, Culture=neutral, PublicKeyToken=a82f807c999637c8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\references\AForge.Video.VFW.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

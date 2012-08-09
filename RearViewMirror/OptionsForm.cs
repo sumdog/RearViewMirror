@@ -120,6 +120,7 @@ namespace RearViewMirror
         {
             OpenFileDialog browser = new OpenFileDialog();
             browser.FileName = tbAudioFile.Text;
+            browser.Filter = "Wave Audio|*.wav";
             if (browser.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 tbAudioFile.Text = browser.FileName;
