@@ -62,6 +62,7 @@ namespace RearViewMirror
 
                 //Make webserver request
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(VERSION_URL);
+                request.Timeout = 2000; //Kinda a hack, we don't want to block if we can't check updates; so give up after 2 sec
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 Stream webStream = response.GetResponseStream();
 

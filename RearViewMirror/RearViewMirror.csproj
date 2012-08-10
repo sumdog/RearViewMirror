@@ -103,9 +103,6 @@
     <Reference Include="AForge.Video.VFW">
       <HintPath>..\references\AForge.Video.VFW.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\references\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -144,13 +144,17 @@ namespace RearViewMirror
                     VideoFeedOptions o = new VideoFeedOptions();
                     o.VideoSource = this;
                     alertEvents = new AlertEvents(o);
+                    options = o;
                     return o;
                 }
             }
             set { 
                 options = value;
                 options.VideoSource = this;
-                alertEvents = new AlertEvents(options);
+                if (alertEvents == null)
+                {
+                    alertEvents = new AlertEvents(options);
+                }
             } 
         }
 

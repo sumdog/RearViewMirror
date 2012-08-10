@@ -28,8 +28,44 @@ using System;
 using System.Collections;
 using System.Xml.Serialization;
 using MJPEGServer;
+using AForge.Video.DirectShow;
 namespace RearViewMirror
 {
+
+    /// <summary>
+    /// Provides an array of Codecs suitable for use in Combo boxes.
+    /// </summary>
+    [Serializable]
+    public class CodecOption
+    {
+
+        public string Moniker { get; set; }
+        public string Name { get; set; }
+        public override string ToString() { return Name; }
+        public override bool Equals(object obj)
+        {
+            if (obj is CodecOption)
+            {
+                return ((CodecOption)obj).Name == Name;
+            }
+            return false;
+        }  
+
+        public static CodecOption[] getAvailableCodecs()
+        {
+            FilterInfoCollection codecs = new FilterInfoCollection(FilterCategory.VideoCompressorCategory);
+            CodecOption[] retval = new CodecOption[codecs.Count+1];
+
+            retval[0] = new CodecOption() { Name = "Raw\\Uncompressed", Moniker = "DIB " };
+
+            Log.info("Installed Codecs");
+            for(int i=0; i < codecs.Count; i++){
+                Log.info(String.Format("Name: {0}\n\tMoniker:{1}", codecs[i].Name, codecs[i].MonikerString));
+                retval[i+1] = new CodecOption() { Name = codecs[i].Name, Moniker = codecs[i].MonikerString };
+            }
+            return retval;
+        }
+    }
 
     public abstract class AbstractFeedOptions
     {
@@ -46,6 +82,8 @@ namespace RearViewMirror
         public abstract bool EnableAlertSound { get; set; }
 
         public abstract string AlertSoundFile { get; set; }
+
+        public abstract CodecOption Codec { get; set; }
 
         protected AbstractFeedOptions() {
         }
@@ -70,6 +108,12 @@ namespace RearViewMirror
         public override bool EnableAlertSound { get; set; }
 
         public override string AlertSoundFile { get; set; }
+
+        private CodecOption codec;
+        public override CodecOption Codec { 
+            get { return codec; } 
+            set { codec = value; } 
+        }
 
         public override double Opacity
         {
@@ -99,6 +143,7 @@ namespace RearViewMirror
             AlertSoundFile = null;
             RecordFolder = null;
             UseGlobal = true;
+            //Codec = null;
         }
     }
 
@@ -121,6 +166,7 @@ namespace RearViewMirror
             globalEnableRecording = false;
             globalAlertSoundFile = null;
             globalRecordFolder = null;
+            globalCodec = null;
         }
 
         public void updateViewers()
@@ -145,6 +191,8 @@ namespace RearViewMirror
                 v.Options.RecordFolder = globalRecordFolder;
                 v.Options.EnableAlertSound = globalEnableAlertSound;
                 v.Options.AlertSoundFile = globalAlertSoundFile;
+                v.Options.Codec = globalCodec;
+                v.Options.Codec = globalCodec;
             }
         }
 
@@ -156,9 +204,17 @@ namespace RearViewMirror
 
         private string globalRecordFolder, globalAlertSoundFile;
 
+        private CodecOption globalCodec;
+
         #endregion
 
         #region Global Properties
+
+        public override CodecOption Codec
+        {
+            get { return globalCodec; }
+            set { globalCodec = value; }
+        }
 
         public override bool EnableRecording {
             get { return globalEnableRecording; }

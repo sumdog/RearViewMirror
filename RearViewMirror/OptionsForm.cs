@@ -32,6 +32,7 @@ using System.Windows.Forms;
 using System.Collections;
 using MJPEGServer;
 using System;
+using System.Collections.Generic;
 
 namespace RearViewMirror
 {
@@ -78,9 +79,16 @@ namespace RearViewMirror
             initialOpacity = options.Opacity;
 
             this.MaximumSize = this.Size; //prevent resizin'
+            this.MinimumSize = this.Size;
+            this.MaximizeBox = false;
 
             //prevents window disposal
             this.FormClosing += new FormClosingEventHandler(OptionsForm_FormClosing);
+
+            //scratch
+            cbCodec.Items.AddRange(CodecOption.getAvailableCodecs());
+            cbCodec.SelectedItem = options.Codec;
+            Log.debug("Codec: " + options.Codec);
         }
 
         #region Events
@@ -141,8 +149,32 @@ namespace RearViewMirror
             options.RecordFolder = tbRecordFolder.Text ;
             options.EnableAlertSound = cbAlertSound.Checked;
             options.AlertSoundFile= tbAudioFile.Text;
+            options.Codec = (CodecOption) cbCodec.SelectedItem;
 
-            Close();
+            //Validation
+            LinkedList<string> errors = new LinkedList<string>();
+            if (cbAlertSound.Checked && tbAudioFile.Text.Trim() == "")
+            { errors.AddLast("No sound file selected"); }
+            if (cbRecord.Checked)
+            {
+                if (tbRecordFolder.Text.Trim() == "")
+                { errors.AddLast("No record folder set"); }
+                if (cbCodec.SelectedItem == null)
+                { errors.AddLast("No video codec selected"); }
+            }
+            if (errors.Count > 0)
+            {
+                MessageBox.Show(String.Join("\n", errors), "Errors", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+            else
+            {
+                if (options is GlobalVideoFeedOptions)
+                {
+                    ((GlobalVideoFeedOptions)options).updateViewers();               
+                }
+                Close();
+            }
         }
 
         private void bCancel_Click(object sender, EventArgs e)
@@ -153,6 +185,7 @@ namespace RearViewMirror
         private void cbGlobalOptions_CheckedChanged(object sender, EventArgs e)
         {            
             flopGlobals();
+            flopFileSelectionBoxes();
         }
 
         private void cbAlertSound_CheckedChanged(object sender, EventArgs e)
@@ -177,15 +210,17 @@ namespace RearViewMirror
 
             bBrowseRecordFolder.Enabled = cbRecord.Checked;
             tbRecordFolder.Enabled = cbRecord.Checked;
+            cbCodec.Enabled = cbRecord.Checked;
         }
 
         private bool undoAlertSoundEnabled, undoRecordEnabled;
         private string undoRecordFolder, undoAudioFile;
         private int undoOpacity;
+        private object undoCodec;
 
         private void flopGlobals()
         {
-            Control[] controls = { tbOpacity, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, tbAudioFile, tbRecordFolder };
+            Control[] controls = { tbOpacity, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, tbAudioFile, tbRecordFolder, cbCodec };
 
             if (cbGlobalOptions.Checked)
             {
@@ -195,6 +230,7 @@ namespace RearViewMirror
                 undoRecordFolder = tbRecordFolder.Text;
                 undoAudioFile = tbAudioFile.Text;
                 undoOpacity = tbOpacity.Value;
+                undoCodec = cbCodec.SelectedItem;
 
                 //pull in all globals
                 GlobalVideoFeedOptions globals = Program.globalSettings;
@@ -202,6 +238,7 @@ namespace RearViewMirror
                 cbRecord.Checked = globals.EnableRecording;
                 tbRecordFolder.Text = globals.RecordFolder;
                 tbAudioFile.Text = globals.AlertSoundFile;
+                cbCodec.SelectedItem = globals.Codec;
 
                 tbOpacity.Value = (int)(globals.Opacity * 100);
                 options.Opacity = ((double)tbOpacity.Value) / 100.0;
@@ -219,13 +256,13 @@ namespace RearViewMirror
                 tbAudioFile.Text = undoAudioFile;
                 tbOpacity.Value = undoOpacity;
                 options.Opacity = ((double)tbOpacity.Value) / 100.0;
+                cbCodec.SelectedItem = undoCodec;
 
                 foreach (Control c in controls) { c.Enabled = true; }
             }
         }
 
         #endregion
-
 
 
     }

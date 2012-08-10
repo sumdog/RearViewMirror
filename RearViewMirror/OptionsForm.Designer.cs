@@ -43,15 +43,16 @@ namespace RearViewMirror
             this.label2 = new System.Windows.Forms.Label();
             this.bBrowseRecordFolder = new System.Windows.Forms.Button();
             this.tbRecordFolder = new System.Windows.Forms.TextBox();
+            this.cbCodec = new System.Windows.Forms.ComboBox();
+            this.lVideoCompression = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.SuspendLayout();
             // 
             // tbOpacity
             // 
-            this.tbOpacity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbOpacity.Location = new System.Drawing.Point(61, 52);
+            this.tbOpacity.Location = new System.Drawing.Point(125, 52);
             this.tbOpacity.Name = "tbOpacity";
-            this.tbOpacity.Size = new System.Drawing.Size(219, 45);
+            this.tbOpacity.Size = new System.Drawing.Size(155, 45);
             this.tbOpacity.TabIndex = 0;
             this.tbOpacity.Scroll += new System.EventHandler(this.tbOpacity_Scroll);
             // 
@@ -68,13 +69,12 @@ namespace RearViewMirror
             // 
             // lOpacity
             // 
-            this.lOpacity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lOpacity.AutoSize = true;
-            this.lOpacity.Location = new System.Drawing.Point(12, 63);
+            this.lOpacity.Location = new System.Drawing.Point(12, 61);
             this.lOpacity.Name = "lOpacity";
-            this.lOpacity.Size = new System.Drawing.Size(43, 13);
+            this.lOpacity.Size = new System.Drawing.Size(107, 13);
             this.lOpacity.TabIndex = 2;
-            this.lOpacity.Text = "Opacity";
+            this.lOpacity.Text = "Viewer Transparency";
             // 
             // cbAlertSound
             // 
@@ -91,8 +91,6 @@ namespace RearViewMirror
             // 
             // tbAudioFile
             // 
-            this.tbAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tbAudioFile.Location = new System.Drawing.Point(83, 129);
             this.tbAudioFile.Name = "tbAudioFile";
             this.tbAudioFile.Size = new System.Drawing.Size(152, 20);
@@ -100,7 +98,6 @@ namespace RearViewMirror
             // 
             // bBrowseAudioFile
             // 
-            this.bBrowseAudioFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bBrowseAudioFile.Location = new System.Drawing.Point(241, 126);
             this.bBrowseAudioFile.Name = "bBrowseAudioFile";
             this.bBrowseAudioFile.Size = new System.Drawing.Size(75, 23);
@@ -111,7 +108,6 @@ namespace RearViewMirror
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 132);
             this.label1.Name = "label1";
@@ -122,7 +118,7 @@ namespace RearViewMirror
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(58, 213);
+            this.bOK.Location = new System.Drawing.Point(58, 242);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(91, 27);
             this.bOK.TabIndex = 8;
@@ -133,7 +129,7 @@ namespace RearViewMirror
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(186, 213);
+            this.bCancel.Location = new System.Drawing.Point(186, 242);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(91, 27);
             this.bCancel.TabIndex = 9;
@@ -190,11 +186,30 @@ namespace RearViewMirror
             this.tbRecordFolder.Size = new System.Drawing.Size(152, 20);
             this.tbRecordFolder.TabIndex = 14;
             // 
+            // cbCodec
+            // 
+            this.cbCodec.FormattingEnabled = true;
+            this.cbCodec.Location = new System.Drawing.Point(83, 206);
+            this.cbCodec.Name = "cbCodec";
+            this.cbCodec.Size = new System.Drawing.Size(152, 21);
+            this.cbCodec.TabIndex = 15;
+            // 
+            // lVideoCompression
+            // 
+            this.lVideoCompression.AutoSize = true;
+            this.lVideoCompression.Location = new System.Drawing.Point(12, 210);
+            this.lVideoCompression.Name = "lVideoCompression";
+            this.lVideoCompression.Size = new System.Drawing.Size(68, 13);
+            this.lVideoCompression.TabIndex = 16;
+            this.lVideoCompression.Text = "Video Codec";
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 261);
+            this.ClientSize = new System.Drawing.Size(329, 290);
+            this.Controls.Add(this.lVideoCompression);
+            this.Controls.Add(this.cbCodec);
             this.Controls.Add(this.tbRecordFolder);
             this.Controls.Add(this.bBrowseRecordFolder);
             this.Controls.Add(this.label2);
@@ -234,5 +249,7 @@ namespace RearViewMirror
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button bBrowseRecordFolder;
         private System.Windows.Forms.TextBox tbRecordFolder;
+        private System.Windows.Forms.ComboBox cbCodec;
+        private System.Windows.Forms.Label lVideoCompression;
     }
 }

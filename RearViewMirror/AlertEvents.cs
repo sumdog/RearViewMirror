@@ -24,6 +24,10 @@ namespace RearViewMirror
 
         private AVIWriter videoWriter;
 
+        private int frameDropThreshold;
+
+        public const int MAX_FRAME_DROP = 10;
+
         /// <summary>
         /// sets time remaining for motion alarm in seconds. 
         /// </summary>
@@ -49,6 +53,7 @@ namespace RearViewMirror
             //events n stuff
             recording = false;
             audioPlayed = false;
+            frameDropThreshold = 0;
 
             Log.debug(String.Format("Alert Events Initialized for {0}",o.Name));
         }
@@ -70,28 +75,33 @@ namespace RearViewMirror
                         Log.error(String.Format("Unable to play audio file for {0}. Error: {1}",options.Name, e.Message));
                     }
                 }
-                if (recording && options.EnableRecording)
+                if (recording && options.EnableRecording && frameDropThreshold <= MAX_FRAME_DROP)
                 {
                     try
                     {
                         if (videoWriter == null)
                         {
                             DateTime now = DateTime.Now;
-                            string file = String.Format("{0}-{1:D4}.{2:D2}.{3:D2}-{4:D2}.{5:D2}.{6:D2}.avi",options.Name,now.Year,now.Month,now.Day,now.Hour,now.Minute,now.Second);
+                            string file = String.Format("{0}-{1:D4}.{2:D2}.{3:D2}-{4:D2}.{5:D2}.{6:D2}.avi", options.Name, now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
                             string fullpath = Path.Combine(options.RecordFolder, file);
 
-                            Log.debug(String.Format("Creating new Video Writer {0}",fullpath));
+                            Log.debug(String.Format("Creating new Video Writer {0} with codec {1}",
+                                fullpath, options.Codec));
 
-                            videoWriter = new AVIWriter("DIB ");
-                            videoWriter.Open(fullpath,frame.Width,frame.Height);
+                            videoWriter = new AVIWriter(options.Codec.Moniker);
+                            videoWriter.Open(fullpath, frame.Width, frame.Height);
                         }
 
                         videoWriter.AddFrame(frame);
                     }
                     catch (Exception io)
                     {
+                        frameDropThreshold++;
                         videoWriter = null;
                         Log.warn(String.Format("Error writing video frame for {0}. Record Folder: {1}. Message: {2}", options.Name, options.RecordFolder, io.Message));
+                        if(frameDropThreshold == MAX_FRAME_DROP) {
+                            Log.error(String.Format("Maximum ({0}) frames failed for {1}. Dropping all frames until next motion alert",MAX_FRAME_DROP,options.Name));
+                        }
                     }
                 }
             }
@@ -110,6 +120,7 @@ namespace RearViewMirror
             if (alarmInterval == 0)
             {
                 audioPlayed = false;
+                frameDropThreshold = 0;
 
                 if (recording)
                 {

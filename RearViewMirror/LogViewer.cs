@@ -34,6 +34,17 @@ namespace RearViewMirror
 
         private void ReceiveLogMessage(string logMessage, Log.LogLevel level)
         {
+            //Thread safing
+            //Taken from http://stackoverflow.com/questions/418845/c-thread-safe-richtextbox-event-logging-method
+            if (rbLogTxt.InvokeRequired)
+            {
+                rbLogTxt.BeginInvoke(new Action(delegate
+                {
+                    ReceiveLogMessage(logMessage, level);
+                }));
+                return;
+            }
+
             switch (level)
             {
                 case Log.LogLevel.TRACE:

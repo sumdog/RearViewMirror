@@ -1,9 +1,9 @@
-﻿using Castle.DynamicProxy;
+﻿//using Castle.DynamicProxy;
 using System;
 
 namespace RearViewMirror
 {
-
+/*
     public class Proxy
     {
         private static LoggingInterceptor logger = new LoggingInterceptor();
@@ -18,5 +18,5 @@ namespace RearViewMirror
         public static GlobalVideoFeedOptions wrapGlobalOptions(GlobalVideoFeedOptions options)
         { return generator.CreateClassProxyWithTarget<GlobalVideoFeedOptions>(options, logger); }
     }
-
+*/
 }
