@@ -88,7 +88,7 @@ namespace RearViewMirror
                             Log.debug(String.Format("Creating new Video Writer {0} with codec {1}",
                                 fullpath, options.Codec));
 
-                            videoWriter = new AVIWriter(options.Codec.Moniker);
+                            videoWriter = new AVIWriter(options.Codec.Code);
                             videoWriter.Open(fullpath, frame.Width, frame.Height);
                         }
 

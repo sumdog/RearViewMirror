@@ -1,5 +1,5 @@
 Rear View Mirror
-0.8.8.6-beta
+0.8.9.3-beta
 
 Copyright 2007-2011 Sumit Khanna
 -GNU GPL v3
