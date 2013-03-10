@@ -44,7 +44,7 @@ namespace RearViewMirror
     public class VideoSource
     {
 
-        public enum DetectorType { None,Basic,Outline,Block,FastBlock,Box };
+        public enum DetectorType { None ,Basic,Outline,Block,FastBlock,Box };
 
         public enum CameraState { Stopped, Started };
 
@@ -63,6 +63,8 @@ namespace RearViewMirror
         private AlertEvents alertEvents;
 
         private VideoFeedOptions options;
+
+        private bool enableAlert;
 
         /// <summary>
         /// Default constructor for serialization. Not useful to call directly. 
@@ -99,7 +101,7 @@ namespace RearViewMirror
             view.moveToTopRight();
 
             //defaults
-            miEnableAlert.Checked = true;
+            enableAlert = true;
 
         }
 
@@ -114,21 +116,63 @@ namespace RearViewMirror
         public void setViewerGlobalStickey(bool b)
         { view.ShowAll = b; }
 
-        #region Properties (Used for Serialization)
+
+
+        #region Devices
 
         /// <summary>
         /// Property representing a CameraDevice. If set, this will overwrite the StreamSource. 
         /// If the StreamSource is set, this will return null.
         /// </summary>
+        [XmlIgnore]
         public VideoCaptureDevice CameraDevice
         {
             get
-            {
-                return (captureDevice is VideoCaptureDevice) ? (VideoCaptureDevice)captureDevice : null;
-            }
+            { return (captureDevice is VideoCaptureDevice) ? (VideoCaptureDevice)captureDevice : null; }
             set { captureDevice = value; }
 
         }
+
+        /// <summary>
+        /// Property representing a StreamSource. If set, this will overwrite the CameraDevice
+        /// If the CameraDevice is set, this will return null.
+        /// </summary>
+        [XmlIgnore]
+        public MJPEGStream StreamSource
+        {
+            get { return (captureDevice is MJPEGStream) ? (MJPEGStream)captureDevice : null; }
+            set { captureDevice = value; }
+        }
+
+        /// <summary>
+        /// Newer versions of AForge do not have Serializable capture devices. 
+        /// This property is so that saved devices can be recreated corectly on startup.
+        /// </summary>
+        public string SerializeddDeviceString
+        {
+            get
+            { 
+                return (captureDevice != null) ? captureDevice.Source : null;  
+            }
+            set
+            {
+                if(value.StartsWith("http")) {
+                    //MJPEG Stream
+                    captureDevice = new MJPEGStream(value);
+                }
+                else
+                {
+                    captureDevice = new VideoCaptureDevice(value);
+                }
+            }
+        }
+
+
+
+        #endregion
+
+        #region Properties (Used for Serialization)
+
 
         /// <summary>
         /// Options for video feed and viewer
@@ -158,23 +202,37 @@ namespace RearViewMirror
             } 
         }
 
-        /// <summary>
-        /// Property representing a StreamSource. If set, this will overwrite the CameraDevice
-        /// If the CameraDevice is set, this will return null.
-        /// </summary>
-        public MJPEGStream StreamSource
-        {
-            get { return (captureDevice is MJPEGStream) ? (MJPEGStream)captureDevice : null; }
-            set { captureDevice = value; }
-        }
+
 
         /// <summary>
         /// If set, window to automatically pops-up if motion detector is specified
         /// </summary>
         public bool EnableAlert
         {
-            get { return miEnableAlert.Checked; }
-            set { miEnableAlert.Checked = value; }
+            get { return enableAlert; }
+            set { 
+                enableAlert = value;
+
+                if (detector != null)
+                {
+                    detector.MotionLevelCalculation = enableAlert;
+                }
+                if (!enableAlert)
+                {
+                    view.AlarmInterval = 0;
+                    alertEvents.AlarmInterval = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// If set, window will always display event without an alert.
+        /// Can be overridden by Global Stickey
+        /// </summary>
+        public bool Sticky
+        {
+            get { return view.Stickey; }
+            set { view.Stickey = value; }
         }
 
         /// <summary>
@@ -244,16 +302,7 @@ namespace RearViewMirror
 
         private ToolStripMenuItem miMain;
         private ToolStripMenuItem miDeviceStatus;
-        private ToolStripMenuItem miEnableAlert;
-        private ToolStripMenuItem miShowViewer;
         private ToolStripMenuItem miOptions;
-        private ToolStripMenuItem miDetectorType;
-        private ToolStripMenuItem miDetectorTypeNone;
-        private ToolStripMenuItem miDetectorTypeBasic;
-        private ToolStripMenuItem miDetectorTypeOutline;
-        private ToolStripMenuItem miDetectorTypeBlock;
-        private ToolStripMenuItem miDetectorTypeFastBlock;
-        private ToolStripMenuItem miDetectorTypeBox;
         private ToolStripMenuItem miRemoveDevice;
 
         private void InitalizeToolstrip()
@@ -265,29 +314,7 @@ namespace RearViewMirror
             miRemoveDevice = new ToolStripMenuItem("Remove Device", null, miRemoveDeviceMenuItem_Click);
             miMain.DropDown.Items.Add(miRemoveDevice);
             miOptions = new ToolStripMenuItem("Options", null, miOptionsMenuItem_Click);
-            miMain.DropDown.Items.Add(miOptions);
-            miMain.DropDown.Items.Add(new ToolStripSeparator());            
-
-            miEnableAlert = new ToolStripMenuItem("Enable Alert", null,miEnableAlertMenuItem_Click);
-            miMain.DropDown.Items.Add(miEnableAlert);
-            miShowViewer = new ToolStripMenuItem("Show Viewer", null,miShowViewerMenuItem_Click);
-            miMain.DropDown.Items.Add(miShowViewer);
-            miDetectorType = new ToolStripMenuItem("Detector Type");
-            miMain.DropDown.Items.Add(miDetectorType);
-
-            miDetectorTypeNone = new ToolStripMenuItem("None", null, detectorNone_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeNone);
-            miDetectorTypeBasic = new ToolStripMenuItem("Basic",null,detectorBasic_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeBasic);
-            miDetectorTypeOutline = new ToolStripMenuItem("Outline",null,detectorOutline_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeOutline);
-            miDetectorTypeBlock = new ToolStripMenuItem("Block",null,detectorBlock_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeBlock);
-            miDetectorTypeFastBlock = new ToolStripMenuItem("Block (Optimized)",null,detectorBetterBlock_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeFastBlock);
-            miDetectorTypeBox = new ToolStripMenuItem("Box",null,detectorBox_Click);
-            miDetectorType.DropDown.Items.Add(miDetectorTypeBox);
-
+            miMain.DropDown.Items.Add(miOptions);           
             
         }
 
@@ -334,7 +361,7 @@ namespace RearViewMirror
             // enable/disable motion alarm
             if (detector != null)
             {
-                detector.MotionLevelCalculation = miEnableAlert.Checked;
+                detector.MotionLevelCalculation = EnableAlert;
             }
 
             // set motion detector to camera
@@ -346,45 +373,6 @@ namespace RearViewMirror
                 camera.Unlock();
             }
         }
-
-        private void detectorBasic_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.Basic;
-            loadDetectorType();
-        }
-
-
-        private void detectorOutline_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.Outline;
-            loadDetectorType();
-        }
-
-        private void detectorBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.Block;
-            loadDetectorType();
-        }
-
-        private void detectorBetterBlock_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.FastBlock;
-            loadDetectorType();
-        }
-
-        private void detectorBox_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.Box;
-            loadDetectorType();
-        }
-
-        private void detectorNone_Click(object sender, EventArgs e)
-        {
-            detectorType = DetectorType.None;
-            loadDetectorType();
-        }
-
-
 
         #endregion
 
@@ -423,7 +411,7 @@ namespace RearViewMirror
             // enable/disable motion alarm
             if (detector != null)
             {
-                detector.MotionLevelCalculation = miEnableAlert.Checked;
+                detector.MotionLevelCalculation = EnableAlert;
             }
 
             camera = new Camera(captureDevice, detector);
@@ -493,39 +481,6 @@ namespace RearViewMirror
                 miDeviceStatus.Text = "Stop Camera";
             }
 
-            //stickey bit
-            miShowViewer.Checked = view.Stickey;
-
-            //set the correct detector type checkbox
-            miDetectorTypeBasic.Checked = false;
-            miDetectorTypeFastBlock.Checked = false;
-            miDetectorTypeBlock.Checked = false;
-            miDetectorTypeOutline.Checked = false;
-            miDetectorTypeBox.Checked = false;
-            miDetectorTypeNone.Checked = false;
-
-            switch (detectorType)
-            {
-                case DetectorType.None:
-                    miDetectorTypeNone.Checked = true;
-                    break;
-                case DetectorType.Basic:
-                    miDetectorTypeBasic.Checked = true;
-                    break;
-                case DetectorType.Outline:
-                    miDetectorTypeOutline.Checked = true;
-                    break;
-                case DetectorType.Block:
-                    miDetectorTypeBlock.Checked = true;
-                    break;
-                case DetectorType.FastBlock:
-                    miDetectorTypeFastBlock.Checked = true;
-                    break;
-                case DetectorType.Box:
-                    miDetectorTypeBox.Checked = true;
-                    break;
-            }
-
         }
 
         private void miStatusMenuItem_Click(object sender, EventArgs e)
@@ -543,25 +498,6 @@ namespace RearViewMirror
         public void miOptionsMenuItem_Click(object sender, EventArgs e)
         {
             new OptionsForm(Options).ShowDialog();
-        }
-
-        private void miEnableAlertMenuItem_Click(object sender, EventArgs e)
-        {
-            miEnableAlert.Checked = !miEnableAlert.Checked;
-            if (detector != null)
-            {
-                detector.MotionLevelCalculation = miEnableAlert.Checked;
-            }
-            //if it's open, cut it off
-            if (!miEnableAlert.Checked)
-            {
-                view.AlarmInterval = 0;
-            }
-        }
-
-        private void miShowViewerMenuItem_Click(object sender, EventArgs e)
-        {
-            view.Stickey = !view.Stickey;
         }
 
 

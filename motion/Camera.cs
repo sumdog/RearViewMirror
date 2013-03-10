@@ -60,7 +60,7 @@ namespace motion
 			get { return ( videoSource == null ) ? 0 : videoSource.FramesReceived; }
 		}
 		// BytesReceived property
-		public int BytesReceived
+		public long BytesReceived
 		{
 			get { return ( videoSource == null ) ? 0 : videoSource.BytesReceived; }
 		}

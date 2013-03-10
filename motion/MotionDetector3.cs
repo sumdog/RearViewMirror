@@ -17,7 +17,7 @@ namespace motion
 	/// </summary>
 	public class MotionDetector3 : IMotionDetector
 	{
-		private IFilter	grayscaleFilter = new GrayscaleBT709( );
+        private IFilter grayscaleFilter = Grayscale.CommonAlgorithms.BT709;
 		private IFilter	pixellateFilter = new Pixellate( );
 		private Difference differenceFilter = new Difference( );
 		private Threshold thresholdFilter = new Threshold( 15 );
@@ -26,7 +26,7 @@ namespace motion
 		private Merge mergeFilter = new Merge( );
 
 		private IFilter extrachChannel = new ExtractChannel( RGB.R );
-		private ReplaceChannel replaceChannel = new ReplaceChannel( RGB.R, null );
+		private ReplaceChannel replaceChannel;// = new ReplaceChannel( RGB.R, (Bitmap) null );
 		private MoveTowards moveTowardsFilter = new MoveTowards( );
 
 		private FiltersSequence	processingFilter1 = new FiltersSequence( );
@@ -142,7 +142,12 @@ namespace motion
 			tmpImage2b.Dispose( );
 
 			// replace red channel in the original image
-			replaceChannel.ChannelImage = tmpImage3;
+            // Updated from original example to support new AForge Libraries (Sumit)
+            if (replaceChannel == null)
+            { replaceChannel = new ReplaceChannel(RGB.R, tmpImage3); }
+            else
+            { replaceChannel.ChannelImage = tmpImage3; }
+
 			Bitmap tmpImage4 = replaceChannel.Apply( image );
 			tmpImage3.Dispose( );
 

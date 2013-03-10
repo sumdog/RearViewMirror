@@ -30,7 +30,9 @@ using System.Text;
 using System.Reflection;
 using System.Net;
 using System.IO;
+using System.Threading;
 using MJPEGServer;
+using System.Windows.Forms;
 
 namespace RearViewMirror
 {
@@ -48,10 +50,17 @@ namespace RearViewMirror
         }
 
         /// <summary>
-        /// Checks for software updates
+        /// Checks for updates and displays dialog box if available for download. 
+        /// This function is non-blocking and spawns its own thread.
         /// </summary>
-        /// <returns>string containing URL for updates or null if verison is current or error occurs</returns>
-        public static string checkForUpdates()
+        public static void checkForUpdates() {
+            new Thread(Updater.checkForUpdatesNonBlocking).Start();
+        }
+
+        /// <summary>
+        /// Checks for software updates and displays dialog box if availabe
+        /// </summary>
+        private static void checkForUpdatesNonBlocking()
         {
             try
             {
@@ -62,7 +71,6 @@ namespace RearViewMirror
 
                 //Make webserver request
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(VERSION_URL);
-                request.Timeout = 2000; //Kinda a hack, we don't want to block if we can't check updates; so give up after 2 sec
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 Stream webStream = response.GetResponseStream();
 
@@ -93,12 +101,27 @@ namespace RearViewMirror
 
                 Log.info("Newer Version " + newVersion);
 
-                return (newVersion) ? parts[1] : null;
+                if (newVersion)
+                {
+                    if (parts[1] != null)
+                    {
+                        Log.debug("Update URL is " + parts[1]);
+
+                        if (MessageBox.Show("An update is avaiable for Rear View Mirror. Would you like to download it?", "Update Avaiable", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(parts[1]);
+                        }
+                    }
+                    else
+                    {
+                        Log.error("Update URL was null.");
+                    }
+                }
+
             }
             catch (Exception e)
             {
                 Log.error("Error checking for updates " + e.Message);
-                return null;
             }
         }
 

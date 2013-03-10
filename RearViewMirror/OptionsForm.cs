@@ -51,16 +51,28 @@ namespace RearViewMirror
 
             this.options = options;
 
+            Log.debug(String.Format("Current Options {0}",options));
+
+            //prevent manual input
+            cbDetectorType.DropDownStyle = ComboBoxStyle.DropDownList;
+
             lCameraName.Text = options.Name;
             tbOpacity.Minimum = 0;
             tbOpacity.Maximum = 100;
 
+            //undos
+            motionUndoRecord = options.EnableRecording;
+            motionUndoAlertsound = options.EnableAlertSound;
+
             //pull values from options
+            cbAlwaysShow.Checked = options.EnableAlwaysShow;
             cbRecord.Checked = options.EnableRecording;
             tbRecordFolder.Text = options.RecordFolder;
             cbAlertSound.Checked = options.EnableAlertSound;
             tbAudioFile.Text = options.AlertSoundFile;
+            cbEnableMotionAlarm.Checked = options.EnableMotionAlert;
             flopFileSelectionBoxes();
+            flopAlerts();
 
             tbOpacity.Value = (int)(options.Opacity * 100);
 
@@ -82,13 +94,37 @@ namespace RearViewMirror
             this.MinimumSize = this.Size;
             this.MaximizeBox = false;
 
+
+            //motion detector types
+            cbDetectorType.DataSource = Enum.GetValues(typeof(VideoSource.DetectorType));
+            cbDetectorType.FormattingEnabled = true;
+            cbDetectorType.Format += delegate(object sender, ListControlConvertEventArgs e)
+            {
+                if ( ((VideoSource.DetectorType)e.Value) == VideoSource.DetectorType.FastBlock)
+                {
+                    e.Value = "Block (Optimized)";
+                }
+                else
+                {
+                    e.Value = e.Value;
+                }
+            };
+            cbDetectorType.SelectedItem = options.DetectorType;
+
+
             //prevents window disposal
             this.FormClosing += new FormClosingEventHandler(OptionsForm_FormClosing);
 
-            //scratch
+            //Log
             cbCodec.Items.AddRange(CodecOption.getAvailableCodecs());
             cbCodec.SelectedItem = options.Codec;
-            Log.debug("Codec: " + options.Codec);
+            Log.debug("Selected Codec: " + options.Codec);
+        }
+
+        private void cbEnableMotionAlarm_CheckedChanged(object sender, EventArgs e)
+        {
+            cbDetectorType.Enabled = cbEnableMotionAlarm.Checked;
+            flopAlerts(true);
         }
 
         #region Events
@@ -150,6 +186,9 @@ namespace RearViewMirror
             options.EnableAlertSound = cbAlertSound.Checked;
             options.AlertSoundFile= tbAudioFile.Text;
             options.Codec = (CodecOption) cbCodec.SelectedItem;
+            options.EnableAlwaysShow = cbAlwaysShow.Checked;
+            options.EnableMotionAlert = cbEnableMotionAlarm.Checked;
+            options.DetectorType = (VideoSource.DetectorType) cbDetectorType.SelectedItem;
 
             //Validation
             LinkedList<string> errors = new LinkedList<string>();
@@ -186,6 +225,7 @@ namespace RearViewMirror
         {            
             flopGlobals();
             flopFileSelectionBoxes();
+            flopAlerts();
         }
 
         private void cbAlertSound_CheckedChanged(object sender, EventArgs e)
@@ -211,16 +251,46 @@ namespace RearViewMirror
             bBrowseRecordFolder.Enabled = cbRecord.Checked;
             tbRecordFolder.Enabled = cbRecord.Checked;
             cbCodec.Enabled = cbRecord.Checked;
+
+            cbDetectorType.Enabled = cbEnableMotionAlarm.Checked;
         }
 
-        private bool undoAlertSoundEnabled, undoRecordEnabled;
+
+        private bool motionUndoRecord, motionUndoAlertsound;
+        private void flopAlerts(bool changed = false)
+        {
+            Control[] controls = {  cbAlertSound, cbRecord };
+            foreach (Control c in controls) { c.Enabled = cbEnableMotionAlarm.Checked; }
+
+            if (!cbEnableMotionAlarm.Checked && cbAlertSound.Checked)
+            {
+                motionUndoAlertsound = cbAlertSound.Checked;
+                cbAlertSound.Checked = false;
+            }
+
+            if (!cbEnableMotionAlarm.Checked && cbRecord.Checked)
+            {
+                motionUndoRecord = cbRecord.Checked;
+                cbRecord.Checked = false;
+            }
+
+            if (changed && cbEnableMotionAlarm.Checked)
+            {
+                cbRecord.Checked = motionUndoRecord;
+                cbAlertSound.Checked = motionUndoAlertsound;
+            }
+        }
+
+        private bool undoAlertSoundEnabled, undoRecordEnabled, undoAlwaysShow, undoEnableMotion;
         private string undoRecordFolder, undoAudioFile;
         private int undoOpacity;
         private object undoCodec;
+        private VideoSource.DetectorType undoDetectorType;
 
         private void flopGlobals()
         {
-            Control[] controls = { tbOpacity, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, tbAudioFile, tbRecordFolder, cbCodec };
+            Control[] controls = { tbOpacity, cbRecord, cbAlertSound, bBrowseAudioFile, bBrowseRecordFolder, 
+                                     tbAudioFile, tbRecordFolder, cbCodec, cbDetectorType, cbEnableMotionAlarm, cbAlwaysShow };
 
             if (cbGlobalOptions.Checked)
             {
@@ -231,6 +301,10 @@ namespace RearViewMirror
                 undoAudioFile = tbAudioFile.Text;
                 undoOpacity = tbOpacity.Value;
                 undoCodec = cbCodec.SelectedItem;
+                undoAlwaysShow = cbAlwaysShow.Checked;
+                undoEnableMotion = cbEnableMotionAlarm.Checked;
+                undoDetectorType = options.DetectorType;
+
 
                 //pull in all globals
                 GlobalVideoFeedOptions globals = Program.globalSettings;
@@ -242,6 +316,10 @@ namespace RearViewMirror
 
                 tbOpacity.Value = (int)(globals.Opacity * 100);
                 options.Opacity = ((double)tbOpacity.Value) / 100.0;
+
+                cbAlwaysShow.Checked = globals.EnableAlwaysShow;
+                cbEnableMotionAlarm.Checked = globals.EnableMotionAlert;
+                cbDetectorType.SelectedItem = globals.DetectorType;
 
                 foreach (Control c in controls) { c.Enabled = false; }
                 
@@ -257,12 +335,17 @@ namespace RearViewMirror
                 tbOpacity.Value = undoOpacity;
                 options.Opacity = ((double)tbOpacity.Value) / 100.0;
                 cbCodec.SelectedItem = undoCodec;
+                cbAlwaysShow.Checked = undoAlwaysShow;
+                cbEnableMotionAlarm.Checked = undoEnableMotion;
+                cbDetectorType.SelectedItem = undoDetectorType;
 
                 foreach (Control c in controls) { c.Enabled = true; }
             }
         }
 
         #endregion
+
+
 
 
     }

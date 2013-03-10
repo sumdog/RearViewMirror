@@ -32,6 +32,7 @@ using AForge.Video.DirectShow;
 namespace RearViewMirror
 {
 
+
     /// <summary>
     /// Provides an array of Codecs suitable for use in Combo boxes.
     /// </summary>
@@ -86,6 +87,10 @@ namespace RearViewMirror
 
         public abstract CodecOption Codec { get; set; }
 
+        public abstract bool EnableMotionAlert { get; set; }
+        public abstract bool EnableAlwaysShow { get; set; }
+        public abstract VideoSource.DetectorType DetectorType { get; set; }
+
         protected AbstractFeedOptions() {
         }
 
@@ -109,6 +114,17 @@ namespace RearViewMirror
         public override bool EnableAlertSound { get; set; }
 
         public override string AlertSoundFile { get; set; }
+
+        [XmlIgnore]
+        public override bool EnableMotionAlert { 
+            get {return VideoSource.EnableAlert; }
+            set {
+                if (VideoSource != null)
+                {
+                    VideoSource.EnableAlert = value;
+                }
+            }
+        }
 
         private CodecOption codec;
         public override CodecOption Codec { 
@@ -135,6 +151,27 @@ namespace RearViewMirror
         [XmlIgnore]
         public VideoSource VideoSource { set; private get; }
 
+        
+        public override bool EnableAlwaysShow { 
+            get { return VideoSource.Sticky; }
+            set {
+                if (VideoSource != null)
+                {
+                    VideoSource.Sticky = value;
+                }
+            } 
+        }
+
+
+
+        [XmlIgnore]        public override VideoSource.DetectorType DetectorType {
+            get { return VideoSource.Detector; }
+            set {
+                if (VideoSource != null)
+                {
+                    VideoSource.Detector = value;
+                }            }        }
+
         public VideoFeedOptions()
         {
 
@@ -144,7 +181,10 @@ namespace RearViewMirror
             AlertSoundFile = null;
             RecordFolder = null;
             UseGlobal = true;
-            //Codec = null;
+            Codec = null;
+            EnableMotionAlert = true;
+            EnableAlwaysShow = false;
+            DetectorType = RearViewMirror.VideoSource.DetectorType.FastBlock;
         }
     }
 
@@ -168,6 +208,9 @@ namespace RearViewMirror
             globalAlertSoundFile = null;
             globalRecordFolder = null;
             globalCodec = null;
+            globalEnableMotionAlert = true;
+            globalEnableAlwaysShow = false;
+            globalDetectorType = RearViewMirror.VideoSource.DetectorType.FastBlock;
         }
 
         public void updateViewers()
@@ -193,7 +236,9 @@ namespace RearViewMirror
                 v.Options.EnableAlertSound = globalEnableAlertSound;
                 v.Options.AlertSoundFile = globalAlertSoundFile;
                 v.Options.Codec = globalCodec;
-                v.Options.Codec = globalCodec;
+                v.Options.EnableAlwaysShow = globalEnableAlwaysShow;
+                v.Options.EnableMotionAlert = globalEnableMotionAlert;
+                v.Options.DetectorType = globalDetectorType;
             }
         }
 
@@ -201,7 +246,9 @@ namespace RearViewMirror
 
         private double globalOpacity;
 
-        private bool globalEnableRecording, globalEnableAlertSound;
+        private bool globalEnableRecording, globalEnableAlertSound, globalEnableMotionAlert, globalEnableAlwaysShow;
+
+        private VideoSource.DetectorType globalDetectorType;
 
         private string globalRecordFolder, globalAlertSoundFile;
 
@@ -248,6 +295,23 @@ namespace RearViewMirror
 
         [XmlIgnore]
         public override string Name { get { return "Global Options"; } }
+
+        public override bool EnableAlwaysShow { 
+            get { return globalEnableAlwaysShow; }
+            set { globalEnableAlwaysShow = value; } 
+        }
+
+        public override bool EnableMotionAlert
+        {
+            get { return globalEnableMotionAlert; }
+            set { globalEnableMotionAlert = value; }
+        }
+
+        public override VideoSource.DetectorType DetectorType
+        {
+            get { return globalDetectorType; }
+            set { globalDetectorType =  value; }
+        }
 
         public override double Opacity
         {

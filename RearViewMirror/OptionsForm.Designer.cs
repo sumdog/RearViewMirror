@@ -45,6 +45,10 @@ namespace RearViewMirror
             this.tbRecordFolder = new System.Windows.Forms.TextBox();
             this.cbCodec = new System.Windows.Forms.ComboBox();
             this.lVideoCompression = new System.Windows.Forms.Label();
+            this.cbAlwaysShow = new System.Windows.Forms.CheckBox();
+            this.cbDetectorType = new System.Windows.Forms.ComboBox();
+            this.cbEnableMotionAlarm = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +63,7 @@ namespace RearViewMirror
             // cbGlobalOptions
             // 
             this.cbGlobalOptions.AutoSize = true;
-            this.cbGlobalOptions.Location = new System.Drawing.Point(13, 13);
+            this.cbGlobalOptions.Location = new System.Drawing.Point(12, 13);
             this.cbGlobalOptions.Name = "cbGlobalOptions";
             this.cbGlobalOptions.Size = new System.Drawing.Size(117, 17);
             this.cbGlobalOptions.TabIndex = 1;
@@ -81,7 +85,7 @@ namespace RearViewMirror
             this.cbAlertSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.cbAlertSound.AutoSize = true;
-            this.cbAlertSound.Location = new System.Drawing.Point(12, 103);
+            this.cbAlertSound.Location = new System.Drawing.Point(12, 199);
             this.cbAlertSound.Name = "cbAlertSound";
             this.cbAlertSound.Size = new System.Drawing.Size(117, 17);
             this.cbAlertSound.TabIndex = 3;
@@ -91,14 +95,14 @@ namespace RearViewMirror
             // 
             // tbAudioFile
             // 
-            this.tbAudioFile.Location = new System.Drawing.Point(83, 129);
+            this.tbAudioFile.Location = new System.Drawing.Point(83, 225);
             this.tbAudioFile.Name = "tbAudioFile";
             this.tbAudioFile.Size = new System.Drawing.Size(152, 20);
             this.tbAudioFile.TabIndex = 5;
             // 
             // bBrowseAudioFile
             // 
-            this.bBrowseAudioFile.Location = new System.Drawing.Point(241, 126);
+            this.bBrowseAudioFile.Location = new System.Drawing.Point(241, 222);
             this.bBrowseAudioFile.Name = "bBrowseAudioFile";
             this.bBrowseAudioFile.Size = new System.Drawing.Size(75, 23);
             this.bBrowseAudioFile.TabIndex = 6;
@@ -109,7 +113,7 @@ namespace RearViewMirror
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 132);
+            this.label1.Location = new System.Drawing.Point(9, 228);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 7;
@@ -118,7 +122,7 @@ namespace RearViewMirror
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(58, 242);
+            this.bOK.Location = new System.Drawing.Point(61, 345);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(91, 27);
             this.bOK.TabIndex = 8;
@@ -129,7 +133,7 @@ namespace RearViewMirror
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(186, 242);
+            this.bCancel.Location = new System.Drawing.Point(189, 345);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(91, 27);
             this.bCancel.TabIndex = 9;
@@ -152,7 +156,7 @@ namespace RearViewMirror
             // cbRecord
             // 
             this.cbRecord.AutoSize = true;
-            this.cbRecord.Location = new System.Drawing.Point(12, 159);
+            this.cbRecord.Location = new System.Drawing.Point(12, 255);
             this.cbRecord.Name = "cbRecord";
             this.cbRecord.Size = new System.Drawing.Size(190, 17);
             this.cbRecord.TabIndex = 11;
@@ -163,7 +167,7 @@ namespace RearViewMirror
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 183);
+            this.label2.Location = new System.Drawing.Point(12, 279);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 12;
@@ -171,7 +175,7 @@ namespace RearViewMirror
             // 
             // bBrowseRecordFolder
             // 
-            this.bBrowseRecordFolder.Location = new System.Drawing.Point(241, 178);
+            this.bBrowseRecordFolder.Location = new System.Drawing.Point(241, 274);
             this.bBrowseRecordFolder.Name = "bBrowseRecordFolder";
             this.bBrowseRecordFolder.Size = new System.Drawing.Size(75, 23);
             this.bBrowseRecordFolder.TabIndex = 13;
@@ -181,7 +185,7 @@ namespace RearViewMirror
             // 
             // tbRecordFolder
             // 
-            this.tbRecordFolder.Location = new System.Drawing.Point(83, 180);
+            this.tbRecordFolder.Location = new System.Drawing.Point(83, 276);
             this.tbRecordFolder.Name = "tbRecordFolder";
             this.tbRecordFolder.Size = new System.Drawing.Size(152, 20);
             this.tbRecordFolder.TabIndex = 14;
@@ -189,7 +193,7 @@ namespace RearViewMirror
             // cbCodec
             // 
             this.cbCodec.FormattingEnabled = true;
-            this.cbCodec.Location = new System.Drawing.Point(83, 206);
+            this.cbCodec.Location = new System.Drawing.Point(83, 302);
             this.cbCodec.Name = "cbCodec";
             this.cbCodec.Size = new System.Drawing.Size(152, 21);
             this.cbCodec.TabIndex = 15;
@@ -197,17 +201,59 @@ namespace RearViewMirror
             // lVideoCompression
             // 
             this.lVideoCompression.AutoSize = true;
-            this.lVideoCompression.Location = new System.Drawing.Point(12, 210);
+            this.lVideoCompression.Location = new System.Drawing.Point(12, 306);
             this.lVideoCompression.Name = "lVideoCompression";
             this.lVideoCompression.Size = new System.Drawing.Size(68, 13);
             this.lVideoCompression.TabIndex = 16;
             this.lVideoCompression.Text = "Video Codec";
             // 
+            // cbAlwaysShow
+            // 
+            this.cbAlwaysShow.AutoSize = true;
+            this.cbAlwaysShow.Location = new System.Drawing.Point(12, 103);
+            this.cbAlwaysShow.Name = "cbAlwaysShow";
+            this.cbAlwaysShow.Size = new System.Drawing.Size(124, 17);
+            this.cbAlwaysShow.TabIndex = 17;
+            this.cbAlwaysShow.Text = "Always Show Viewer";
+            this.cbAlwaysShow.UseVisualStyleBackColor = true;
+            // 
+            // cbDetectorType
+            // 
+            this.cbDetectorType.FormattingEnabled = true;
+            this.cbDetectorType.Location = new System.Drawing.Point(128, 161);
+            this.cbDetectorType.Name = "cbDetectorType";
+            this.cbDetectorType.Size = new System.Drawing.Size(152, 21);
+            this.cbDetectorType.TabIndex = 18;
+            // 
+            // cbEnableMotionAlarm
+            // 
+            this.cbEnableMotionAlarm.AutoSize = true;
+            this.cbEnableMotionAlarm.Location = new System.Drawing.Point(12, 138);
+            this.cbEnableMotionAlarm.Name = "cbEnableMotionAlarm";
+            this.cbEnableMotionAlarm.Size = new System.Drawing.Size(118, 17);
+            this.cbEnableMotionAlarm.TabIndex = 19;
+            this.cbEnableMotionAlarm.Text = "Enable Motion Alert";
+            this.cbEnableMotionAlarm.UseVisualStyleBackColor = true;
+            this.cbEnableMotionAlarm.CheckedChanged += new System.EventHandler(this.cbEnableMotionAlarm_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 166);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 13);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Motion Detector Type";
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 290);
+            this.ClientSize = new System.Drawing.Size(329, 384);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cbEnableMotionAlarm);
+            this.Controls.Add(this.cbDetectorType);
+            this.Controls.Add(this.cbAlwaysShow);
             this.Controls.Add(this.lVideoCompression);
             this.Controls.Add(this.cbCodec);
             this.Controls.Add(this.tbRecordFolder);
@@ -251,5 +297,9 @@ namespace RearViewMirror
         private System.Windows.Forms.TextBox tbRecordFolder;
         private System.Windows.Forms.ComboBox cbCodec;
         private System.Windows.Forms.Label lVideoCompression;
+        private System.Windows.Forms.CheckBox cbAlwaysShow;
+        private System.Windows.Forms.ComboBox cbDetectorType;
+        private System.Windows.Forms.CheckBox cbEnableMotionAlarm;
+        private System.Windows.Forms.Label label3;
     }
 }

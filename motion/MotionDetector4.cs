@@ -18,7 +18,7 @@ namespace motion
 	/// </summary>
 	public class MotionDetector4 : IMotionDetector
 	{
-		private IFilter	grayscaleFilter = new GrayscaleBT709( );
+        private IFilter grayscaleFilter = Grayscale.CommonAlgorithms.BT709;
 		private IFilter	pixellateFilter = new Pixellate( );
 		private Difference differenceFilter = new Difference( );
 		private Threshold thresholdFilter = new Threshold( 15 );
@@ -122,7 +122,7 @@ namespace motion
 
             // get object rectangles
             blobCounter.ProcessImage( bitmapData );
-            Rectangle[] rects = blobCounter.GetObjectRectangles( );
+            Rectangle[] rects = blobCounter.GetObjectsRectangles();
 
             // unlock temporary image
             tmpImage.UnlockBits( bitmapData );

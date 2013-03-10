@@ -85,8 +85,28 @@ namespace RearViewMirror
 
             //load and start all video sources which were started previously
             VideoSource[] loadSources = Properties.Settings.Default.videoSources;
-            sources = (loadSources != null) ? new ArrayList(loadSources) : new ArrayList();
+
+            //Seralizing for older versions of RearViewMirror searziled the entire
+            // capture object which no longer works with new versions of AForge
+            // If we have any of these saved cameras, we'll need to drop them.
+            sources = new ArrayList();
+            if (loadSources != null)
+            {
+                foreach (VideoSource vs in loadSources)
+                {
+                    if (vs.SerializeddDeviceString != null)
+                    {
+                        sources.Add(vs);
+                    }
+                    else
+                    {
+                        Log.warn(String.Format("Camera {0} from older version of RearViewMirror could not be restored",vs.Name));
+                    }
+                }
+            }
+
             foreach(VideoSource i in sources) {
+
                 if (i.SaveState == VideoSource.CameraState.Started)
                 {
                     i.startCamera();
@@ -134,16 +154,7 @@ namespace RearViewMirror
             }
 
             //check for updates
-            //TODO: It's own thread
-            string updateUrl = Updater.checkForUpdates();
-            Log.debug("Update URL is " + updateUrl);
-            if (updateUrl != null)
-            {
-                if (MessageBox.Show("An update is avaiable for Rear View Mirror. Would you like to download it?", "Update Avaiable", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    System.Diagnostics.Process.Start(updateUrl);
-                }
-            }
+            Updater.checkForUpdates();
 
         }
             
@@ -232,6 +243,7 @@ namespace RearViewMirror
                 String sourceName = showGetSourceNameBox();
                 if (sourceName != null) //user didn't cancel
                 {
+                    Log.info(String.Format("Video source: {0}",c.Source));
                     VideoSource r = new VideoSource(sourceName, c);
                     sources.Add(r);
                     r.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
@@ -274,6 +286,7 @@ namespace RearViewMirror
                 {
                     MJPEGStream s = new MJPEGStream();
                     s.Source = form.URL;
+                    Log.info(String.Format("Video source: {0}", s.Source));
                     VideoSource v = new VideoSource(sourceName, s);
                     sources.Add(v);
                     v.RemoveSelected += new VideoSource.RemoveEventHandler(r_RemoveSelected);
@@ -300,7 +313,6 @@ namespace RearViewMirror
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //System.Diagnostics.Process.Start(DONATE_URL);
             Help.ShowHelp(this,DONATE_URL);
         }
 

@@ -34,6 +34,7 @@ using System.Drawing;
 using System.IO;
 using RearViewMirror.MJPEGServer;
 using System.Collections.Concurrent;
+using RearViewMirror;
 
 namespace MJPEGServer
 {
