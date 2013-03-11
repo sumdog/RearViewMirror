@@ -95,13 +95,36 @@ namespace RearViewMirror.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public RearViewMirror.GlobalVideoFeedOptions globalVideoOptions {
+        public global::RearViewMirror.GlobalVideoFeedOptions globalVideoOptions {
             get {
-                return ((RearViewMirror.GlobalVideoFeedOptions)(this["globalVideoOptions"]));
+                return ((global::RearViewMirror.GlobalVideoFeedOptions)(this["globalVideoOptions"]));
             }
             set {
                 this["globalVideoOptions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool firstTime {
+            get {
+                return ((bool)(this["firstTime"]));
+            }
+            set {
+                this["firstTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool checkUpdates {
+            get {
+                return ((bool)(this["checkUpdates"]));
+            }
+            set {
+                this["checkUpdates"] = value;
             }
         }
     }

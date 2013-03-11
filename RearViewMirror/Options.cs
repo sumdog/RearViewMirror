@@ -42,7 +42,12 @@ namespace RearViewMirror
 
         public string Moniker { get; set; }
         public string Name { get; set; }
-        public string Code { get { return Moniker.Split('\\')[1]; } }
+        public string Code { 
+            get { 
+                String[] parts = Moniker.Split('\\');
+                return (parts.Length >= 2) ? parts[1] : parts[0];
+            } 
+        }
         public override string ToString() { return Name; }
         public override bool Equals(object obj)
         {

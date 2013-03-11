@@ -42,7 +42,7 @@ namespace RearViewMirror
     public class Updater
     {
 
-        public const String VERSION_URL = "http://penguindreams.org/files/progs/RVM.version";
+        public const String VERSION_URL = "http://rearviewmirror.cc/RVM.version";
 
         private static bool newerVersion(String client, String server)
         {

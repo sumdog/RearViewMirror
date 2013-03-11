@@ -74,6 +74,27 @@ namespace RearViewMirror
             logviewer = new LogViewer();
             this.Resize += SystemTray_Resize;
 
+            //Log Mode
+            Log.info(String.Format("Running in {0}-bit mode.",
+                (Environment.Is64BitProcess) ? 64: 32
+            ));
+
+            //first time, make sure update checks are alright
+            if (Properties.Settings.Default.firstTime)
+            {
+                if (MessageBox.Show("Would you like Rear View Mirror to automatically check for updates?", "Check for Updates", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Properties.Settings.Default.checkUpdates = true;
+                }
+                else
+                {
+                    Properties.Settings.Default.checkUpdates = false;
+                }
+                Properties.Settings.Default.firstTime = false;
+                Properties.Settings.Default.Save();
+            }
+
+
             //upgrade our settings from previous versions
             if (Properties.Settings.Default.updateSettings)
             {
@@ -154,7 +175,16 @@ namespace RearViewMirror
             }
 
             //check for updates
-            Updater.checkForUpdates();
+            if (Properties.Settings.Default.checkUpdates)
+            {
+                Updater.checkForUpdates();
+                checkForUpdatesToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                checkForUpdatesToolStripMenuItem.Checked = false;
+                Log.info("Update check not enabled");
+            }
 
         }
             
@@ -301,6 +331,12 @@ namespace RearViewMirror
 
         #region Main TrayIcon Menu Events
 
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            checkForUpdatesToolStripMenuItem.Checked = !checkForUpdatesToolStripMenuItem.Checked;
+            Properties.Settings.Default.checkUpdates = checkForUpdatesToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -476,6 +512,8 @@ namespace RearViewMirror
         }
 
         #endregion
+
+
 
 
 

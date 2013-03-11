@@ -1,8 +1,9 @@
 Rear View Mirror
-0.8.9.3-beta
+1.0.0.0
 
 Copyright 2007-2011 Sumit Khanna
 -GNU GPL v3
+http://rearviewmirror.cc
 http://penguindreams.org
 ------------------------------
 
@@ -28,9 +29,5 @@ If you remove a camera, people connected to you at that camera will stay connect
 Todo
 ------------------------------
 
-Show which camera a user is connected to in server window
-
-More options per Camera (alert sound, enable camera on startup, etc.)
-
-Recording to file when motion occurs 
+Change out recording framework from VFW to something better
 

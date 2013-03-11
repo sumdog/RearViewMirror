@@ -1,5 +1,10 @@
 # ChangeLog for Rear View Mirror
-# Copyright 2007,2011 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+# Copyright 2007,2011,2013 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+
+*RearViewMirror-1.0.0.0 (11 Mar 2013)
+
+   Added 32-bit and 64-bit MSI Packages
+   Options moved to their own dialog
 
 *RearViewMirror-0.8.9.3 (10 Aug 2011)
 
