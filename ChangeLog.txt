@@ -1,19 +1,19 @@
 # ChangeLog for Rear View Mirror
-# Copyright 2007,2011,2013 Sumit Khanna / penguindreams.org; Distributed under GPL v3
+# Copyright 2007,2012,2013 Sumit Khanna / penguindreams.org; Distributed under GPL v3
 
 *RearViewMirror-1.0.0.0 (11 Mar 2013)
 
    Added 32-bit and 64-bit MSI Packages
    Options moved to their own dialog
 
-*RearViewMirror-0.8.9.3 (10 Aug 2011)
+*RearViewMirror-0.8.9.3 (10 Aug 2012)
 
    Added global options and options per camera
    Added support for playing an audio on alert
    Added support for recording video on alert
    Dropped to 32-bit release to support VFW codecs (next release will use FFMpeg)
    
-*RearViewMirror-0.8.8.2 (07 Jul 2011)
+*RearViewMirror-0.8.8.2 (07 Jul 2012)
 
    Updated project to Visual Studio 2010
    Added queuing system for MJPEG server to reduce latency
