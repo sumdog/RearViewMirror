@@ -311,9 +311,9 @@ namespace RearViewMirror
 
             miDeviceStatus = new ToolStripMenuItem("-", null, miStatusMenuItem_Click);
             miMain.DropDown.Items.Add(miDeviceStatus);
-            miRemoveDevice = new ToolStripMenuItem("Remove Device", null, miRemoveDeviceMenuItem_Click);
+            miRemoveDevice = new ToolStripMenuItem(Messages.RemoveDevice, null, miRemoveDeviceMenuItem_Click);
             miMain.DropDown.Items.Add(miRemoveDevice);
-            miOptions = new ToolStripMenuItem("Options", null, miOptionsMenuItem_Click);
+            miOptions = new ToolStripMenuItem(Messages.Options, null, miOptionsMenuItem_Click);
             miMain.DropDown.Items.Add(miOptions);           
             
         }
@@ -468,17 +468,17 @@ namespace RearViewMirror
             if (captureDevice == null)
             {
                 miDeviceStatus.Enabled = false;
-                miDeviceStatus.Text = "Start Camera";
+                miDeviceStatus.Text = Messages.MenuCameraStart;
             }
             else if (camera == null)
             {
                 miDeviceStatus.Enabled = true;
-                miDeviceStatus.Text = "Start Camera";
+                miDeviceStatus.Text = Messages.MenuCameraStop;
             }
             else if (camera != null)
             {
                 miDeviceStatus.Enabled = true;
-                miDeviceStatus.Text = "Stop Camera";
+                miDeviceStatus.Text = Messages.MenuCameraStop;
             }
 
         }
@@ -503,7 +503,7 @@ namespace RearViewMirror
 
         private void miRemoveDeviceMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult r = MessageBox.Show("Are you sure you want to remove the Camera " + this.Name + "?", "Remove Camera", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult r = MessageBox.Show(String.Format(Messages.RemoveCameraQuestion,this.Name), Messages.MenuRemoveCamera, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (r == DialogResult.Yes)
             {
                 RemoveSelected(this);

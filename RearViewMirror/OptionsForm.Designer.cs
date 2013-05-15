@@ -54,202 +54,128 @@ namespace RearViewMirror
             // 
             // tbOpacity
             // 
-            this.tbOpacity.Location = new System.Drawing.Point(125, 52);
+            resources.ApplyResources(this.tbOpacity, "tbOpacity");
             this.tbOpacity.Name = "tbOpacity";
-            this.tbOpacity.Size = new System.Drawing.Size(155, 45);
-            this.tbOpacity.TabIndex = 0;
             this.tbOpacity.Scroll += new System.EventHandler(this.tbOpacity_Scroll);
             // 
             // cbGlobalOptions
             // 
-            this.cbGlobalOptions.AutoSize = true;
-            this.cbGlobalOptions.Location = new System.Drawing.Point(12, 13);
+            resources.ApplyResources(this.cbGlobalOptions, "cbGlobalOptions");
             this.cbGlobalOptions.Name = "cbGlobalOptions";
-            this.cbGlobalOptions.Size = new System.Drawing.Size(117, 17);
-            this.cbGlobalOptions.TabIndex = 1;
-            this.cbGlobalOptions.Text = "Use Global Options";
             this.cbGlobalOptions.UseVisualStyleBackColor = true;
             this.cbGlobalOptions.CheckedChanged += new System.EventHandler(this.cbGlobalOptions_CheckedChanged);
             // 
             // lOpacity
             // 
-            this.lOpacity.AutoSize = true;
-            this.lOpacity.Location = new System.Drawing.Point(12, 61);
+            resources.ApplyResources(this.lOpacity, "lOpacity");
             this.lOpacity.Name = "lOpacity";
-            this.lOpacity.Size = new System.Drawing.Size(107, 13);
-            this.lOpacity.TabIndex = 2;
-            this.lOpacity.Text = "Viewer Transparency";
             // 
             // cbAlertSound
             // 
-            this.cbAlertSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.cbAlertSound.AutoSize = true;
-            this.cbAlertSound.Location = new System.Drawing.Point(12, 199);
+            resources.ApplyResources(this.cbAlertSound, "cbAlertSound");
             this.cbAlertSound.Name = "cbAlertSound";
-            this.cbAlertSound.Size = new System.Drawing.Size(117, 17);
-            this.cbAlertSound.TabIndex = 3;
-            this.cbAlertSound.Text = "Enable Alert Sound";
             this.cbAlertSound.UseVisualStyleBackColor = true;
             this.cbAlertSound.CheckedChanged += new System.EventHandler(this.cbAlertSound_CheckedChanged);
             // 
             // tbAudioFile
             // 
-            this.tbAudioFile.Location = new System.Drawing.Point(83, 225);
+            resources.ApplyResources(this.tbAudioFile, "tbAudioFile");
             this.tbAudioFile.Name = "tbAudioFile";
-            this.tbAudioFile.Size = new System.Drawing.Size(152, 20);
-            this.tbAudioFile.TabIndex = 5;
             // 
             // bBrowseAudioFile
             // 
-            this.bBrowseAudioFile.Location = new System.Drawing.Point(241, 222);
+            resources.ApplyResources(this.bBrowseAudioFile, "bBrowseAudioFile");
             this.bBrowseAudioFile.Name = "bBrowseAudioFile";
-            this.bBrowseAudioFile.Size = new System.Drawing.Size(75, 23);
-            this.bBrowseAudioFile.TabIndex = 6;
-            this.bBrowseAudioFile.Text = "Browse";
             this.bBrowseAudioFile.UseVisualStyleBackColor = true;
             this.bBrowseAudioFile.Click += new System.EventHandler(this.bBrowseAudioFile_Click);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 228);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Sound File";
             // 
             // bOK
             // 
-            this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bOK.Location = new System.Drawing.Point(61, 345);
+            resources.ApplyResources(this.bOK, "bOK");
             this.bOK.Name = "bOK";
-            this.bOK.Size = new System.Drawing.Size(91, 27);
-            this.bOK.TabIndex = 8;
-            this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // bCancel
             // 
-            this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(189, 345);
+            resources.ApplyResources(this.bCancel, "bCancel");
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(91, 27);
-            this.bCancel.TabIndex = 9;
-            this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
             // 
             // lCameraName
             // 
-            this.lCameraName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lCameraName.AutoSize = true;
-            this.lCameraName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lCameraName.Location = new System.Drawing.Point(195, 13);
+            resources.ApplyResources(this.lCameraName, "lCameraName");
             this.lCameraName.Name = "lCameraName";
-            this.lCameraName.Size = new System.Drawing.Size(122, 20);
-            this.lCameraName.TabIndex = 10;
-            this.lCameraName.Text = "Camera Name";
-            this.lCameraName.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // cbRecord
             // 
-            this.cbRecord.AutoSize = true;
-            this.cbRecord.Location = new System.Drawing.Point(12, 255);
+            resources.ApplyResources(this.cbRecord, "cbRecord");
             this.cbRecord.Name = "cbRecord";
-            this.cbRecord.Size = new System.Drawing.Size(190, 17);
-            this.cbRecord.TabIndex = 11;
-            this.cbRecord.Text = "Record Video on Motion Detection";
             this.cbRecord.UseVisualStyleBackColor = true;
             this.cbRecord.CheckedChanged += new System.EventHandler(this.cbRecord_CheckedChanged);
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 279);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Save Folder";
             // 
             // bBrowseRecordFolder
             // 
-            this.bBrowseRecordFolder.Location = new System.Drawing.Point(241, 274);
+            resources.ApplyResources(this.bBrowseRecordFolder, "bBrowseRecordFolder");
             this.bBrowseRecordFolder.Name = "bBrowseRecordFolder";
-            this.bBrowseRecordFolder.Size = new System.Drawing.Size(75, 23);
-            this.bBrowseRecordFolder.TabIndex = 13;
-            this.bBrowseRecordFolder.Text = "Browse";
             this.bBrowseRecordFolder.UseVisualStyleBackColor = true;
             this.bBrowseRecordFolder.Click += new System.EventHandler(this.bBrowseRecordFolder_Click);
             // 
             // tbRecordFolder
             // 
-            this.tbRecordFolder.Location = new System.Drawing.Point(83, 276);
+            resources.ApplyResources(this.tbRecordFolder, "tbRecordFolder");
             this.tbRecordFolder.Name = "tbRecordFolder";
-            this.tbRecordFolder.Size = new System.Drawing.Size(152, 20);
-            this.tbRecordFolder.TabIndex = 14;
             // 
             // cbCodec
             // 
+            resources.ApplyResources(this.cbCodec, "cbCodec");
             this.cbCodec.FormattingEnabled = true;
-            this.cbCodec.Location = new System.Drawing.Point(83, 302);
             this.cbCodec.Name = "cbCodec";
-            this.cbCodec.Size = new System.Drawing.Size(152, 21);
-            this.cbCodec.TabIndex = 15;
             // 
             // lVideoCompression
             // 
-            this.lVideoCompression.AutoSize = true;
-            this.lVideoCompression.Location = new System.Drawing.Point(12, 306);
+            resources.ApplyResources(this.lVideoCompression, "lVideoCompression");
             this.lVideoCompression.Name = "lVideoCompression";
-            this.lVideoCompression.Size = new System.Drawing.Size(68, 13);
-            this.lVideoCompression.TabIndex = 16;
-            this.lVideoCompression.Text = "Video Codec";
             // 
             // cbAlwaysShow
             // 
-            this.cbAlwaysShow.AutoSize = true;
-            this.cbAlwaysShow.Location = new System.Drawing.Point(12, 103);
+            resources.ApplyResources(this.cbAlwaysShow, "cbAlwaysShow");
             this.cbAlwaysShow.Name = "cbAlwaysShow";
-            this.cbAlwaysShow.Size = new System.Drawing.Size(124, 17);
-            this.cbAlwaysShow.TabIndex = 17;
-            this.cbAlwaysShow.Text = "Always Show Viewer";
             this.cbAlwaysShow.UseVisualStyleBackColor = true;
             // 
             // cbDetectorType
             // 
+            resources.ApplyResources(this.cbDetectorType, "cbDetectorType");
             this.cbDetectorType.FormattingEnabled = true;
-            this.cbDetectorType.Location = new System.Drawing.Point(128, 161);
             this.cbDetectorType.Name = "cbDetectorType";
-            this.cbDetectorType.Size = new System.Drawing.Size(152, 21);
-            this.cbDetectorType.TabIndex = 18;
             // 
             // cbEnableMotionAlarm
             // 
-            this.cbEnableMotionAlarm.AutoSize = true;
-            this.cbEnableMotionAlarm.Location = new System.Drawing.Point(12, 138);
+            resources.ApplyResources(this.cbEnableMotionAlarm, "cbEnableMotionAlarm");
             this.cbEnableMotionAlarm.Name = "cbEnableMotionAlarm";
-            this.cbEnableMotionAlarm.Size = new System.Drawing.Size(118, 17);
-            this.cbEnableMotionAlarm.TabIndex = 19;
-            this.cbEnableMotionAlarm.Text = "Enable Motion Alert";
             this.cbEnableMotionAlarm.UseVisualStyleBackColor = true;
             this.cbEnableMotionAlarm.CheckedChanged += new System.EventHandler(this.cbEnableMotionAlarm_CheckedChanged);
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 166);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 13);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "Motion Detector Type";
             // 
             // OptionsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 384);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cbEnableMotionAlarm);
             this.Controls.Add(this.cbDetectorType);
@@ -270,9 +196,7 @@ namespace RearViewMirror
             this.Controls.Add(this.lOpacity);
             this.Controls.Add(this.cbGlobalOptions);
             this.Controls.Add(this.tbOpacity);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OptionsForm";
-            this.Text = "Options";
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

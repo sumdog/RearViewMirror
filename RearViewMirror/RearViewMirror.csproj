@@ -97,9 +97,6 @@
     <Reference Include="AForge.Video.DirectShow">
       <HintPath>..\references\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Video.FFMPEG">
-      <HintPath>..\references\AForge.Video.FFMPEG.dll</HintPath>
-    </Reference>
     <Reference Include="AForge.Video.VFW">
       <HintPath>..\references\AForge.Video.VFW.dll</HintPath>
     </Reference>
@@ -126,6 +123,11 @@
     <Compile Include="LogViewer.Designer.cs">
       <DependentUpon>LogViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="MJPEGServer\FrameQueue.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OptionsForm.cs">
@@ -149,13 +151,26 @@
       <SubType>Designer</SubType>
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LogViewer.fr.resx">
+      <DependentUpon>LogViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogViewer.resx">
       <DependentUpon>LogViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="MJPEGServer\ServerConnections.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ServerConnections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.en.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.fr.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsForm.resx">
       <SubType>Designer</SubType>

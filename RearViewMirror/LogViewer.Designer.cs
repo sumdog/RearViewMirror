@@ -34,24 +34,15 @@
             // 
             // rbLogTxt
             // 
-            this.rbLogTxt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.rbLogTxt.Location = new System.Drawing.Point(12, 12);
+            resources.ApplyResources(this.rbLogTxt, "rbLogTxt");
             this.rbLogTxt.Name = "rbLogTxt";
-            this.rbLogTxt.Size = new System.Drawing.Size(625, 317);
-            this.rbLogTxt.TabIndex = 0;
-            this.rbLogTxt.Text = "";
             // 
             // LogViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 341);
             this.Controls.Add(this.rbLogTxt);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LogViewer";
-            this.Text = "LogViewer";
             this.ResumeLayout(false);
 
         }

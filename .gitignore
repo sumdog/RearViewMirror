@@ -1,0 +1,6 @@
+.DS_Store
+Installer*/Release
+motion/bin
+motion/obj
+RearViewMirror/bin
+RearViewMirror/obj

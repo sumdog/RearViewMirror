@@ -1,0 +1,2 @@
+Add 404 Message and Disconnect for Invalid Camera Names
+Add Multi-Language Support

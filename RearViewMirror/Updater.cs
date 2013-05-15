@@ -107,7 +107,7 @@ namespace RearViewMirror
                     {
                         Log.debug("Update URL is " + parts[1]);
 
-                        if (MessageBox.Show("An update is avaiable for Rear View Mirror. Would you like to download it?", "Update Avaiable", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (MessageBox.Show(Messages.DownloadUpdateQuestion, Messages.DownloadUpdateTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(parts[1]);
                         }
